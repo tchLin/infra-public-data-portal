@@ -16,6 +16,7 @@ items:
     labels:
       io.kompose.service: ckan-dev
     name: ckan-dev
+    namespace: buspark-test-dev
     resourceVersion: "2992907861"
     uid: d09e2065-60e1-4e8b-9923-c3db726d5d43
   spec:
@@ -125,6 +126,7 @@ items:
     labels:
       io.kompose.service: datapusher
     name: datapusher
+    namespace: buspark-test-dev
     resourceVersion: "3002254826"
     uid: dc528fff-2f14-4679-9983-9b6527ad0ae1
   spec:
@@ -200,6 +202,7 @@ items:
     labels:
       io.kompose.service: db
     name: db
+    namespace: buspark-test-dev
     resourceVersion: "3002254842"
     uid: 3af94f16-84ae-47de-8faa-9fd1feaa5f29
   spec:
@@ -286,6 +289,7 @@ items:
     labels:
       io.kompose.service: nginx
     name: nginx
+    namespace: buspark-test-dev
     resourceVersion: "3002254871"
     uid: f1b509f8-760e-489b-9e63-f743316d3485
   spec:
@@ -381,6 +385,7 @@ items:
     labels:
       io.kompose.service: redis
     name: redis
+    namespace: buspark-test-dev
     resourceVersion: "3002254881"
     uid: 291dbb0c-0cd2-4f22-a867-754b2f54d5b2
   spec:
@@ -456,6 +461,7 @@ items:
     labels:
       io.kompose.service: solr
     name: solr
+    namespace: buspark-test-dev
     resourceVersion: "3002254895"
     uid: 907d9f18-4e92-4cfe-a836-9763305923ad
   spec:

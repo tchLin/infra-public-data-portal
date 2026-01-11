@@ -1,5 +1,1027 @@
 apiVersion: v1
 items:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "55"
+      kompose.cmd: kompose convert -f docker-compose.dev.yml -o ../ckan-docker-to-kubes/
+      kompose.version: 1.36.0 (ae2a39403)
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{"kompose.cmd":"kompose convert -f docker-compose.dev.yml -o ../ckan-docker-to-kubes/","kompose.version":"1.36.0 (ae2a39403)"},"labels":{"io.kompose.service":"ckan-dev"},"name":"ckan-dev","namespace":"buspark-test-dev"},"spec":{"replicas":1,"selector":{"matchLabels":{"io.kompose.service":"ckan-dev"}},"strategy":{"type":"Recreate"},"template":{"metadata":{"annotations":{"kompose.cmd":"kompose convert -f docker-compose.dev.yml -o ../ckan-docker-to-kubes/","kompose.version":"1.36.0 (ae2a39403)"},"labels":{"io.kompose.service":"ckan-dev"}},"spec":{"containers":[{"envFrom":[{"configMapRef":{"name":"env"}}],"image":"quay.io/buspark_test/spark-ckan:latest","livenessProbe":{"exec":{"command":["wget","-qO","/dev/null","http://localhost:5000"]}},"name":"ckan","ports":[{"containerPort":5000,"protocol":"TCP"}],"volumeMounts":[{"mountPath":"/var/lib/ckan","name":"ckan-storage"},{"mountPath":"/srv/app/config","name":"ckan-config"}]}],"restartPolicy":"Always","volumes":[{"name":"ckan-storage","persistentVolumeClaim":{"claimName":"ckan-storage"}},{"emptyDir":{},"name":"ckan-config"}]}}}}
+      kubernetes.io/change-cause: oc set image deployment/ckan-dev ckan=quay.io/buspark_test/spark-ckan:latest
+        --record=true
+    creationTimestamp: "2025-06-25T09:21:37Z"
+    generation: 72
+    labels:
+      io.kompose.service: ckan-dev
+    name: ckan-dev
+    namespace: buspark-test-dev
+    resourceVersion: "2992907861"
+    uid: d09e2065-60e1-4e8b-9923-c3db726d5d43
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 0
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        io.kompose.service: ckan-dev
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        annotations:
+          kompose.cmd: kompose convert -f docker-compose.dev.yml -o ../ckan-docker-to-kubes/
+          kompose.version: 1.36.0 (ae2a39403)
+          kubectl.kubernetes.io/restartedAt: "2025-07-06T23:22:49+08:00"
+        creationTimestamp: null
+        labels:
+          io.kompose.service: ckan-dev
+      spec:
+        containers:
+        - command:
+          - /bin/sh
+          - /srv/app/start_ckan.sh
+          env:
+          - name: CKAN__DATASTORE__READ_URL
+            value: postgresql://datastore_ro:datastore@db/datastore
+          - name: CKAN__DATASTORE__WRITE_URL
+            value: postgresql://ckan:ckan@db/datastore
+          envFrom:
+          - configMapRef:
+              name: env
+          image: quay.io/buspark_test/spark-ckan:latest
+          imagePullPolicy: Always
+          livenessProbe:
+            exec:
+              command:
+              - wget
+              - -qO
+              - /dev/null
+              - http://localhost:5000
+            failureThreshold: 3
+            initialDelaySeconds: 120
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: ckan
+          ports:
+          - containerPort: 5000
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /api/3/action/status_show
+              port: 5000
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 2
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/lib/ckan
+            name: ckan-storage
+          - mountPath: /srv/app/config
+            name: ckan-config
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: ckan-storage
+          persistentVolumeClaim:
+            claimName: ckan-storage
+        - emptyDir: {}
+          name: ckan-config
+  status:
+    conditions:
+    - lastTransitionTime: "2025-07-02T08:24:43Z"
+      lastUpdateTime: "2025-07-06T15:24:28Z"
+      message: ReplicaSet "ckan-dev-9c8c9fb94" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2025-07-07T18:50:23Z"
+      lastUpdateTime: "2025-07-07T18:50:23Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 72
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "4"
+      kompose.cmd: kompose convert -f docker-compose.dev.yml -o ../ckan-docker-to-kubes/
+      kompose.version: 1.36.0 (ae2a39403)
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{"kompose.cmd":"kompose convert -f docker-compose.dev.yml -o ../ckan-docker-to-kubes/","kompose.version":"1.36.0 (ae2a39403)"},"labels":{"io.kompose.service":"datapusher"},"name":"datapusher","namespace":"buspark-test-dev"},"spec":{"replicas":1,"selector":{"matchLabels":{"io.kompose.service":"datapusher"}},"template":{"metadata":{"annotations":{"kompose.cmd":"kompose convert -f docker-compose.dev.yml -o ../ckan-docker-to-kubes/","kompose.version":"1.36.0 (ae2a39403)"},"labels":{"io.kompose.service":"datapusher"}},"spec":{"containers":[{"image":"ckan/ckan-base-datapusher:0.0.19","livenessProbe":{"failureThreshold":6,"httpGet":{"path":"/","port":8800},"initialDelaySeconds":15,"periodSeconds":10,"timeoutSeconds":3},"name":"datapusher"}],"restartPolicy":"Always"}}}}
+    creationTimestamp: "2025-06-25T13:25:45Z"
+    generation: 15
+    labels:
+      io.kompose.service: datapusher
+    name: datapusher
+    namespace: buspark-test-dev
+    resourceVersion: "3002254826"
+    uid: dc528fff-2f14-4679-9983-9b6527ad0ae1
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 0
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        io.kompose.service: datapusher
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          kompose.cmd: kompose convert -f docker-compose.dev.yml -o ../ckan-docker-to-kubes/
+          kompose.version: 1.36.0 (ae2a39403)
+          kubectl.kubernetes.io/restartedAt: "2025-07-06T16:46:32+08:00"
+        creationTimestamp: null
+        labels:
+          io.kompose.service: datapusher
+      spec:
+        containers:
+        - image: ckan/ckan-base-datapusher:0.0.19
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 6
+            httpGet:
+              path: /
+              port: 8800
+              scheme: HTTP
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+          name: datapusher
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    conditions:
+    - lastTransitionTime: "2025-06-25T13:25:45Z"
+      lastUpdateTime: "2025-07-06T08:46:32Z"
+      message: ReplicaSet "datapusher-6dd487887c" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2025-07-07T14:25:48Z"
+      lastUpdateTime: "2025-07-07T14:25:48Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 15
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "4"
+      kompose.cmd: kompose convert -f docker-compose.dev.yml -o ../ckan-docker-to-kubes/
+      kompose.version: 1.36.0 (ae2a39403)
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{"kompose.cmd":"kompose convert -f docker-compose.dev.yml -o ../ckan-docker-to-kubes/","kompose.version":"1.36.0 (ae2a39403)"},"labels":{"io.kompose.service":"db"},"name":"db","namespace":"buspark-test-dev"},"spec":{"replicas":1,"selector":{"matchLabels":{"io.kompose.service":"db"}},"strategy":{"type":"Recreate"},"template":{"metadata":{"annotations":{"kompose.cmd":"kompose convert -f docker-compose.dev.yml -o ../ckan-docker-to-kubes/","kompose.version":"1.36.0 (ae2a39403)"},"labels":{"io.kompose.service":"db"}},"spec":{"containers":[{"env":[{"name":"DATASTORE_READONLY_PASSWORD","value":"datastore"},{"name":"PGDATA","value":"/var/lib/postgresql/data/db"},{"name":"POSTGRES_PASSWORD","value":"ckan"}],"image":"postgres:12","livenessProbe":{"exec":{"command":["pg_isready","-U","ckan"]}},"name":"db","volumeMounts":[{"mountPath":"/var/lib/postgresql/data","name":"pg-data"}]}],"restartPolicy":"Always","volumes":[{"name":"pg-data","persistentVolumeClaim":{"claimName":"pg-data"}}]}}}}
+    creationTimestamp: "2025-06-25T13:25:35Z"
+    generation: 15
+    labels:
+      io.kompose.service: db
+    name: db
+    namespace: buspark-test-dev
+    resourceVersion: "3002254842"
+    uid: 3af94f16-84ae-47de-8faa-9fd1feaa5f29
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 0
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        io.kompose.service: db
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        annotations:
+          kompose.cmd: kompose convert -f docker-compose.dev.yml -o ../ckan-docker-to-kubes/
+          kompose.version: 1.36.0 (ae2a39403)
+          kubectl.kubernetes.io/restartedAt: "2025-07-06T16:46:33+08:00"
+        creationTimestamp: null
+        labels:
+          io.kompose.service: db
+      spec:
+        containers:
+        - env:
+          - name: DATASTORE_READONLY_PASSWORD
+            value: datastore
+          - name: PGDATA
+            value: /var/lib/postgresql/data/db
+          - name: POSTGRES_PASSWORD
+            value: ckan
+          image: postgres:12
+          imagePullPolicy: Always
+          livenessProbe:
+            exec:
+              command:
+              - pg_isready
+              - -U
+              - ckan
+            failureThreshold: 3
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: db
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/lib/postgresql/data
+            name: pg-data
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: pg-data
+          persistentVolumeClaim:
+            claimName: pg-data
+  status:
+    conditions:
+    - lastTransitionTime: "2025-06-25T13:25:35Z"
+      lastUpdateTime: "2025-07-06T08:46:33Z"
+      message: ReplicaSet "db-8486f4f94b" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2025-07-07T14:25:53Z"
+      lastUpdateTime: "2025-07-07T14:25:53Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 15
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "11"
+      kompose.cmd: kompose convert -f docker-compose.dev.yml -o ../ckan-docker-to-kubes/
+      kompose.version: 1.36.0 (ae2a39403)
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{"kompose.cmd":"kompose convert -f docker-compose.dev.yml -o ../ckan-docker-to-kubes/","kompose.version":"1.36.0 (ae2a39403)"},"labels":{"io.kompose.service":"nginx"},"name":"nginx","namespace":"buspark-test-dev"},"spec":{"replicas":1,"selector":{"matchLabels":{"io.kompose.service":"nginx"}},"strategy":{"type":"Recreate"},"template":{"metadata":{"annotations":{"kompose.cmd":"kompose convert -f docker-compose.dev.yml -o ../ckan-docker-to-kubes/","kompose.version":"1.36.0 (ae2a39403)"},"labels":{"io.kompose.service":"nginx"}},"spec":{"containers":[{"image":"nginx","name":"nginx","ports":[{"containerPort":8080,"protocol":"TCP"},{"containerPort":443,"protocol":"TCP"}],"volumeMounts":[{"mountPath":"/etc/nginx/certs","name":"nginx-certs"},{"mountPath":"/var/cache/nginx","name":"nginx-cache"},{"mountPath":"/etc/nginx/nginx.conf","name":"nginx-config","subPath":"nginx.conf"}]}],"restartPolicy":"Always","volumes":[{"name":"nginx-certs","persistentVolumeClaim":{"claimName":"nginx-certs"}},{"emptyDir":{},"name":"nginx-cache"},{"configMap":{"name":"nginx-config"},"name":"nginx-config"}]}}}}
+    creationTimestamp: "2025-06-25T13:25:48Z"
+    generation: 23
+    labels:
+      io.kompose.service: nginx
+    name: nginx
+    namespace: buspark-test-dev
+    resourceVersion: "3002254871"
+    uid: f1b509f8-760e-489b-9e63-f743316d3485
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 0
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        io.kompose.service: nginx
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        annotations:
+          kompose.cmd: kompose convert -f docker-compose.dev.yml -o ../ckan-docker-to-kubes/
+          kompose.version: 1.36.0 (ae2a39403)
+          kubectl.kubernetes.io/restartedAt: "2025-07-06T22:57:34+08:00"
+        creationTimestamp: null
+        labels:
+          io.kompose.service: nginx
+      spec:
+        containers:
+        - image: nginx
+          imagePullPolicy: Always
+          name: nginx
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          - containerPort: 443
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /etc/nginx/certs
+            name: nginx-certs
+          - mountPath: /var/cache/nginx
+            name: nginx-cache
+          - mountPath: /etc/nginx/nginx.conf
+            name: nginx-config
+            subPath: nginx.conf
+          - mountPath: /etc/nginx/conf.d/default.conf
+            name: nginx-conf
+            subPath: nginx.conf
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: nginx-certs
+          persistentVolumeClaim:
+            claimName: nginx-certs
+        - emptyDir: {}
+          name: nginx-cache
+        - configMap:
+            defaultMode: 420
+            name: nginx-config
+          name: nginx-config
+        - configMap:
+            defaultMode: 420
+            items:
+            - key: nginx.conf
+              path: nginx.conf
+            name: nginx-config
+          name: nginx-conf
+  status:
+    conditions:
+    - lastTransitionTime: "2025-07-06T09:26:03Z"
+      lastUpdateTime: "2025-07-06T14:57:47Z"
+      message: ReplicaSet "nginx-6868c4c7fc" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2025-07-07T14:25:54Z"
+      lastUpdateTime: "2025-07-07T14:25:54Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 23
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "3"
+      kompose.cmd: kompose convert -f docker-compose.dev.yml -o ../ckan-docker-to-kubes/
+      kompose.version: 1.36.0 (ae2a39403)
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{"kompose.cmd":"kompose convert -f docker-compose.dev.yml -o ../ckan-docker-to-kubes/","kompose.version":"1.36.0 (ae2a39403)"},"labels":{"io.kompose.service":"redis"},"name":"redis","namespace":"buspark-test-dev"},"spec":{"replicas":1,"selector":{"matchLabels":{"io.kompose.service":"redis"}},"template":{"metadata":{"annotations":{"kompose.cmd":"kompose convert -f docker-compose.dev.yml -o ../ckan-docker-to-kubes/","kompose.version":"1.36.0 (ae2a39403)"},"labels":{"io.kompose.service":"redis"}},"spec":{"containers":[{"image":"redis:6","livenessProbe":{"exec":{"command":["redis-cli","-e","QUIT"]}},"name":"redis"}],"restartPolicy":"Always"}}}}
+    creationTimestamp: "2025-06-25T13:25:42Z"
+    generation: 14
+    labels:
+      io.kompose.service: redis
+    name: redis
+    namespace: buspark-test-dev
+    resourceVersion: "3002254881"
+    uid: 291dbb0c-0cd2-4f22-a867-754b2f54d5b2
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 0
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        io.kompose.service: redis
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          kompose.cmd: kompose convert -f docker-compose.dev.yml -o ../ckan-docker-to-kubes/
+          kompose.version: 1.36.0 (ae2a39403)
+          kubectl.kubernetes.io/restartedAt: "2025-07-06T16:46:35+08:00"
+        creationTimestamp: null
+        labels:
+          io.kompose.service: redis
+      spec:
+        containers:
+        - image: redis:6
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec:
+              command:
+              - redis-cli
+              - -e
+              - QUIT
+            failureThreshold: 3
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: redis
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    conditions:
+    - lastTransitionTime: "2025-06-25T13:25:42Z"
+      lastUpdateTime: "2025-07-06T08:46:35Z"
+      message: ReplicaSet "redis-85f8479dc8" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2025-07-07T14:25:49Z"
+      lastUpdateTime: "2025-07-07T14:25:49Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 14
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "3"
+      kompose.cmd: kompose convert -f docker-compose.dev.yml -o ../ckan-docker-to-kubes/
+      kompose.version: 1.36.0 (ae2a39403)
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{"kompose.cmd":"kompose convert -f docker-compose.dev.yml -o ../ckan-docker-to-kubes/","kompose.version":"1.36.0 (ae2a39403)"},"labels":{"io.kompose.service":"solr"},"name":"solr","namespace":"buspark-test-dev"},"spec":{"replicas":1,"selector":{"matchLabels":{"io.kompose.service":"solr"}},"strategy":{"type":"Recreate"},"template":{"metadata":{"annotations":{"kompose.cmd":"kompose convert -f docker-compose.dev.yml -o ../ckan-docker-to-kubes/","kompose.version":"1.36.0 (ae2a39403)"},"labels":{"io.kompose.service":"solr"}},"spec":{"containers":[{"image":"ckan/ckan-solr:2.9-solr8","livenessProbe":{"exec":{"command":["wget","-qO","/dev/null","http://localhost:8983/solr/"]}},"name":"solr","volumeMounts":[{"mountPath":"/var/solr","name":"solr-data"}]}],"restartPolicy":"Always","volumes":[{"name":"solr-data","persistentVolumeClaim":{"claimName":"solr-data"}}]}}}}
+    creationTimestamp: "2025-06-25T13:25:39Z"
+    generation: 14
+    labels:
+      io.kompose.service: solr
+    name: solr
+    namespace: buspark-test-dev
+    resourceVersion: "3002254895"
+    uid: 907d9f18-4e92-4cfe-a836-9763305923ad
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 0
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        io.kompose.service: solr
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        annotations:
+          kompose.cmd: kompose convert -f docker-compose.dev.yml -o ../ckan-docker-to-kubes/
+          kompose.version: 1.36.0 (ae2a39403)
+          kubectl.kubernetes.io/restartedAt: "2025-07-06T16:46:36+08:00"
+        creationTimestamp: null
+        labels:
+          io.kompose.service: solr
+      spec:
+        containers:
+        - image: ckan/ckan-solr:2.9-solr8
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec:
+              command:
+              - wget
+              - -qO
+              - /dev/null
+              - http://localhost:8983/solr/
+            failureThreshold: 3
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: solr
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/solr
+            name: solr-data
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: solr-data
+          persistentVolumeClaim:
+            claimName: solr-data
+  status:
+    conditions:
+    - lastTransitionTime: "2025-06-25T13:25:39Z"
+      lastUpdateTime: "2025-07-06T08:46:36Z"
+      message: ReplicaSet "solr-55d98798fc" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2025-07-07T14:26:02Z"
+      lastUpdateTime: "2025-07-07T14:26:02Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 14
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert -f docker-compose.dev.yml -o ../ckan-docker-to-kubes/
+      kompose.version: 1.36.0 (ae2a39403)
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{"kompose.cmd":"kompose convert -f docker-compose.dev.yml -o ../ckan-docker-to-kubes/","kompose.version":"1.36.0 (ae2a39403)"},"labels":{"io.kompose.service":"ckan-dev"},"name":"ckan-dev","namespace":"buspark-test-dev"},"spec":{"ports":[{"name":"5000","port":5000,"targetPort":5000}],"selector":{"io.kompose.service":"ckan-dev"}}}
+    creationTimestamp: "2025-06-25T13:26:23Z"
+    labels:
+      io.kompose.service: ckan-dev
+    name: ckan-dev
+    namespace: buspark-test-dev
+    resourceVersion: "2627667218"
+    uid: 0dffa4a7-cd2e-4a05-b6c1-b054d120b9fb
+  spec:
+    clusterIP: 172.30.57.17
+    clusterIPs:
+    - 172.30.57.17
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: "5000"
+      port: 5000
+      protocol: TCP
+      targetPort: 5000
+    selector:
+      io.kompose.service: ckan-dev
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: "2025-07-06T14:18:13Z"
+    labels:
+      io.kompose.service: ckan-dev
+    name: ckan-service
+    namespace: buspark-test-dev
+    resourceVersion: "2957811210"
+    uid: 3e2d70a0-95f7-4b6e-91e4-6272dee5033a
+  spec:
+    clusterIP: 172.30.61.146
+    clusterIPs:
+    - 172.30.61.146
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - port: 5000
+      protocol: TCP
+      targetPort: 5000
+    selector:
+      io.kompose.service: ckan-dev
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert -f docker-compose.yml
+      kompose.version: 1.32.0 (765fde254)
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{"kompose.cmd":"kompose convert -f docker-compose.yml","kompose.version":"1.32.0 (765fde254)"},"labels":{"io.kompose.service":"datapusher"},"name":"datapusher","namespace":"buspark-test-dev"},"spec":{"ports":[{"name":"8800","port":8800,"targetPort":8800}],"selector":{"io.kompose.service":"datapusher"}}}
+    creationTimestamp: "2025-06-25T13:25:47Z"
+    labels:
+      io.kompose.service: datapusher
+    name: datapusher
+    namespace: buspark-test-dev
+    resourceVersion: "2627654542"
+    uid: b81db122-a3e4-44f1-a8ef-644d862d9e89
+  spec:
+    clusterIP: 172.30.56.157
+    clusterIPs:
+    - 172.30.56.157
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: "8800"
+      port: 8800
+      protocol: TCP
+      targetPort: 8800
+    selector:
+      io.kompose.service: datapusher
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert -f docker-compose.yml
+      kompose.version: 1.32.0 (765fde254)
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{"kompose.cmd":"kompose convert -f docker-compose.yml","kompose.version":"1.32.0 (765fde254)"},"labels":{"io.kompose.service":"db"},"name":"db","namespace":"buspark-test-dev"},"spec":{"ports":[{"name":"5432","port":5432,"targetPort":5432}],"selector":{"io.kompose.service":"db"}}}
+    creationTimestamp: "2025-06-25T13:25:37Z"
+    labels:
+      io.kompose.service: db
+    name: db
+    namespace: buspark-test-dev
+    resourceVersion: "2627651076"
+    uid: 2c6b70c3-ef31-4886-a22b-7f6dbf78c1cd
+  spec:
+    clusterIP: 172.30.138.142
+    clusterIPs:
+    - 172.30.138.142
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: "5432"
+      port: 5432
+      protocol: TCP
+      targetPort: 5432
+    selector:
+      io.kompose.service: db
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      service.alpha.openshift.io/serving-cert-secret-name: model-serving-proxy-tls
+      service.alpha.openshift.io/serving-cert-signed-by: openshift-service-serving-signer@1733253833
+      service.beta.openshift.io/serving-cert-signed-by: openshift-service-serving-signer@1733253833
+    creationTimestamp: "2025-06-10T09:49:53Z"
+    labels:
+      app.kubernetes.io/instance: modelmesh-controller
+      app.kubernetes.io/managed-by: modelmesh-controller
+      app.kubernetes.io/name: modelmesh-controller
+      modelmesh-service: modelmesh-serving
+    name: modelmesh-serving
+    namespace: buspark-test-dev
+    ownerReferences:
+    - apiVersion: v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Namespace
+      name: buspark-test-dev
+      uid: 28350542-012b-41b4-a588-acefa985e4f2
+    resourceVersion: "2428866412"
+    uid: c0f82a3e-1d98-4b13-8c9f-98b2588317ca
+  spec:
+    clusterIP: None
+    clusterIPs:
+    - None
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: grpc
+      port: 8033
+      protocol: TCP
+      targetPort: grpc
+    - name: http
+      port: 8008
+      protocol: TCP
+      targetPort: http
+    - name: https
+      port: 8443
+      protocol: TCP
+      targetPort: https
+    - name: prometheus
+      port: 2112
+      protocol: TCP
+      targetPort: prometheus
+    selector:
+      modelmesh-service: modelmesh-serving
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert -f docker-compose.dev.yml -o ../ckan-docker-to-kubes/
+      kompose.version: 1.36.0 (ae2a39403)
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{"kompose.cmd":"kompose convert -f docker-compose.dev.yml -o ../ckan-docker-to-kubes/","kompose.version":"1.36.0 (ae2a39403)"},"labels":{"io.kompose.service":"nginx"},"name":"nginx","namespace":"buspark-test-dev"},"spec":{"ports":[{"name":"81","port":81,"targetPort":80},{"name":"8443","port":8443,"targetPort":443}],"selector":{"io.kompose.service":"nginx"}}}
+    creationTimestamp: "2025-06-25T13:25:50Z"
+    labels:
+      io.kompose.service: nginx
+    name: nginx
+    namespace: buspark-test-dev
+    resourceVersion: "2958615710"
+    uid: 0e48bef1-e3e3-40c0-99ba-9adb2be52665
+  spec:
+    clusterIP: 172.30.33.65
+    clusterIPs:
+    - 172.30.33.65
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: "81"
+      port: 81
+      protocol: TCP
+      targetPort: 8080
+    - name: "8443"
+      port: 8443
+      protocol: TCP
+      targetPort: 443
+    selector:
+      io.kompose.service: nginx
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert -f docker-compose.yml
+      kompose.version: 1.32.0 (765fde254)
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{"kompose.cmd":"kompose convert -f docker-compose.yml","kompose.version":"1.32.0 (765fde254)"},"labels":{"io.kompose.service":"redis"},"name":"redis","namespace":"buspark-test-dev"},"spec":{"ports":[{"name":"6379","port":6379,"targetPort":6379}],"selector":{"io.kompose.service":"redis"}}}
+    creationTimestamp: "2025-06-25T13:25:43Z"
+    labels:
+      io.kompose.service: redis
+    name: redis
+    namespace: buspark-test-dev
+    resourceVersion: "2627653401"
+    uid: 9b999a48-a494-4d8e-85cb-539a9ba15e63
+  spec:
+    clusterIP: 172.30.213.123
+    clusterIPs:
+    - 172.30.213.123
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: "6379"
+      port: 6379
+      protocol: TCP
+      targetPort: 6379
+    selector:
+      io.kompose.service: redis
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert -f docker-compose.yml
+      kompose.version: 1.32.0 (765fde254)
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{"kompose.cmd":"kompose convert -f docker-compose.yml","kompose.version":"1.32.0 (765fde254)"},"labels":{"io.kompose.service":"solr"},"name":"solr","namespace":"buspark-test-dev"},"spec":{"ports":[{"name":"8983","port":8983,"targetPort":8983}],"selector":{"io.kompose.service":"solr"}}}
+    creationTimestamp: "2025-06-25T13:25:40Z"
+    labels:
+      io.kompose.service: solr
+    name: solr
+    namespace: buspark-test-dev
+    resourceVersion: "2627652231"
+    uid: 732d63fe-cce5-4df4-8b3d-fa5173c8fd74
+  spec:
+    clusterIP: 172.30.255.78
+    clusterIPs:
+    - 172.30.255.78
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: "8983"
+      port: 8983
+      protocol: TCP
+      targetPort: 8983
+    selector:
+      io.kompose.service: solr
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    annotations:
+      openshift.io/host.generated: "true"
+    creationTimestamp: "2025-06-25T09:30:41Z"
+    labels:
+      io.kompose.service: ckan-dev
+      pod-template-hash: 5d54478c9c
+    name: ckan-service
+    namespace: buspark-test-dev
+    resourceVersion: "2622720122"
+    uid: d23744eb-cefc-4304-8961-5463c220f55a
+  spec:
+    host: ckan-service-buspark-test-dev.apps.rm3.7wse.p1.openshiftapps.com
+    port:
+      targetPort: 5000
+    to:
+      kind: Service
+      name: ckan-service
+      weight: 100
+    wildcardPolicy: None
+  status:
+    ingress:
+    - conditions:
+      - lastTransitionTime: "2025-06-25T09:30:41Z"
+        status: "True"
+        type: Admitted
+      host: ckan-service-buspark-test-dev.apps.rm3.7wse.p1.openshiftapps.com
+      routerCanonicalHostname: router-default.apps.rm3.7wse.p1.openshiftapps.com
+      routerName: default
+      wildcardPolicy: None
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    annotations:
+      openshift.io/host.generated: "true"
+    creationTimestamp: "2025-07-06T08:52:17Z"
+    labels:
+      io.kompose.service: nginx
+    name: nginx
+    namespace: buspark-test-dev
+    resourceVersion: "2951128424"
+    uid: ace633c3-9f1c-455b-bb30-b8aa04031870
+  spec:
+    host: nginx-buspark-test-dev.apps.rm3.7wse.p1.openshiftapps.com
+    port:
+      targetPort: 81
+    to:
+      kind: Service
+      name: nginx
+      weight: 100
+    wildcardPolicy: None
+  status:
+    ingress:
+    - conditions:
+      - lastTransitionTime: "2025-07-06T08:52:17Z"
+        status: "True"
+        type: Admitted
+      host: nginx-buspark-test-dev.apps.rm3.7wse.p1.openshiftapps.com
+      routerCanonicalHostname: router-default.apps.rm3.7wse.p1.openshiftapps.com
+      routerName: default
+      wildcardPolicy: None
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"PersistentVolumeClaim","metadata":{"annotations":{},"labels":{"io.kompose.service":"ckan-storage"},"name":"ckan-storage","namespace":"buspark-test-dev"},"spec":{"accessModes":["ReadWriteOnce"],"resources":{"requests":{"storage":"100Mi"}}}}
+      pv.kubernetes.io/bind-completed: "yes"
+      pv.kubernetes.io/bound-by-controller: "yes"
+      volume.beta.kubernetes.io/storage-provisioner: ebs.csi.aws.com
+      volume.kubernetes.io/selected-node: ip-10-0-34-36.ec2.internal
+      volume.kubernetes.io/storage-provisioner: ebs.csi.aws.com
+    creationTimestamp: "2025-06-25T09:25:01Z"
+    finalizers:
+    - kubernetes.io/pvc-protection
+    labels:
+      io.kompose.service: ckan-storage
+    name: ckan-storage
+    namespace: buspark-test-dev
+    resourceVersion: "2622602808"
+    uid: 7739c28a-fed9-4b00-910f-1ab8f8c35deb
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 100Mi
+    storageClassName: gp3
+    volumeMode: Filesystem
+    volumeName: pvc-7739c28a-fed9-4b00-910f-1ab8f8c35deb
+  status:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 1Gi
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"PersistentVolumeClaim","metadata":{"annotations":{},"labels":{"io.kompose.service":"nginx-certs"},"name":"nginx-certs","namespace":"buspark-test-dev"},"spec":{"accessModes":["ReadWriteOnce"],"resources":{"requests":{"storage":"100Mi"}}}}
+      pv.kubernetes.io/bind-completed: "yes"
+      pv.kubernetes.io/bound-by-controller: "yes"
+      volume.beta.kubernetes.io/storage-provisioner: ebs.csi.aws.com
+      volume.kubernetes.io/selected-node: ip-10-0-29-118.ec2.internal
+      volume.kubernetes.io/storage-provisioner: ebs.csi.aws.com
+    creationTimestamp: "2025-06-25T13:25:26Z"
+    finalizers:
+    - kubernetes.io/pvc-protection
+    labels:
+      io.kompose.service: nginx-certs
+    name: nginx-certs
+    namespace: buspark-test-dev
+    resourceVersion: "2627655863"
+    uid: 9d4034b3-f698-43f0-8b4b-b1cc95b311b1
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 100Mi
+    storageClassName: gp3
+    volumeMode: Filesystem
+    volumeName: pvc-9d4034b3-f698-43f0-8b4b-b1cc95b311b1
+  status:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 1Gi
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"PersistentVolumeClaim","metadata":{"annotations":{},"labels":{"io.kompose.service":"pg-data"},"name":"pg-data","namespace":"buspark-test-dev"},"spec":{"accessModes":["ReadWriteOnce"],"resources":{"requests":{"storage":"100Mi"}}}}
+      pv.kubernetes.io/bind-completed: "yes"
+      pv.kubernetes.io/bound-by-controller: "yes"
+      volume.beta.kubernetes.io/storage-provisioner: ebs.csi.aws.com
+      volume.kubernetes.io/selected-node: ip-10-0-29-118.ec2.internal
+      volume.kubernetes.io/storage-provisioner: ebs.csi.aws.com
+    creationTimestamp: "2025-06-25T13:25:18Z"
+    finalizers:
+    - kubernetes.io/pvc-protection
+    labels:
+      io.kompose.service: pg-data
+    name: pg-data
+    namespace: buspark-test-dev
+    resourceVersion: "2627651305"
+    uid: 7b32e735-7082-4dca-8c73-7dc76d1897cf
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 100Mi
+    storageClassName: gp3
+    volumeMode: Filesystem
+    volumeName: pvc-7b32e735-7082-4dca-8c73-7dc76d1897cf
+  status:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 1Gi
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"PersistentVolumeClaim","metadata":{"annotations":{},"labels":{"io.kompose.service":"solr-data"},"name":"solr-data","namespace":"buspark-test-dev"},"spec":{"accessModes":["ReadWriteOnce"],"resources":{"requests":{"storage":"100Mi"}}}}
+      pv.kubernetes.io/bind-completed: "yes"
+      pv.kubernetes.io/bound-by-controller: "yes"
+      volume.beta.kubernetes.io/storage-provisioner: ebs.csi.aws.com
+      volume.kubernetes.io/selected-node: ip-10-0-34-36.ec2.internal
+      volume.kubernetes.io/storage-provisioner: ebs.csi.aws.com
+    creationTimestamp: "2025-06-25T13:25:20Z"
+    finalizers:
+    - kubernetes.io/pvc-protection
+    labels:
+      io.kompose.service: solr-data
+    name: solr-data
+    namespace: buspark-test-dev
+    resourceVersion: "2627652476"
+    uid: 238a3f8b-3aa4-45b0-bc44-546cd41aa12c
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 100Mi
+    storageClassName: gp3
+    volumeMode: Filesystem
+    volumeName: pvc-238a3f8b-3aa4-45b0-bc44-546cd41aa12c
+  status:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 1Gi
+    phase: Bound
 - apiVersion: v1
   data:
     service-ca.crt: |
@@ -34,6 +1056,7 @@ items:
     labels:
       app.kubernetes.io/part-of: tekton-pipelines
     name: config-service-cabundle
+    namespace: buspark-test-dev
     ownerReferences:
     - apiVersion: operator.tekton.dev/v1alpha1
       blockOwnerDeletion: true
@@ -4004,6 +5027,7 @@ items:
       app.kubernetes.io/part-of: tekton-pipelines
       config.openshift.io/inject-trusted-cabundle: "true"
     name: config-trusted-cabundle
+    namespace: buspark-test-dev
     ownerReferences:
     - apiVersion: operator.tekton.dev/v1alpha1
       blockOwnerDeletion: true
@@ -4031,6 +5055,7 @@ items:
       app.kubernetes.io/part-of: devworkspace-operator
       controller.devfile.io/watch-configmap: "true"
     name: devworkspace-ssh-askpass
+    namespace: buspark-test-dev
     resourceVersion: "2744911426"
     uid: c6030220-df99-412a-88ad-92115c13c1c3
 - apiVersion: v1
@@ -4103,6 +5128,7 @@ items:
     labels:
       io.kompose.service: ckan-dev-env
     name: env
+    namespace: buspark-test-dev
     resourceVersion: "2959134694"
     uid: 7dc3005a-263a-4004-a569-4a1d6d5ef1ee
 - apiVersion: v1
@@ -4259,6 +5285,7 @@ items:
         of Kubernetes clusters.
     creationTimestamp: "2025-06-10T09:49:53Z"
     name: kube-root-ca.crt
+    namespace: buspark-test-dev
     resourceVersion: "2428866353"
     uid: 6530183d-de19-47f7-8a3b-65f118aad076
 - apiVersion: v1
@@ -4302,6 +5329,7 @@ items:
         {"apiVersion":"v1","data":{"nginx.conf":"pid /tmp/nginx.pid;\n\nevents {}\n\nhttp {\n    upstream ckan_upstream {\n        server ckan-service:5000;\n    }\n\n    server {\n        # OpenShift non-root containers listen on high ports\n        listen 8080;\n\n        # Proxy all root-path requests through to CKAN\n        location / {\n            proxy_pass         http://ckan_upstream;\n            proxy_set_header   Host $host;\n            proxy_set_header   X-Real-IP $remote_addr;\n            proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;\n            proxy_buffering    off;\n        }\n\n        # Static file caching proxy\n        location ~* \\.(css|js|png|jpg|jpeg|gif|svg|ico)$ {\n            proxy_pass         http://ckan_upstream;\n            proxy_set_header   Host $host;\n            proxy_cache_bypass $http_pragma;\n            expires            max;\n        }\n    }\n}\n"},"kind":"ConfigMap","metadata":{"annotations":{},"creationTimestamp":null,"name":"nginx-config","namespace":"buspark-test-dev"}}
     creationTimestamp: "2025-06-29T11:03:19Z"
     name: nginx-config
+    namespace: buspark-test-dev
     resourceVersion: "2958407694"
     uid: 0a9eaec4-dc49-419f-9a7a-833c6d2993eb
 - apiVersion: v1
@@ -8267,6 +9295,7 @@ items:
       app.kubernetes.io/part-of: opendatahub-operator
       config.openshift.io/inject-trusted-cabundle: "true"
     name: odh-trusted-ca-bundle
+    namespace: buspark-test-dev
     resourceVersion: "2465735434"
     uid: 9a11b80e-08bc-4e60-a010-c32cb8c6016f
 - apiVersion: v1
@@ -8298,8 +9327,132 @@ items:
       service.beta.openshift.io/inject-cabundle: "true"
     creationTimestamp: "2025-06-10T09:49:53Z"
     name: openshift-service-ca.crt
+    namespace: buspark-test-dev
     resourceVersion: "2428866356"
     uid: 63b9044d-59f3-479a-acb3-c0669ad6da22
+- apiVersion: v1
+  data:
+    .dockercfg: eyIxNzIuMzAuMTk0LjIyMTo1MDAwIjp7ImF1dGgiOiJQSFJ2YTJWdVBqcGxlVXBvWWtkamFVOXBTbE5WZWtreFRtbEpjMGx0ZEhCYVEwazJTVzVqZUdWRmFFMVViRUpZVDBaa2NGSjZSVEJVUld4d1RsUk9VVk5GU2xoak1GRjNWMnhvUzFGWGJEVlphbWQ1VFVWV2VrMXNXa2RVUkdkcFpsRXVaWGxLYUdSWFVXbFBiSE5wWVVoU01HTklUVFpNZVRsMllWZFNha3h0T1hkTlV6VjJZMGRXZFdNeWFIQmFibEpvWTBoQ2VreHRUblppVXpoNVdtMVdibG96Um5SWmJVcDZZMnBhY1UweWFHcGliVFZxV2pOTk5HSnVVVE5aYW1NMFpGUmtkazFUU21STVEwcHNaVWhCYVU5cVJUTk9WRWwzVGtSTmQwNTZUWE5KYld4b1pFTkpOazFVWXpGTmFrRjZUMVJSTTAxNWQybGhXRTU2U1dwdmFXRklVakJqU0UwMlRIazVkbUZYVW1wTWJUbDNUVk0xZG1OSFZuVmpNbWh3V201U2FHTklRbnBNYlU1MllsTTRlVnB0Vm01YU0wWjBXVzFLZW1OcVduRk5NbWhxWW0wMWFsb3pUVFJpYmxFeldXcGpOR1JVWkhaTlUwbHpTVzF3TUdGVFNUWkpiVXBvV2xkTmVFMVVTbXRNVkdzelRucFpkRTVFWTNsTlV6QTBUbTFLYlV4VWF6Vk9la0pwV21wcmQxbHFUWGhPUTBselNXMTBNVmx0Vm5saWJWWXdXbGhOZFdGWE9HbFBibk5wWW0xR2RGcFlUbmRaVjA1c1NXcHZhVmx1Vm5walIwWjVZWGt4TUZwWVRqQk1WMUpzWkdsSmMwbHVUbXhaTTBwc1pFTkpObVY1U25WWlZ6RnNTV3B2YVZsdVZuQmlSMUpzWTJreGEySXlUbkphV0VwcVdtMWpkR1I2U1hsYVJFbHBURU5LTVdGWFVXbFBhVWwzVFdwRmVVOUVWbWhaVXpGcVRYcFZkMHhVVVRKYVJGRjBXV3BzYVU1RE1XMU5WMUYzV1ZkSk0wOUVWbXROZW1OcFpsTjNhV015Vm5sa2JXeHFXbGRHYWxreU9URmlibEZwVDI1emFXSnRSblJhVTBrMlNXMUtNV0ZYZUd0YVdFbHBURU5LTVdGWFVXbFBhVXBzVGxSSmVsbDZRVFZhUXpCNVdrZGFhMHhVVW14TmVsRjBXVlJWZUZscE1XbFpWR1JyVG0xT2FVNVVWbWxOUjBscFpsZ3djMGx0TldsYWFVazJUVlJqTVUxcVFYcFBWRkV6VFhsM2FXTXpWbWxKYW05cFl6TnNlbVJIVm5SUGJrNXNZMjVhY0ZreVZtaFpNazUyWkZjMU1FOXRTakZqTTBKb1kyMXpkR1JIVm5wa1F6RnJXbGhaTmxsdVZuQmlSMUpzWTJsS09TNUhlRU5zUTJWMVJsRkZVMFZIWkV0M01uSm1hRGhQUVUxS2EweFVhVTgxVnpKUVNXVjNRVmRvT0Y5WFR6Z3lXV2d5UTFoWE5EazJYemxHYzB0TFVYRmpZMWxrTmxadWJteGlSVlJIU2w5c1RIaG9abW8wU1c5V05HZE9UbTFaZDB3eFgxbFdabmRLZGxCQk4wWlZWRVJIY1cxdFpuVTRka3h2VGtSeGExWk1SSFZTVUdkTlptUTBTelpHUTNac1IxTnpiMUpNUWpSU2QzVlVWQzEyWlRaeE9HVnllWE5HUjJkSVVrdFJZVlZuWkdoeGJ6UkZiM0JqTW5wcWFtOHdNMjl3WW0xd01HSjFZekJWUkV4Rk56Z3ROM05uUjFkVlYyaG1WMlJDT1VFelpESk5UMGxwZUc5ME1XTXpiVU5sVDIwd05VazBWbXB0Ukc1NlozaG9Nbkl3U25Ga2REbHRaM0pOWWxCbllsRk1WMVJrY0ZReWRETm9jVEUzWldKaWRXZDJSbmRxTlVKdWFHVnhjbVpzWWtOUGVEa3dlV2RyYjFaaFlUUk5Za054Y2xwM1EzTnFiR1kxUlRGVVQwVktYelp0VVRsaGVqSm5Za3hSZFROQ01rSldPVEpoVEV0S1VYWkNSVE50Y3pGcFlWVklVRzR6VkVGZlEwSnlVbU5UVTB3eFZrWTJPV3BoZHpaMVF6VkxWMWh1V25KWk0zZHZlbGsxYVhCS1JIUTRSMkp1WWw5UlMyVlBiMHRuY0ZCcFVUVkROV0prY0ZoTGN6ZFhaVzl5WTA5bE1XeHNOWE5YUVZwa1NIcE9hbHAwU0UxamRDMDBhMUZDUWpndE5XSmpWVVZWU2kweFRFdGxWVFZqT0RoUGJUQTFPVm8wWjFaelZUTjZURzlwUlVaRVMyVlJOekJsYVZSR1prY3lRMmRtYVhsdlFWRTNaR3h0WVZKelJEWlpNVnBsTFZCbVgwNVliVEF6WWxGSVdHMDVZelZ4YjNSWVkwSTFkWHBvVlRGeVpGa3hiWHB6TWxweUxVcFpVVzV2YzAxelkybFpNRGwxUlY5U05IWkxWek5FYWxWTmVVeFlXakZEVlZSSFExaEtlV3BSVVhWT01uTXljSGRrVHpGbVpXSlpYemR4VUdoMFpYWjRSa3BXWms5TGNEbG1PWFZxY0VGVVdVSmtkVUpmU2xKM1YwbDVUREJ3ZWw5ak9BPT0ifSwiZGVmYXVsdC1yb3V0ZS1vcGVuc2hpZnQtaW1hZ2UtcmVnaXN0cnkuYXBwcy5ybTMuN3dzZS5wMS5vcGVuc2hpZnRhcHBzLmNvbSI6eyJhdXRoIjoiUEhSdmEyVnVQanBsZVVwb1lrZGphVTlwU2xOVmVra3hUbWxKYzBsdGRIQmFRMGsyU1c1amVHVkZhRTFVYkVKWVQwWmtjRko2UlRCVVJXeHdUbFJPVVZORlNsaGpNRkYzVjJ4b1MxRlhiRFZaYW1kNVRVVldlazFzV2tkVVJHZHBabEV1WlhsS2FHUlhVV2xQYkhOcFlVaFNNR05JVFRaTWVUbDJZVmRTYWt4dE9YZE5VelYyWTBkV2RXTXlhSEJhYmxKb1kwaENla3h0VG5aaVV6aDVXbTFXYmxvelJuUlpiVXA2WTJwYWNVMHlhR3BpYlRWcVdqTk5OR0p1VVROWmFtTTBaRlJrZGsxVFNtUk1RMHBzWlVoQmFVOXFSVE5PVkVsM1RrUk5kMDU2VFhOSmJXeG9aRU5KTmsxVVl6Rk5ha0Y2VDFSUk0wMTVkMmxoV0U1NlNXcHZhV0ZJVWpCalNFMDJUSGs1ZG1GWFVtcE1iVGwzVFZNMWRtTkhWblZqTW1od1dtNVNhR05JUW5wTWJVNTJZbE00ZVZwdFZtNWFNMFowV1cxS2VtTnFXbkZOTW1ocVltMDFhbG96VFRSaWJsRXpXV3BqTkdSVVpIWk5VMGx6U1cxd01HRlRTVFpKYlVwb1dsZE5lRTFVU210TVZHc3pUbnBaZEU1RVkzbE5VekEwVG0xS2JVeFVhelZPZWtKcFdtcHJkMWxxVFhoT1EwbHpTVzEwTVZsdFZubGliVll3V2xoTmRXRlhPR2xQYm5OcFltMUdkRnBZVG5kWlYwNXNTV3B2YVZsdVZucGpSMFo1WVhreE1GcFlUakJNVjFKc1pHbEpjMGx1VG14Wk0wcHNaRU5KTm1WNVNuVlpWekZzU1dwdmFWbHVWbkJpUjFKc1kya3hhMkl5VG5KYVdFcHFXbTFqZEdSNlNYbGFSRWxwVEVOS01XRlhVV2xQYVVsM1RXcEZlVTlFVm1oWlV6RnFUWHBWZDB4VVVUSmFSRkYwV1dwc2FVNURNVzFOVjFGM1dWZEpNMDlFVm10TmVtTnBabE4zYVdNeVZubGtiV3hxV2xkR2Fsa3lPVEZpYmxGcFQyNXphV0p0Um5SYVUwazJTVzFLTVdGWGVHdGFXRWxwVEVOS01XRlhVV2xQYVVwc1RsUkplbGw2UVRWYVF6QjVXa2RhYTB4VVVteE5lbEYwV1ZSVmVGbHBNV2xaVkdSclRtMU9hVTVVVm1sTlIwbHBabGd3YzBsdE5XbGFhVWsyVFZSak1VMXFRWHBQVkZFelRYbDNhV016Vm1sSmFtOXBZek5zZW1SSFZuUlBiazVzWTI1YWNGa3lWbWhaTWs1MlpGYzFNRTl0U2pGak0wSm9ZMjF6ZEdSSFZucGtRekZyV2xoWk5sbHVWbkJpUjFKc1kybEtPUzVIZUVOc1EyVjFSbEZGVTBWSFpFdDNNbkptYURoUFFVMUthMHhVYVU4MVZ6SlFTV1YzUVZkb09GOVhUemd5V1dneVExaFhORGsyWHpsR2MwdExVWEZqWTFsa05sWnVibXhpUlZSSFNsOXNUSGhvWm1vMFNXOVdOR2RPVG0xWmQwd3hYMWxXWm5kS2RsQkJOMFpWVkVSSGNXMXRablU0ZGt4dlRrUnhhMVpNUkhWU1VHZE5abVEwU3paR1EzWnNSMU56YjFKTVFqUlNkM1ZVVkMxMlpUWnhPR1Z5ZVhOR1IyZElVa3RSWVZWblpHaHhielJGYjNCak1ucHFhbTh3TTI5d1ltMXdNR0oxWXpCVlJFeEZOemd0TjNOblIxZFZWMmhtVjJSQ09VRXpaREpOVDBscGVHOTBNV016YlVObFQyMHdOVWswVm1wdFJHNTZaM2hvTW5Jd1NuRmtkRGx0WjNKTllsQm5ZbEZNVjFSa2NGUXlkRE5vY1RFM1pXSmlkV2QyUm5kcU5VSnVhR1Z4Y21ac1lrTlBlRGt3ZVdkcmIxWmhZVFJOWWtOeGNscDNRM05xYkdZMVJURlVUMFZLWHpadFVUbGhlakpuWWt4UmRUTkNNa0pXT1RKaFRFdEtVWFpDUlROdGN6RnBZVlZJVUc0elZFRmZRMEp5VW1OVFUwd3hWa1kyT1dwaGR6WjFRelZMVjFodVduSlpNM2R2ZWxrMWFYQktSSFE0UjJKdVlsOVJTMlZQYjB0bmNGQnBVVFZETldKa2NGaExjemRYWlc5eVkwOWxNV3hzTlhOWFFWcGtTSHBPYWxwMFNFMWpkQzAwYTFGQ1FqZ3ROV0pqVlVWVlNpMHhURXRsVlRWak9EaFBiVEExT1ZvMFoxWnpWVE42VEc5cFJVWkVTMlZSTnpCbGFWUkdaa2N5UTJkbWFYbHZRVkUzWkd4dFlWSnpSRFpaTVZwbExWQm1YMDVZYlRBellsRklXRzA1WXpWeGIzUllZMEkxZFhwb1ZURnlaRmt4Ylhwek1scHlMVXBaVVc1dmMwMXpZMmxaTURsMVJWOVNOSFpMVnpORWFsVk5lVXhZV2pGRFZWUkhRMWhLZVdwUlVYVk9Nbk15Y0hka1R6Rm1aV0paWHpkeFVHaDBaWFo0UmtwV1prOUxjRGxtT1hWcWNFRlVXVUprZFVKZlNsSjNWMGw1VERCd2VsOWpPQT09In0sImltYWdlLXJlZ2lzdHJ5Lm9wZW5zaGlmdC1pbWFnZS1yZWdpc3RyeS5zdmMuY2x1c3Rlci5sb2NhbDo1MDAwIjp7ImF1dGgiOiJQSFJ2YTJWdVBqcGxlVXBvWWtkamFVOXBTbE5WZWtreFRtbEpjMGx0ZEhCYVEwazJTVzVqZUdWRmFFMVViRUpZVDBaa2NGSjZSVEJVUld4d1RsUk9VVk5GU2xoak1GRjNWMnhvUzFGWGJEVlphbWQ1VFVWV2VrMXNXa2RVUkdkcFpsRXVaWGxLYUdSWFVXbFBiSE5wWVVoU01HTklUVFpNZVRsMllWZFNha3h0T1hkTlV6VjJZMGRXZFdNeWFIQmFibEpvWTBoQ2VreHRUblppVXpoNVdtMVdibG96Um5SWmJVcDZZMnBhY1UweWFHcGliVFZxV2pOTk5HSnVVVE5aYW1NMFpGUmtkazFUU21STVEwcHNaVWhCYVU5cVJUTk9WRWwzVGtSTmQwNTZUWE5KYld4b1pFTkpOazFVWXpGTmFrRjZUMVJSTTAxNWQybGhXRTU2U1dwdmFXRklVakJqU0UwMlRIazVkbUZYVW1wTWJUbDNUVk0xZG1OSFZuVmpNbWh3V201U2FHTklRbnBNYlU1MllsTTRlVnB0Vm01YU0wWjBXVzFLZW1OcVduRk5NbWhxWW0wMWFsb3pUVFJpYmxFeldXcGpOR1JVWkhaTlUwbHpTVzF3TUdGVFNUWkpiVXBvV2xkTmVFMVVTbXRNVkdzelRucFpkRTVFWTNsTlV6QTBUbTFLYlV4VWF6Vk9la0pwV21wcmQxbHFUWGhPUTBselNXMTBNVmx0Vm5saWJWWXdXbGhOZFdGWE9HbFBibk5wWW0xR2RGcFlUbmRaVjA1c1NXcHZhVmx1Vm5walIwWjVZWGt4TUZwWVRqQk1WMUpzWkdsSmMwbHVUbXhaTTBwc1pFTkpObVY1U25WWlZ6RnNTV3B2YVZsdVZuQmlSMUpzWTJreGEySXlUbkphV0VwcVdtMWpkR1I2U1hsYVJFbHBURU5LTVdGWFVXbFBhVWwzVFdwRmVVOUVWbWhaVXpGcVRYcFZkMHhVVVRKYVJGRjBXV3BzYVU1RE1XMU5WMUYzV1ZkSk0wOUVWbXROZW1OcFpsTjNhV015Vm5sa2JXeHFXbGRHYWxreU9URmlibEZwVDI1emFXSnRSblJhVTBrMlNXMUtNV0ZYZUd0YVdFbHBURU5LTVdGWFVXbFBhVXBzVGxSSmVsbDZRVFZhUXpCNVdrZGFhMHhVVW14TmVsRjBXVlJWZUZscE1XbFpWR1JyVG0xT2FVNVVWbWxOUjBscFpsZ3djMGx0TldsYWFVazJUVlJqTVUxcVFYcFBWRkV6VFhsM2FXTXpWbWxKYW05cFl6TnNlbVJIVm5SUGJrNXNZMjVhY0ZreVZtaFpNazUyWkZjMU1FOXRTakZqTTBKb1kyMXpkR1JIVm5wa1F6RnJXbGhaTmxsdVZuQmlSMUpzWTJsS09TNUhlRU5zUTJWMVJsRkZVMFZIWkV0M01uSm1hRGhQUVUxS2EweFVhVTgxVnpKUVNXVjNRVmRvT0Y5WFR6Z3lXV2d5UTFoWE5EazJYemxHYzB0TFVYRmpZMWxrTmxadWJteGlSVlJIU2w5c1RIaG9abW8wU1c5V05HZE9UbTFaZDB3eFgxbFdabmRLZGxCQk4wWlZWRVJIY1cxdFpuVTRka3h2VGtSeGExWk1SSFZTVUdkTlptUTBTelpHUTNac1IxTnpiMUpNUWpSU2QzVlVWQzEyWlRaeE9HVnllWE5HUjJkSVVrdFJZVlZuWkdoeGJ6UkZiM0JqTW5wcWFtOHdNMjl3WW0xd01HSjFZekJWUkV4Rk56Z3ROM05uUjFkVlYyaG1WMlJDT1VFelpESk5UMGxwZUc5ME1XTXpiVU5sVDIwd05VazBWbXB0Ukc1NlozaG9Nbkl3U25Ga2REbHRaM0pOWWxCbllsRk1WMVJrY0ZReWRETm9jVEUzWldKaWRXZDJSbmRxTlVKdWFHVnhjbVpzWWtOUGVEa3dlV2RyYjFaaFlUUk5Za054Y2xwM1EzTnFiR1kxUlRGVVQwVktYelp0VVRsaGVqSm5Za3hSZFROQ01rSldPVEpoVEV0S1VYWkNSVE50Y3pGcFlWVklVRzR6VkVGZlEwSnlVbU5UVTB3eFZrWTJPV3BoZHpaMVF6VkxWMWh1V25KWk0zZHZlbGsxYVhCS1JIUTRSMkp1WWw5UlMyVlBiMHRuY0ZCcFVUVkROV0prY0ZoTGN6ZFhaVzl5WTA5bE1XeHNOWE5YUVZwa1NIcE9hbHAwU0UxamRDMDBhMUZDUWpndE5XSmpWVVZWU2kweFRFdGxWVFZqT0RoUGJUQTFPVm8wWjFaelZUTjZURzlwUlVaRVMyVlJOekJsYVZSR1prY3lRMmRtYVhsdlFWRTNaR3h0WVZKelJEWlpNVnBsTFZCbVgwNVliVEF6WWxGSVdHMDVZelZ4YjNSWVkwSTFkWHBvVlRGeVpGa3hiWHB6TWxweUxVcFpVVzV2YzAxelkybFpNRGwxUlY5U05IWkxWek5FYWxWTmVVeFlXakZEVlZSSFExaEtlV3BSVVhWT01uTXljSGRrVHpGbVpXSlpYemR4VUdoMFpYWjRSa3BXWms5TGNEbG1PWFZxY0VGVVdVSmtkVUpmU2xKM1YwbDVUREJ3ZWw5ak9BPT0ifSwiaW1hZ2UtcmVnaXN0cnkub3BlbnNoaWZ0LWltYWdlLXJlZ2lzdHJ5LnN2Yzo1MDAwIjp7ImF1dGgiOiJQSFJ2YTJWdVBqcGxlVXBvWWtkamFVOXBTbE5WZWtreFRtbEpjMGx0ZEhCYVEwazJTVzVqZUdWRmFFMVViRUpZVDBaa2NGSjZSVEJVUld4d1RsUk9VVk5GU2xoak1GRjNWMnhvUzFGWGJEVlphbWQ1VFVWV2VrMXNXa2RVUkdkcFpsRXVaWGxLYUdSWFVXbFBiSE5wWVVoU01HTklUVFpNZVRsMllWZFNha3h0T1hkTlV6VjJZMGRXZFdNeWFIQmFibEpvWTBoQ2VreHRUblppVXpoNVdtMVdibG96Um5SWmJVcDZZMnBhY1UweWFHcGliVFZxV2pOTk5HSnVVVE5aYW1NMFpGUmtkazFUU21STVEwcHNaVWhCYVU5cVJUTk9WRWwzVGtSTmQwNTZUWE5KYld4b1pFTkpOazFVWXpGTmFrRjZUMVJSTTAxNWQybGhXRTU2U1dwdmFXRklVakJqU0UwMlRIazVkbUZYVW1wTWJUbDNUVk0xZG1OSFZuVmpNbWh3V201U2FHTklRbnBNYlU1MllsTTRlVnB0Vm01YU0wWjBXVzFLZW1OcVduRk5NbWhxWW0wMWFsb3pUVFJpYmxFeldXcGpOR1JVWkhaTlUwbHpTVzF3TUdGVFNUWkpiVXBvV2xkTmVFMVVTbXRNVkdzelRucFpkRTVFWTNsTlV6QTBUbTFLYlV4VWF6Vk9la0pwV21wcmQxbHFUWGhPUTBselNXMTBNVmx0Vm5saWJWWXdXbGhOZFdGWE9HbFBibk5wWW0xR2RGcFlUbmRaVjA1c1NXcHZhVmx1Vm5walIwWjVZWGt4TUZwWVRqQk1WMUpzWkdsSmMwbHVUbXhaTTBwc1pFTkpObVY1U25WWlZ6RnNTV3B2YVZsdVZuQmlSMUpzWTJreGEySXlUbkphV0VwcVdtMWpkR1I2U1hsYVJFbHBURU5LTVdGWFVXbFBhVWwzVFdwRmVVOUVWbWhaVXpGcVRYcFZkMHhVVVRKYVJGRjBXV3BzYVU1RE1XMU5WMUYzV1ZkSk0wOUVWbXROZW1OcFpsTjNhV015Vm5sa2JXeHFXbGRHYWxreU9URmlibEZwVDI1emFXSnRSblJhVTBrMlNXMUtNV0ZYZUd0YVdFbHBURU5LTVdGWFVXbFBhVXBzVGxSSmVsbDZRVFZhUXpCNVdrZGFhMHhVVW14TmVsRjBXVlJWZUZscE1XbFpWR1JyVG0xT2FVNVVWbWxOUjBscFpsZ3djMGx0TldsYWFVazJUVlJqTVUxcVFYcFBWRkV6VFhsM2FXTXpWbWxKYW05cFl6TnNlbVJIVm5SUGJrNXNZMjVhY0ZreVZtaFpNazUyWkZjMU1FOXRTakZqTTBKb1kyMXpkR1JIVm5wa1F6RnJXbGhaTmxsdVZuQmlSMUpzWTJsS09TNUhlRU5zUTJWMVJsRkZVMFZIWkV0M01uSm1hRGhQUVUxS2EweFVhVTgxVnpKUVNXVjNRVmRvT0Y5WFR6Z3lXV2d5UTFoWE5EazJYemxHYzB0TFVYRmpZMWxrTmxadWJteGlSVlJIU2w5c1RIaG9abW8wU1c5V05HZE9UbTFaZDB3eFgxbFdabmRLZGxCQk4wWlZWRVJIY1cxdFpuVTRka3h2VGtSeGExWk1SSFZTVUdkTlptUTBTelpHUTNac1IxTnpiMUpNUWpSU2QzVlVWQzEyWlRaeE9HVnllWE5HUjJkSVVrdFJZVlZuWkdoeGJ6UkZiM0JqTW5wcWFtOHdNMjl3WW0xd01HSjFZekJWUkV4Rk56Z3ROM05uUjFkVlYyaG1WMlJDT1VFelpESk5UMGxwZUc5ME1XTXpiVU5sVDIwd05VazBWbXB0Ukc1NlozaG9Nbkl3U25Ga2REbHRaM0pOWWxCbllsRk1WMVJrY0ZReWRETm9jVEUzWldKaWRXZDJSbmRxTlVKdWFHVnhjbVpzWWtOUGVEa3dlV2RyYjFaaFlUUk5Za054Y2xwM1EzTnFiR1kxUlRGVVQwVktYelp0VVRsaGVqSm5Za3hSZFROQ01rSldPVEpoVEV0S1VYWkNSVE50Y3pGcFlWVklVRzR6VkVGZlEwSnlVbU5UVTB3eFZrWTJPV3BoZHpaMVF6VkxWMWh1V25KWk0zZHZlbGsxYVhCS1JIUTRSMkp1WWw5UlMyVlBiMHRuY0ZCcFVUVkROV0prY0ZoTGN6ZFhaVzl5WTA5bE1XeHNOWE5YUVZwa1NIcE9hbHAwU0UxamRDMDBhMUZDUWpndE5XSmpWVVZWU2kweFRFdGxWVFZqT0RoUGJUQTFPVm8wWjFaelZUTjZURzlwUlVaRVMyVlJOekJsYVZSR1prY3lRMmRtYVhsdlFWRTNaR3h0WVZKelJEWlpNVnBsTFZCbVgwNVliVEF6WWxGSVdHMDVZelZ4YjNSWVkwSTFkWHBvVlRGeVpGa3hiWHB6TWxweUxVcFpVVzV2YzAxelkybFpNRGwxUlY5U05IWkxWek5FYWxWTmVVeFlXakZEVlZSSFExaEtlV3BSVVhWT01uTXljSGRrVHpGbVpXSlpYemR4VUdoMFpYWjRSa3BXWms5TGNEbG1PWFZxY0VGVVdVSmtkVUpmU2xKM1YwbDVUREJ3ZWw5ak9BPT0ifX0=
+  kind: Secret
+  metadata:
+    annotations:
+      openshift.io/internal-registry-auth-token.binding: bound
+      openshift.io/internal-registry-auth-token.service-account: builder
+    creationTimestamp: "2025-06-10T09:49:53Z"
+    name: builder-dockercfg-w22d2
+    namespace: buspark-test-dev
+    ownerReferences:
+    - apiVersion: v1
+      kind: ServiceAccount
+      name: builder
+      uid: e523c09d-2dfd-4e34-a51b-ba7d6cb55b0b
+    resourceVersion: "3035758193"
+    uid: 021285aa-c350-46d4-b9b4-f1d0ab785d37
+  type: kubernetes.io/dockercfg
+- apiVersion: v1
+  data:
+    .dockercfg: eyIxNzIuMzAuMTk0LjIyMTo1MDAwIjp7ImF1dGgiOiJQSFJ2YTJWdVBqcGxlVXBvWWtkamFVOXBTbE5WZWtreFRtbEpjMGx0ZEhCYVEwazJTVzVqZUdWRmFFMVViRUpZVDBaa2NGSjZSVEJVUld4d1RsUk9VVk5GU2xoak1GRjNWMnhvUzFGWGJEVlphbWQ1VFVWV2VrMXNXa2RVUkdkcFpsRXVaWGxLYUdSWFVXbFBiSE5wWVVoU01HTklUVFpNZVRsMllWZFNha3h0T1hkTlV6VjJZMGRXZFdNeWFIQmFibEpvWTBoQ2VreHRUblppVXpoNVdtMVdibG96Um5SWmJVcDZZMnBhY1UweWFHcGliVFZxV2pOTk5HSnVVVE5aYW1NMFpGUmtkazFUU21STVEwcHNaVWhCYVU5cVJUTk9WRWwzVGtSTmQwNTZUWE5KYld4b1pFTkpOazFVWXpGTmFrRjZUMVJSTTAxNWQybGhXRTU2U1dwdmFXRklVakJqU0UwMlRIazVkbUZYVW1wTWJUbDNUVk0xZG1OSFZuVmpNbWh3V201U2FHTklRbnBNYlU1MllsTTRlVnB0Vm01YU0wWjBXVzFLZW1OcVduRk5NbWhxWW0wMWFsb3pUVFJpYmxFeldXcGpOR1JVWkhaTlUwbHpTVzF3TUdGVFNUWkphbWhwVFZSVk5GbDZZM2hNVjAweldYcG5kRTVIUm1sUFF6Rm9Ua2RPYkV4WFRtMU5hbGw2VG5wamVrMUViRzFhVTBselNXMTBNVmx0Vm5saWJWWXdXbGhOZFdGWE9HbFBibk5wWW0xR2RGcFlUbmRaVjA1c1NXcHZhVmx1Vm5walIwWjVZWGt4TUZwWVRqQk1WMUpzWkdsSmMwbHVUbXhaTTBwc1pFTkpObVY1U25WWlZ6RnNTV3B2YVZwSFZtMVpXRlp6WkVNeGEySXlUbkphV0VwcVdtMWpkR1ZIV1RGT1dHZHBURU5LTVdGWFVXbFBhVWwzV1dwVk1rNUhTbXBPYVRGcFRUSkdhVXhVVVRCYVIxbDBUMGRSZDA5VE1IaFpWRmwzVFZSRk1GcHRXbWxQUjFGcFpsTjNhV015Vm5sa2JXeHFXbGRHYWxreU9URmlibEZwVDI1emFXSnRSblJhVTBrMlNXMVNiRnB0UmpGaVNGRnBURU5LTVdGWFVXbFBhVXByVGxSb2FGbHRTVFJQVXpCNFRtcG9hVXhVVW0xT2FtZDBXV3BOTWs5VE1XdE5Na1Y1VDFkTmVFMXRWWGhOUkVGcFpsZ3djMGx0TldsYWFVazJUVlJqTVUxcVFYcFBWRkV6VFhsM2FXTXpWbWxKYW05cFl6TnNlbVJIVm5SUGJrNXNZMjVhY0ZreVZtaFpNazUyWkZjMU1FOXRTakZqTTBKb1kyMXpkR1JIVm5wa1F6RnJXbGhaTmxwSFZtMVpXRlp6WkVOS09TNWFlSEJoTTNNd1JIVmlTamxhYkRnMmJHeExiR05qVXpSalNGSklVMnAwYlZBMlUySXpSa1JHYWtaS1VFVmpXRTVuVVdKWVNVWmtkbEJmYTJkelZtSjVaVlV3YjBaVFRIRnRiRVpvYVZScFluSnRaekJhVVVRM05tRkxMVGhQZVZGUU1HNVlWRVZCUWpkSlQzbG5WRkpvTm1GTFFVMXdiV3BQTUVVeE4zWnVjM0JCZEdwdlMwZEdNMk0xTkVSNWEwWm9jMkZKZWt3NWMwdzJMVlpVYW5aNVprOUJkRXd5Ym1ORGJ6YzNZbkZUZURsRVdWcEVUR05vUkdkUGIwbzFiSEkyTUhReGRtOW5UVVl0VEhCTU0xZzJWRUY2WDBSVGJVdFdjVEl0VWtrMVdGcEJjbDkzWVdOTlNqUTBiSE5wUVdRNFVFTm1NWFF5U1RKUFIxZFljV0l5VEdkSlgxWmpZbW90WjBGVExYVXhWVXBTY2paQ2RrSkxUVEJHTUcxNFNXNXplVzVzZVZWblJYVTVNRVp3WXkxSWFITktlRVZwWHpoTU5IbFVNRzVEYlhCdFJETnZla0pVTW5KdmEyaFpOR2RZWkZrMFpUaG9NaTFDY1hjd1dVUkhVamt4Y1U5bWR6UnJiVTlDV2tweFFtSk9ZMlZqVW1NeVdEWk9lbGxCWVd4VVNEVjRWSGd0Y1hONmJEUnBiMDVRZVVSMVdVeDRjSFpCU2xKc09ITlBPV1ZvV0V0WFZqYzJTM1ZPZUVob1VUQllTWGN0U0hoWkxYSktha3RVVFhKT1VYQnZXWGxTVWtoU016Uk5hV1ZzYmpodlgxUnljazFEUjNGYWFXWnhkMmxDWVVSVmREVm5WbFl4Y0dGMWFGQjFTSFpMWTBwVk5GbGpOVFpUV21OVmNEUlRkbVZOZG1weGFETjNSbFJEVFc1NVpHaDRiMWR5TlhCc1RtbG9NRk5GWHpGUVVsbFVaSEJpV0hrM05ESlBOR2xhYWtKelpVeHFZblp1YkY5blVGSmFVR2hvVWtsQ2QweFpNR1JRVjB0bVdtcGxWelJKWTJSTU1HRXpNVVpoVmpseU1UYzFaRzgzT0dGTlIycHlSVk5TZVMxVE5XMW1OV0ZLUW05d1VIZENlbTlETFcxdlVFWjRiVk5WWDJSelJpMHhZMDVHYkdJeGFFWTRkMG8zZW05dFgxSm1TVlZWWWxocWJ3PT0ifSwiZGVmYXVsdC1yb3V0ZS1vcGVuc2hpZnQtaW1hZ2UtcmVnaXN0cnkuYXBwcy5ybTMuN3dzZS5wMS5vcGVuc2hpZnRhcHBzLmNvbSI6eyJhdXRoIjoiUEhSdmEyVnVQanBsZVVwb1lrZGphVTlwU2xOVmVra3hUbWxKYzBsdGRIQmFRMGsyU1c1amVHVkZhRTFVYkVKWVQwWmtjRko2UlRCVVJXeHdUbFJPVVZORlNsaGpNRkYzVjJ4b1MxRlhiRFZaYW1kNVRVVldlazFzV2tkVVJHZHBabEV1WlhsS2FHUlhVV2xQYkhOcFlVaFNNR05JVFRaTWVUbDJZVmRTYWt4dE9YZE5VelYyWTBkV2RXTXlhSEJhYmxKb1kwaENla3h0VG5aaVV6aDVXbTFXYmxvelJuUlpiVXA2WTJwYWNVMHlhR3BpYlRWcVdqTk5OR0p1VVROWmFtTTBaRlJrZGsxVFNtUk1RMHBzWlVoQmFVOXFSVE5PVkVsM1RrUk5kMDU2VFhOSmJXeG9aRU5KTmsxVVl6Rk5ha0Y2VDFSUk0wMTVkMmxoV0U1NlNXcHZhV0ZJVWpCalNFMDJUSGs1ZG1GWFVtcE1iVGwzVFZNMWRtTkhWblZqTW1od1dtNVNhR05JUW5wTWJVNTJZbE00ZVZwdFZtNWFNMFowV1cxS2VtTnFXbkZOTW1ocVltMDFhbG96VFRSaWJsRXpXV3BqTkdSVVpIWk5VMGx6U1cxd01HRlRTVFpKYW1ocFRWUlZORmw2WTNoTVYwMHpXWHBuZEU1SFJtbFBRekZvVGtkT2JFeFhUbTFOYWxsNlRucGplazFFYkcxYVUwbHpTVzEwTVZsdFZubGliVll3V2xoTmRXRlhPR2xQYm5OcFltMUdkRnBZVG5kWlYwNXNTV3B2YVZsdVZucGpSMFo1WVhreE1GcFlUakJNVjFKc1pHbEpjMGx1VG14Wk0wcHNaRU5KTm1WNVNuVlpWekZzU1dwdmFWcEhWbTFaV0ZaelpFTXhhMkl5VG5KYVdFcHFXbTFqZEdWSFdURk9XR2RwVEVOS01XRlhVV2xQYVVsM1dXcFZNazVIU21wT2FURnBUVEpHYVV4VVVUQmFSMWwwVDBkUmQwOVRNSGhaVkZsM1RWUkZNRnB0V21sUFIxRnBabE4zYVdNeVZubGtiV3hxV2xkR2Fsa3lPVEZpYmxGcFQyNXphV0p0Um5SYVUwazJTVzFTYkZwdFJqRmlTRkZwVEVOS01XRlhVV2xQYVVwclRsUm9hRmx0U1RSUFV6QjRUbXBvYVV4VVVtMU9hbWQwV1dwTk1rOVRNV3ROTWtWNVQxZE5lRTF0VlhoTlJFRnBabGd3YzBsdE5XbGFhVWsyVFZSak1VMXFRWHBQVkZFelRYbDNhV016Vm1sSmFtOXBZek5zZW1SSFZuUlBiazVzWTI1YWNGa3lWbWhaTWs1MlpGYzFNRTl0U2pGak0wSm9ZMjF6ZEdSSFZucGtRekZyV2xoWk5scEhWbTFaV0ZaelpFTktPUzVhZUhCaE0zTXdSSFZpU2psYWJEZzJiR3hMYkdOalV6UmpTRkpJVTJwMGJWQTJVMkl6UmtSR2FrWktVRVZqV0U1blVXSllTVVprZGxCZmEyZHpWbUo1WlZVd2IwWlRUSEZ0YkVab2FWUnBZbkp0WnpCYVVVUTNObUZMTFRoUGVWRlFNRzVZVkVWQlFqZEpUM2xuVkZKb05tRkxRVTF3YldwUE1FVXhOM1p1YzNCQmRHcHZTMGRHTTJNMU5FUjVhMFpvYzJGSmVrdzVjMHcyTFZaVWFuWjVaazlCZEV3eWJtTkRiemMzWW5GVGVEbEVXVnBFVEdOb1JHZFBiMG8xYkhJMk1IUXhkbTluVFVZdFRIQk1NMWcyVkVGNlgwUlRiVXRXY1RJdFVrazFXRnBCY2w5M1lXTk5TalEwYkhOcFFXUTRVRU5tTVhReVNUSlBSMWRZY1dJeVRHZEpYMVpqWW1vdFowRlRMWFV4VlVwU2NqWkNka0pMVFRCR01HMTRTVzV6ZVc1c2VWVm5SWFU1TUVad1l5MUlhSE5LZUVWcFh6aE1OSGxVTUc1RGJYQnRSRE52ZWtKVU1uSnZhMmhaTkdkWVpGazBaVGhvTWkxQ2NYY3dXVVJIVWpreGNVOW1kelJyYlU5Q1drcHhRbUpPWTJWalVtTXlXRFpPZWxsQllXeFVTRFY0VkhndGNYTjZiRFJwYjA1UWVVUjFXVXg0Y0haQlNsSnNPSE5QT1dWb1dFdFhWamMyUzNWT2VFaG9VVEJZU1hjdFNIaFpMWEpLYWt0VVRYSk9VWEJ2V1hsU1VraFNNelJOYVdWc2JqaHZYMVJ5Y2sxRFIzRmFhV1p4ZDJsQ1lVUlZkRFZuVmxZeGNHRjFhRkIxU0haTFkwcFZORmxqTlRaVFdtTlZjRFJUZG1WTmRtcHhhRE4zUmxSRFRXNTVaR2g0YjFkeU5YQnNUbWxvTUZORlh6RlFVbGxVWkhCaVdIazNOREpQTkdsYWFrSnpaVXhxWW5adWJGOW5VRkphVUdob1VrbENkMHhaTUdSUVYwdG1XbXBsVnpSSlkyUk1NR0V6TVVaaFZqbHlNVGMxWkc4M09HRk5SMnB5UlZOU2VTMVROVzFtTldGS1FtOXdVSGRDZW05RExXMXZVRVo0YlZOVlgyUnpSaTB4WTA1R2JHSXhhRVk0ZDBvM2VtOXRYMUptU1ZWVllsaHFidz09In0sImltYWdlLXJlZ2lzdHJ5Lm9wZW5zaGlmdC1pbWFnZS1yZWdpc3RyeS5zdmMuY2x1c3Rlci5sb2NhbDo1MDAwIjp7ImF1dGgiOiJQSFJ2YTJWdVBqcGxlVXBvWWtkamFVOXBTbE5WZWtreFRtbEpjMGx0ZEhCYVEwazJTVzVqZUdWRmFFMVViRUpZVDBaa2NGSjZSVEJVUld4d1RsUk9VVk5GU2xoak1GRjNWMnhvUzFGWGJEVlphbWQ1VFVWV2VrMXNXa2RVUkdkcFpsRXVaWGxLYUdSWFVXbFBiSE5wWVVoU01HTklUVFpNZVRsMllWZFNha3h0T1hkTlV6VjJZMGRXZFdNeWFIQmFibEpvWTBoQ2VreHRUblppVXpoNVdtMVdibG96Um5SWmJVcDZZMnBhY1UweWFHcGliVFZxV2pOTk5HSnVVVE5aYW1NMFpGUmtkazFUU21STVEwcHNaVWhCYVU5cVJUTk9WRWwzVGtSTmQwNTZUWE5KYld4b1pFTkpOazFVWXpGTmFrRjZUMVJSTTAxNWQybGhXRTU2U1dwdmFXRklVakJqU0UwMlRIazVkbUZYVW1wTWJUbDNUVk0xZG1OSFZuVmpNbWh3V201U2FHTklRbnBNYlU1MllsTTRlVnB0Vm01YU0wWjBXVzFLZW1OcVduRk5NbWhxWW0wMWFsb3pUVFJpYmxFeldXcGpOR1JVWkhaTlUwbHpTVzF3TUdGVFNUWkphbWhwVFZSVk5GbDZZM2hNVjAweldYcG5kRTVIUm1sUFF6Rm9Ua2RPYkV4WFRtMU5hbGw2VG5wamVrMUViRzFhVTBselNXMTBNVmx0Vm5saWJWWXdXbGhOZFdGWE9HbFBibk5wWW0xR2RGcFlUbmRaVjA1c1NXcHZhVmx1Vm5walIwWjVZWGt4TUZwWVRqQk1WMUpzWkdsSmMwbHVUbXhaTTBwc1pFTkpObVY1U25WWlZ6RnNTV3B2YVZwSFZtMVpXRlp6WkVNeGEySXlUbkphV0VwcVdtMWpkR1ZIV1RGT1dHZHBURU5LTVdGWFVXbFBhVWwzV1dwVk1rNUhTbXBPYVRGcFRUSkdhVXhVVVRCYVIxbDBUMGRSZDA5VE1IaFpWRmwzVFZSRk1GcHRXbWxQUjFGcFpsTjNhV015Vm5sa2JXeHFXbGRHYWxreU9URmlibEZwVDI1emFXSnRSblJhVTBrMlNXMVNiRnB0UmpGaVNGRnBURU5LTVdGWFVXbFBhVXByVGxSb2FGbHRTVFJQVXpCNFRtcG9hVXhVVW0xT2FtZDBXV3BOTWs5VE1XdE5Na1Y1VDFkTmVFMXRWWGhOUkVGcFpsZ3djMGx0TldsYWFVazJUVlJqTVUxcVFYcFBWRkV6VFhsM2FXTXpWbWxKYW05cFl6TnNlbVJIVm5SUGJrNXNZMjVhY0ZreVZtaFpNazUyWkZjMU1FOXRTakZqTTBKb1kyMXpkR1JIVm5wa1F6RnJXbGhaTmxwSFZtMVpXRlp6WkVOS09TNWFlSEJoTTNNd1JIVmlTamxhYkRnMmJHeExiR05qVXpSalNGSklVMnAwYlZBMlUySXpSa1JHYWtaS1VFVmpXRTVuVVdKWVNVWmtkbEJmYTJkelZtSjVaVlV3YjBaVFRIRnRiRVpvYVZScFluSnRaekJhVVVRM05tRkxMVGhQZVZGUU1HNVlWRVZCUWpkSlQzbG5WRkpvTm1GTFFVMXdiV3BQTUVVeE4zWnVjM0JCZEdwdlMwZEdNMk0xTkVSNWEwWm9jMkZKZWt3NWMwdzJMVlpVYW5aNVprOUJkRXd5Ym1ORGJ6YzNZbkZUZURsRVdWcEVUR05vUkdkUGIwbzFiSEkyTUhReGRtOW5UVVl0VEhCTU0xZzJWRUY2WDBSVGJVdFdjVEl0VWtrMVdGcEJjbDkzWVdOTlNqUTBiSE5wUVdRNFVFTm1NWFF5U1RKUFIxZFljV0l5VEdkSlgxWmpZbW90WjBGVExYVXhWVXBTY2paQ2RrSkxUVEJHTUcxNFNXNXplVzVzZVZWblJYVTVNRVp3WXkxSWFITktlRVZwWHpoTU5IbFVNRzVEYlhCdFJETnZla0pVTW5KdmEyaFpOR2RZWkZrMFpUaG9NaTFDY1hjd1dVUkhVamt4Y1U5bWR6UnJiVTlDV2tweFFtSk9ZMlZqVW1NeVdEWk9lbGxCWVd4VVNEVjRWSGd0Y1hONmJEUnBiMDVRZVVSMVdVeDRjSFpCU2xKc09ITlBPV1ZvV0V0WFZqYzJTM1ZPZUVob1VUQllTWGN0U0hoWkxYSktha3RVVFhKT1VYQnZXWGxTVWtoU016Uk5hV1ZzYmpodlgxUnljazFEUjNGYWFXWnhkMmxDWVVSVmREVm5WbFl4Y0dGMWFGQjFTSFpMWTBwVk5GbGpOVFpUV21OVmNEUlRkbVZOZG1weGFETjNSbFJEVFc1NVpHaDRiMWR5TlhCc1RtbG9NRk5GWHpGUVVsbFVaSEJpV0hrM05ESlBOR2xhYWtKelpVeHFZblp1YkY5blVGSmFVR2hvVWtsQ2QweFpNR1JRVjB0bVdtcGxWelJKWTJSTU1HRXpNVVpoVmpseU1UYzFaRzgzT0dGTlIycHlSVk5TZVMxVE5XMW1OV0ZLUW05d1VIZENlbTlETFcxdlVFWjRiVk5WWDJSelJpMHhZMDVHYkdJeGFFWTRkMG8zZW05dFgxSm1TVlZWWWxocWJ3PT0ifSwiaW1hZ2UtcmVnaXN0cnkub3BlbnNoaWZ0LWltYWdlLXJlZ2lzdHJ5LnN2Yzo1MDAwIjp7ImF1dGgiOiJQSFJ2YTJWdVBqcGxlVXBvWWtkamFVOXBTbE5WZWtreFRtbEpjMGx0ZEhCYVEwazJTVzVqZUdWRmFFMVViRUpZVDBaa2NGSjZSVEJVUld4d1RsUk9VVk5GU2xoak1GRjNWMnhvUzFGWGJEVlphbWQ1VFVWV2VrMXNXa2RVUkdkcFpsRXVaWGxLYUdSWFVXbFBiSE5wWVVoU01HTklUVFpNZVRsMllWZFNha3h0T1hkTlV6VjJZMGRXZFdNeWFIQmFibEpvWTBoQ2VreHRUblppVXpoNVdtMVdibG96Um5SWmJVcDZZMnBhY1UweWFHcGliVFZxV2pOTk5HSnVVVE5aYW1NMFpGUmtkazFUU21STVEwcHNaVWhCYVU5cVJUTk9WRWwzVGtSTmQwNTZUWE5KYld4b1pFTkpOazFVWXpGTmFrRjZUMVJSTTAxNWQybGhXRTU2U1dwdmFXRklVakJqU0UwMlRIazVkbUZYVW1wTWJUbDNUVk0xZG1OSFZuVmpNbWh3V201U2FHTklRbnBNYlU1MllsTTRlVnB0Vm01YU0wWjBXVzFLZW1OcVduRk5NbWhxWW0wMWFsb3pUVFJpYmxFeldXcGpOR1JVWkhaTlUwbHpTVzF3TUdGVFNUWkphbWhwVFZSVk5GbDZZM2hNVjAweldYcG5kRTVIUm1sUFF6Rm9Ua2RPYkV4WFRtMU5hbGw2VG5wamVrMUViRzFhVTBselNXMTBNVmx0Vm5saWJWWXdXbGhOZFdGWE9HbFBibk5wWW0xR2RGcFlUbmRaVjA1c1NXcHZhVmx1Vm5walIwWjVZWGt4TUZwWVRqQk1WMUpzWkdsSmMwbHVUbXhaTTBwc1pFTkpObVY1U25WWlZ6RnNTV3B2YVZwSFZtMVpXRlp6WkVNeGEySXlUbkphV0VwcVdtMWpkR1ZIV1RGT1dHZHBURU5LTVdGWFVXbFBhVWwzV1dwVk1rNUhTbXBPYVRGcFRUSkdhVXhVVVRCYVIxbDBUMGRSZDA5VE1IaFpWRmwzVFZSRk1GcHRXbWxQUjFGcFpsTjNhV015Vm5sa2JXeHFXbGRHYWxreU9URmlibEZwVDI1emFXSnRSblJhVTBrMlNXMVNiRnB0UmpGaVNGRnBURU5LTVdGWFVXbFBhVXByVGxSb2FGbHRTVFJQVXpCNFRtcG9hVXhVVW0xT2FtZDBXV3BOTWs5VE1XdE5Na1Y1VDFkTmVFMXRWWGhOUkVGcFpsZ3djMGx0TldsYWFVazJUVlJqTVUxcVFYcFBWRkV6VFhsM2FXTXpWbWxKYW05cFl6TnNlbVJIVm5SUGJrNXNZMjVhY0ZreVZtaFpNazUyWkZjMU1FOXRTakZqTTBKb1kyMXpkR1JIVm5wa1F6RnJXbGhaTmxwSFZtMVpXRlp6WkVOS09TNWFlSEJoTTNNd1JIVmlTamxhYkRnMmJHeExiR05qVXpSalNGSklVMnAwYlZBMlUySXpSa1JHYWtaS1VFVmpXRTVuVVdKWVNVWmtkbEJmYTJkelZtSjVaVlV3YjBaVFRIRnRiRVpvYVZScFluSnRaekJhVVVRM05tRkxMVGhQZVZGUU1HNVlWRVZCUWpkSlQzbG5WRkpvTm1GTFFVMXdiV3BQTUVVeE4zWnVjM0JCZEdwdlMwZEdNMk0xTkVSNWEwWm9jMkZKZWt3NWMwdzJMVlpVYW5aNVprOUJkRXd5Ym1ORGJ6YzNZbkZUZURsRVdWcEVUR05vUkdkUGIwbzFiSEkyTUhReGRtOW5UVVl0VEhCTU0xZzJWRUY2WDBSVGJVdFdjVEl0VWtrMVdGcEJjbDkzWVdOTlNqUTBiSE5wUVdRNFVFTm1NWFF5U1RKUFIxZFljV0l5VEdkSlgxWmpZbW90WjBGVExYVXhWVXBTY2paQ2RrSkxUVEJHTUcxNFNXNXplVzVzZVZWblJYVTVNRVp3WXkxSWFITktlRVZwWHpoTU5IbFVNRzVEYlhCdFJETnZla0pVTW5KdmEyaFpOR2RZWkZrMFpUaG9NaTFDY1hjd1dVUkhVamt4Y1U5bWR6UnJiVTlDV2tweFFtSk9ZMlZqVW1NeVdEWk9lbGxCWVd4VVNEVjRWSGd0Y1hONmJEUnBiMDVRZVVSMVdVeDRjSFpCU2xKc09ITlBPV1ZvV0V0WFZqYzJTM1ZPZUVob1VUQllTWGN0U0hoWkxYSktha3RVVFhKT1VYQnZXWGxTVWtoU016Uk5hV1ZzYmpodlgxUnljazFEUjNGYWFXWnhkMmxDWVVSVmREVm5WbFl4Y0dGMWFGQjFTSFpMWTBwVk5GbGpOVFpUV21OVmNEUlRkbVZOZG1weGFETjNSbFJEVFc1NVpHaDRiMWR5TlhCc1RtbG9NRk5GWHpGUVVsbFVaSEJpV0hrM05ESlBOR2xhYWtKelpVeHFZblp1YkY5blVGSmFVR2hvVWtsQ2QweFpNR1JRVjB0bVdtcGxWelJKWTJSTU1HRXpNVVpoVmpseU1UYzFaRzgzT0dGTlIycHlSVk5TZVMxVE5XMW1OV0ZLUW05d1VIZENlbTlETFcxdlVFWjRiVk5WWDJSelJpMHhZMDVHYkdJeGFFWTRkMG8zZW05dFgxSm1TVlZWWWxocWJ3PT0ifX0=
+  kind: Secret
+  metadata:
+    annotations:
+      openshift.io/internal-registry-auth-token.binding: bound
+      openshift.io/internal-registry-auth-token.service-account: default
+    creationTimestamp: "2025-06-10T09:49:53Z"
+    name: default-dockercfg-xf55x
+    namespace: buspark-test-dev
+    ownerReferences:
+    - apiVersion: v1
+      kind: ServiceAccount
+      name: default
+      uid: d58abb89-168b-4f68-b369-d3a29c12e100
+    resourceVersion: "3035758189"
+    uid: 0b564bc6-b3ab-44df-8d09-1a60114ffb8d
+  type: kubernetes.io/dockercfg
+- apiVersion: v1
+  data:
+    .dockercfg: eyIxNzIuMzAuMTk0LjIyMTo1MDAwIjp7ImF1dGgiOiJQSFJ2YTJWdVBqcGxlVXBvWWtkamFVOXBTbE5WZWtreFRtbEpjMGx0ZEhCYVEwazJTVzVqZUdWRmFFMVViRUpZVDBaa2NGSjZSVEJVUld4d1RsUk9VVk5GU2xoak1GRjNWMnhvUzFGWGJEVlphbWQ1VFVWV2VrMXNXa2RVUkdkcFpsRXVaWGxLYUdSWFVXbFBiSE5wWVVoU01HTklUVFpNZVRsMllWZFNha3h0T1hkTlV6VjJZMGRXZFdNeWFIQmFibEpvWTBoQ2VreHRUblppVXpoNVdtMVdibG96Um5SWmJVcDZZMnBhY1UweWFHcGliVFZxV2pOTk5HSnVVVE5aYW1NMFpGUmtkazFUU21STVEwcHNaVWhCYVU5cVJUTk9WRWwzVGtSTmQwNTZUWE5KYld4b1pFTkpOazFVWXpGTmFrRjZUMVJSTTAxNWQybGhXRTU2U1dwdmFXRklVakJqU0UwMlRIazVkbUZYVW1wTWJUbDNUVk0xZG1OSFZuVmpNbWh3V201U2FHTklRbnBNYlU1MllsTTRlVnB0Vm01YU0wWjBXVzFLZW1OcVduRk5NbWhxWW0wMWFsb3pUVFJpYmxFeldXcGpOR1JVWkhaTlUwbHpTVzF3TUdGVFNUWkpha2t4VFZSWmVFNXFUbWhNVkVWNldWUmpkRTVFVlRCTlV6RnBUVEpWTUV4VVdtbFpNbFpzV2xSak1VMTZaM2xPYVVselNXMTBNVmx0Vm5saWJWWXdXbGhOZFdGWE9HbFBibk5wWW0xR2RGcFlUbmRaVjA1c1NXcHZhVmx1Vm5walIwWjVZWGt4TUZwWVRqQk1WMUpzWkdsSmMwbHVUbXhaTTBwc1pFTkpObVY1U25WWlZ6RnNTV3B2YVZwSFZuZGlSemsxV2xoSmRGcEhPV3BoTWxaNVdUSmFia3hYYnpGbFIwcDFTV2wzYVdSWGJHdEphbTlwV2tST2FscHFXbTFhYWtsMFdXcFJlRmxwTURCTmJVbDNURlJzYWsxVVozUk5SRVV3V1cxUmQwMVhTWGRhVjFVd1NXNHdjMGx1VG14amJscHdXVEpXYUZreVRuWmtWelV3U1dwd04wbHROV2hpVjFWcFQybEthMXBZUW5OaU0yeHNZMmxKYzBsdVZuQmFRMGsyU1dwVmVWbDZhelZOVkUwMFRGUmthMWxxUlhST1JHeHRXbE13TlZsdFZYcE1WRmswV1ZSamVrOVhUbXhhUkZFelRWTktPV1pUZDJsaWJVcHRTV3B2ZUU1NlZYbE5SRTAxVGtSamVreERTbnBrVjBscFQybEtlbVZZVGpCYVZ6QTJZekpXZVdSdGJHcGFWMFpxV1RJNU1XSnVVVFpaYmxaNlkwZEdlV0Y1TVRCYVdFNHdURmRTYkdScWNHdGFXRUp6WWpOc2JHTnBTamt1ZDJKTlVtdHllbmRFVVU1VWExSm9WVWhqV2tWTVVqSTFSM2RXVlVKWFFqWnViRTFQVEdRd1EwY3dXWGhPUVdOb09XUlFja0ZKZW5kbE9WaENjbk5ZVVhsU1MyTndPSFphWDNaMlVVdHdURTFsUjIxTk1qZFhVbkl3VW5OUlRHNVJkM1JzU21SemJtMWtaWEJ6TkROT1dIVlBaekZ5WjNGUFQxQXlabEpUYlRGME1YaFZZMTlSVjI5bFluazNWa3h5TlV4R1ozVk1ObFYyUzA5blRIaHdVR2RwWDBOQ2MxVlVjbFpUU0d4Q1FqaFBja0l5ZGtsc1h6bDFRVmhzV1cwMFdVTmpNVmx2V1dFM2QwVm5XRk5oUzNaQ2RFOVBTVXd3Y1VsRmNuUlBkVEE1WVVnd2RYSkRaVFUzT0RNNGF6bGhPVloyTWpoR1IyTmphakJTYUdSTk5sOTZVMUZZY3pWMGRrbHRUMEZDVFd0S2VrVXpha015ZDE5SVIxUTVZMncwZFRGUFJsSnhSRWhSVmtaUlMyNVdVRUk0UnpacWIybG9XbmMzYkROdmF6bDBYMmhSU0ZWelQxSklRUzF4ZEZJMlJ6SXpTMnBZU1hkaWJGRkJRbmxVWkZKRlRtOVlaa3hGUXpSWGFtMUNTWE01VERaQlowc3hTR2wwV1hCUFIxcE5VMFpaYlhwNVJVVlRXakppTnpFNVRtdFNWMXBJU0dkNVVuZHlVbmhxU0Y5QlVsYzBhRWx4WXpsd1UxZHJYMWwxYmxFd2NHRkJRalJSTWw5clpXeHVlR3BRTmtKWlFtRnhielp0VlZOT1oyVk5UV0pPTjFaNlYwOUZkRXg0ZVVaQ04wbDVVRlo2VjNkbmJqTnhSalZKU1VwZmFuQnBhMFpOZFY5SmJHNXJkR3B6T1dOQmRsWm5PWEJtV0hSWFYyeENWR05zUjJsR1oxWXpjVXQxTjBGT1RuQlhRVWcxUXpkek1WUkVWMHRsTFdNeFZHNW5YMWRmUjFwVlpuUXlOa0l3UW5SWllXNVljMEZEYzJKMFNWaGpWVlpSWkhaNmJrVkpWV3hJU25KelFXeHpla0ZMVWxWbFZsSXhjMnh0ZDFZM2EyMTZZVWxKWkRoMmVFNURXVlYzWm1sdlZuTmpUbVJMU1dGNFZYUjJZWFV5U2tWeFlsZzNZMWRTYVZOMWREQTFiMnB0YWxOSlZWaHpTMDA9In0sImRlZmF1bHQtcm91dGUtb3BlbnNoaWZ0LWltYWdlLXJlZ2lzdHJ5LmFwcHMucm0zLjd3c2UucDEub3BlbnNoaWZ0YXBwcy5jb20iOnsiYXV0aCI6IlBIUnZhMlZ1UGpwbGVVcG9Za2RqYVU5cFNsTlZla2t4VG1sSmMwbHRkSEJhUTBrMlNXNWplR1ZGYUUxVWJFSllUMFprY0ZKNlJUQlVSV3h3VGxST1VWTkZTbGhqTUZGM1YyeG9TMUZYYkRWWmFtZDVUVVZXZWsxc1drZFVSR2RwWmxFdVpYbEthR1JYVVdsUGJITnBZVWhTTUdOSVRUWk1lVGwyWVZkU2FreHRPWGROVXpWMlkwZFdkV015YUhCYWJsSm9ZMGhDZWt4dFRuWmlVemg1V20xV2Jsb3pSblJaYlVwNlkycGFjVTB5YUdwaWJUVnFXak5OTkdKdVVUTlphbU0wWkZSa2RrMVRTbVJNUTBwc1pVaEJhVTlxUlROT1ZFbDNUa1JOZDA1NlRYTkpiV3hvWkVOSk5rMVVZekZOYWtGNlQxUlJNMDE1ZDJsaFdFNTZTV3B2YVdGSVVqQmpTRTAyVEhrNWRtRlhVbXBNYlRsM1RWTTFkbU5IVm5Wak1taHdXbTVTYUdOSVFucE1iVTUyWWxNNGVWcHRWbTVhTTBaMFdXMUtlbU5xV25GTk1taHFZbTAxYWxvelRUUmlibEV6V1dwak5HUlVaSFpOVTBselNXMXdNR0ZUU1RaSmFra3hUVlJaZUU1cVRtaE1WRVY2V1ZSamRFNUVWVEJOVXpGcFRUSlZNRXhVV21sWk1sWnNXbFJqTVUxNlozbE9hVWx6U1cxME1WbHRWbmxpYlZZd1dsaE5kV0ZYT0dsUGJuTnBZbTFHZEZwWVRuZFpWMDVzU1dwdmFWbHVWbnBqUjBaNVlYa3hNRnBZVGpCTVYxSnNaR2xKYzBsdVRteFpNMHBzWkVOSk5tVjVTblZaVnpGc1NXcHZhVnBIVm5kaVJ6azFXbGhKZEZwSE9XcGhNbFo1V1RKYWJreFhiekZsUjBwMVNXbDNhV1JYYkd0SmFtOXBXa1JPYWxwcVdtMWFha2wwV1dwUmVGbHBNREJOYlVsM1RGUnNhazFVWjNSTlJFVXdXVzFSZDAxWFNYZGFWMVV3U1c0d2MwbHVUbXhqYmxwd1dUSldhRmt5VG5aa1Z6VXdTV3B3TjBsdE5XaGlWMVZwVDJsS2ExcFlRbk5pTTJ4c1kybEpjMGx1Vm5CYVEwazJTV3BWZVZsNmF6Vk5WRTAwVEZSa2ExbHFSWFJPUkd4dFdsTXdOVmx0VlhwTVZGazBXVlJqZWs5WFRteGFSRkV6VFZOS09XWlRkMmxpYlVwdFNXcHZlRTU2VlhsTlJFMDFUa1JqZWt4RFNucGtWMGxwVDJsS2VtVllUakJhVnpBMll6SldlV1J0YkdwYVYwWnFXVEk1TVdKdVVUWlpibFo2WTBkR2VXRjVNVEJhV0U0d1RGZFNiR1JxY0d0YVdFSnpZak5zYkdOcFNqa3VkMkpOVW10eWVuZEVVVTVVYTFKb1ZVaGpXa1ZNVWpJMVIzZFdWVUpYUWpadWJFMVBUR1F3UTBjd1dYaE9RV05vT1dSUWNrRkplbmRsT1ZoQ2NuTllVWGxTUzJOd09IWmFYM1oyVVV0d1RFMWxSMjFOTWpkWFVuSXdVbk5SVEc1UmQzUnNTbVJ6Ym0xa1pYQnpORE5PV0hWUFp6RnlaM0ZQVDFBeVpsSlRiVEYwTVhoVlkxOVJWMjlsWW5rM1ZreHlOVXhHWjNWTU5sVjJTMDluVEhod1VHZHBYME5DYzFWVWNsWlRTR3hDUWpoUGNrSXlka2xzWHpsMVFWaHNXVzAwV1VOak1WbHZXV0UzZDBWbldGTmhTM1pDZEU5UFNVd3djVWxGY25SUGRUQTVZVWd3ZFhKRFpUVTNPRE00YXpsaE9WWjJNamhHUjJOamFqQlNhR1JOTmw5NlUxRlljelYwZGtsdFQwRkNUV3RLZWtVemFrTXlkMTlJUjFRNVkydzBkVEZQUmxKeFJFaFJWa1pSUzI1V1VFSTRSelpxYjJsb1duYzNiRE52YXpsMFgyaFJTRlZ6VDFKSVFTMXhkRkkyUnpJelMycFlTWGRpYkZGQlFubFVaRkpGVG05WVpreEZRelJYYW0xQ1NYTTVURFpCWjBzeFNHbDBXWEJQUjFwTlUwWlpiWHA1UlVWVFdqSmlOekU1VG10U1YxcElTR2Q1VW5keVVuaHFTRjlCVWxjMGFFbHhZemx3VTFkclgxbDFibEV3Y0dGQlFqUlJNbDlyWld4dWVHcFFOa0paUW1GeGJ6WnRWVk5PWjJWTlRXSk9OMVo2VjA5RmRFeDRlVVpDTjBsNVVGWjZWM2RuYmpOeFJqVkpTVXBmYW5CcGEwWk5kVjlKYkc1cmRHcHpPV05CZGxabk9YQm1XSFJYVjJ4Q1ZHTnNSMmxHWjFZemNVdDFOMEZPVG5CWFFVZzFRemR6TVZSRVYwdGxMV014Vkc1blgxZGZSMXBWWm5ReU5rSXdRblJaWVc1WWMwRkRjMkowU1ZoalZWWlJaSFo2YmtWSlZXeElTbkp6UVd4emVrRkxVbFZsVmxJeGMyeHRkMVkzYTIxNllVbEpaRGgyZUU1RFdWVjNabWx2Vm5OalRtUkxTV0Y0VlhSMllYVXlTa1Z4WWxnM1kxZFNhVk4xZERBMWIycHRhbE5KVlZoelMwMD0ifSwiaW1hZ2UtcmVnaXN0cnkub3BlbnNoaWZ0LWltYWdlLXJlZ2lzdHJ5LnN2Yy5jbHVzdGVyLmxvY2FsOjUwMDAiOnsiYXV0aCI6IlBIUnZhMlZ1UGpwbGVVcG9Za2RqYVU5cFNsTlZla2t4VG1sSmMwbHRkSEJhUTBrMlNXNWplR1ZGYUUxVWJFSllUMFprY0ZKNlJUQlVSV3h3VGxST1VWTkZTbGhqTUZGM1YyeG9TMUZYYkRWWmFtZDVUVVZXZWsxc1drZFVSR2RwWmxFdVpYbEthR1JYVVdsUGJITnBZVWhTTUdOSVRUWk1lVGwyWVZkU2FreHRPWGROVXpWMlkwZFdkV015YUhCYWJsSm9ZMGhDZWt4dFRuWmlVemg1V20xV2Jsb3pSblJaYlVwNlkycGFjVTB5YUdwaWJUVnFXak5OTkdKdVVUTlphbU0wWkZSa2RrMVRTbVJNUTBwc1pVaEJhVTlxUlROT1ZFbDNUa1JOZDA1NlRYTkpiV3hvWkVOSk5rMVVZekZOYWtGNlQxUlJNMDE1ZDJsaFdFNTZTV3B2YVdGSVVqQmpTRTAyVEhrNWRtRlhVbXBNYlRsM1RWTTFkbU5IVm5Wak1taHdXbTVTYUdOSVFucE1iVTUyWWxNNGVWcHRWbTVhTTBaMFdXMUtlbU5xV25GTk1taHFZbTAxYWxvelRUUmlibEV6V1dwak5HUlVaSFpOVTBselNXMXdNR0ZUU1RaSmFra3hUVlJaZUU1cVRtaE1WRVY2V1ZSamRFNUVWVEJOVXpGcFRUSlZNRXhVV21sWk1sWnNXbFJqTVUxNlozbE9hVWx6U1cxME1WbHRWbmxpYlZZd1dsaE5kV0ZYT0dsUGJuTnBZbTFHZEZwWVRuZFpWMDVzU1dwdmFWbHVWbnBqUjBaNVlYa3hNRnBZVGpCTVYxSnNaR2xKYzBsdVRteFpNMHBzWkVOSk5tVjVTblZaVnpGc1NXcHZhVnBIVm5kaVJ6azFXbGhKZEZwSE9XcGhNbFo1V1RKYWJreFhiekZsUjBwMVNXbDNhV1JYYkd0SmFtOXBXa1JPYWxwcVdtMWFha2wwV1dwUmVGbHBNREJOYlVsM1RGUnNhazFVWjNSTlJFVXdXVzFSZDAxWFNYZGFWMVV3U1c0d2MwbHVUbXhqYmxwd1dUSldhRmt5VG5aa1Z6VXdTV3B3TjBsdE5XaGlWMVZwVDJsS2ExcFlRbk5pTTJ4c1kybEpjMGx1Vm5CYVEwazJTV3BWZVZsNmF6Vk5WRTAwVEZSa2ExbHFSWFJPUkd4dFdsTXdOVmx0VlhwTVZGazBXVlJqZWs5WFRteGFSRkV6VFZOS09XWlRkMmxpYlVwdFNXcHZlRTU2VlhsTlJFMDFUa1JqZWt4RFNucGtWMGxwVDJsS2VtVllUakJhVnpBMll6SldlV1J0YkdwYVYwWnFXVEk1TVdKdVVUWlpibFo2WTBkR2VXRjVNVEJhV0U0d1RGZFNiR1JxY0d0YVdFSnpZak5zYkdOcFNqa3VkMkpOVW10eWVuZEVVVTVVYTFKb1ZVaGpXa1ZNVWpJMVIzZFdWVUpYUWpadWJFMVBUR1F3UTBjd1dYaE9RV05vT1dSUWNrRkplbmRsT1ZoQ2NuTllVWGxTUzJOd09IWmFYM1oyVVV0d1RFMWxSMjFOTWpkWFVuSXdVbk5SVEc1UmQzUnNTbVJ6Ym0xa1pYQnpORE5PV0hWUFp6RnlaM0ZQVDFBeVpsSlRiVEYwTVhoVlkxOVJWMjlsWW5rM1ZreHlOVXhHWjNWTU5sVjJTMDluVEhod1VHZHBYME5DYzFWVWNsWlRTR3hDUWpoUGNrSXlka2xzWHpsMVFWaHNXVzAwV1VOak1WbHZXV0UzZDBWbldGTmhTM1pDZEU5UFNVd3djVWxGY25SUGRUQTVZVWd3ZFhKRFpUVTNPRE00YXpsaE9WWjJNamhHUjJOamFqQlNhR1JOTmw5NlUxRlljelYwZGtsdFQwRkNUV3RLZWtVemFrTXlkMTlJUjFRNVkydzBkVEZQUmxKeFJFaFJWa1pSUzI1V1VFSTRSelpxYjJsb1duYzNiRE52YXpsMFgyaFJTRlZ6VDFKSVFTMXhkRkkyUnpJelMycFlTWGRpYkZGQlFubFVaRkpGVG05WVpreEZRelJYYW0xQ1NYTTVURFpCWjBzeFNHbDBXWEJQUjFwTlUwWlpiWHA1UlVWVFdqSmlOekU1VG10U1YxcElTR2Q1VW5keVVuaHFTRjlCVWxjMGFFbHhZemx3VTFkclgxbDFibEV3Y0dGQlFqUlJNbDlyWld4dWVHcFFOa0paUW1GeGJ6WnRWVk5PWjJWTlRXSk9OMVo2VjA5RmRFeDRlVVpDTjBsNVVGWjZWM2RuYmpOeFJqVkpTVXBmYW5CcGEwWk5kVjlKYkc1cmRHcHpPV05CZGxabk9YQm1XSFJYVjJ4Q1ZHTnNSMmxHWjFZemNVdDFOMEZPVG5CWFFVZzFRemR6TVZSRVYwdGxMV014Vkc1blgxZGZSMXBWWm5ReU5rSXdRblJaWVc1WWMwRkRjMkowU1ZoalZWWlJaSFo2YmtWSlZXeElTbkp6UVd4emVrRkxVbFZsVmxJeGMyeHRkMVkzYTIxNllVbEpaRGgyZUU1RFdWVjNabWx2Vm5OalRtUkxTV0Y0VlhSMllYVXlTa1Z4WWxnM1kxZFNhVk4xZERBMWIycHRhbE5KVlZoelMwMD0ifSwiaW1hZ2UtcmVnaXN0cnkub3BlbnNoaWZ0LWltYWdlLXJlZ2lzdHJ5LnN2Yzo1MDAwIjp7ImF1dGgiOiJQSFJ2YTJWdVBqcGxlVXBvWWtkamFVOXBTbE5WZWtreFRtbEpjMGx0ZEhCYVEwazJTVzVqZUdWRmFFMVViRUpZVDBaa2NGSjZSVEJVUld4d1RsUk9VVk5GU2xoak1GRjNWMnhvUzFGWGJEVlphbWQ1VFVWV2VrMXNXa2RVUkdkcFpsRXVaWGxLYUdSWFVXbFBiSE5wWVVoU01HTklUVFpNZVRsMllWZFNha3h0T1hkTlV6VjJZMGRXZFdNeWFIQmFibEpvWTBoQ2VreHRUblppVXpoNVdtMVdibG96Um5SWmJVcDZZMnBhY1UweWFHcGliVFZxV2pOTk5HSnVVVE5aYW1NMFpGUmtkazFUU21STVEwcHNaVWhCYVU5cVJUTk9WRWwzVGtSTmQwNTZUWE5KYld4b1pFTkpOazFVWXpGTmFrRjZUMVJSTTAxNWQybGhXRTU2U1dwdmFXRklVakJqU0UwMlRIazVkbUZYVW1wTWJUbDNUVk0xZG1OSFZuVmpNbWh3V201U2FHTklRbnBNYlU1MllsTTRlVnB0Vm01YU0wWjBXVzFLZW1OcVduRk5NbWhxWW0wMWFsb3pUVFJpYmxFeldXcGpOR1JVWkhaTlUwbHpTVzF3TUdGVFNUWkpha2t4VFZSWmVFNXFUbWhNVkVWNldWUmpkRTVFVlRCTlV6RnBUVEpWTUV4VVdtbFpNbFpzV2xSak1VMTZaM2xPYVVselNXMTBNVmx0Vm5saWJWWXdXbGhOZFdGWE9HbFBibk5wWW0xR2RGcFlUbmRaVjA1c1NXcHZhVmx1Vm5walIwWjVZWGt4TUZwWVRqQk1WMUpzWkdsSmMwbHVUbXhaTTBwc1pFTkpObVY1U25WWlZ6RnNTV3B2YVZwSFZuZGlSemsxV2xoSmRGcEhPV3BoTWxaNVdUSmFia3hYYnpGbFIwcDFTV2wzYVdSWGJHdEphbTlwV2tST2FscHFXbTFhYWtsMFdXcFJlRmxwTURCTmJVbDNURlJzYWsxVVozUk5SRVV3V1cxUmQwMVhTWGRhVjFVd1NXNHdjMGx1VG14amJscHdXVEpXYUZreVRuWmtWelV3U1dwd04wbHROV2hpVjFWcFQybEthMXBZUW5OaU0yeHNZMmxKYzBsdVZuQmFRMGsyU1dwVmVWbDZhelZOVkUwMFRGUmthMWxxUlhST1JHeHRXbE13TlZsdFZYcE1WRmswV1ZSamVrOVhUbXhhUkZFelRWTktPV1pUZDJsaWJVcHRTV3B2ZUU1NlZYbE5SRTAxVGtSamVreERTbnBrVjBscFQybEtlbVZZVGpCYVZ6QTJZekpXZVdSdGJHcGFWMFpxV1RJNU1XSnVVVFpaYmxaNlkwZEdlV0Y1TVRCYVdFNHdURmRTYkdScWNHdGFXRUp6WWpOc2JHTnBTamt1ZDJKTlVtdHllbmRFVVU1VWExSm9WVWhqV2tWTVVqSTFSM2RXVlVKWFFqWnViRTFQVEdRd1EwY3dXWGhPUVdOb09XUlFja0ZKZW5kbE9WaENjbk5ZVVhsU1MyTndPSFphWDNaMlVVdHdURTFsUjIxTk1qZFhVbkl3VW5OUlRHNVJkM1JzU21SemJtMWtaWEJ6TkROT1dIVlBaekZ5WjNGUFQxQXlabEpUYlRGME1YaFZZMTlSVjI5bFluazNWa3h5TlV4R1ozVk1ObFYyUzA5blRIaHdVR2RwWDBOQ2MxVlVjbFpUU0d4Q1FqaFBja0l5ZGtsc1h6bDFRVmhzV1cwMFdVTmpNVmx2V1dFM2QwVm5XRk5oUzNaQ2RFOVBTVXd3Y1VsRmNuUlBkVEE1WVVnd2RYSkRaVFUzT0RNNGF6bGhPVloyTWpoR1IyTmphakJTYUdSTk5sOTZVMUZZY3pWMGRrbHRUMEZDVFd0S2VrVXpha015ZDE5SVIxUTVZMncwZFRGUFJsSnhSRWhSVmtaUlMyNVdVRUk0UnpacWIybG9XbmMzYkROdmF6bDBYMmhSU0ZWelQxSklRUzF4ZEZJMlJ6SXpTMnBZU1hkaWJGRkJRbmxVWkZKRlRtOVlaa3hGUXpSWGFtMUNTWE01VERaQlowc3hTR2wwV1hCUFIxcE5VMFpaYlhwNVJVVlRXakppTnpFNVRtdFNWMXBJU0dkNVVuZHlVbmhxU0Y5QlVsYzBhRWx4WXpsd1UxZHJYMWwxYmxFd2NHRkJRalJSTWw5clpXeHVlR3BRTmtKWlFtRnhielp0VlZOT1oyVk5UV0pPTjFaNlYwOUZkRXg0ZVVaQ04wbDVVRlo2VjNkbmJqTnhSalZKU1VwZmFuQnBhMFpOZFY5SmJHNXJkR3B6T1dOQmRsWm5PWEJtV0hSWFYyeENWR05zUjJsR1oxWXpjVXQxTjBGT1RuQlhRVWcxUXpkek1WUkVWMHRsTFdNeFZHNW5YMWRmUjFwVlpuUXlOa0l3UW5SWllXNVljMEZEYzJKMFNWaGpWVlpSWkhaNmJrVkpWV3hJU25KelFXeHpla0ZMVWxWbFZsSXhjMnh0ZDFZM2EyMTZZVWxKWkRoMmVFNURXVlYzWm1sdlZuTmpUbVJMU1dGNFZYUjJZWFV5U2tWeFlsZzNZMWRTYVZOMWREQTFiMnB0YWxOSlZWaHpTMDA9In19
+  kind: Secret
+  metadata:
+    annotations:
+      openshift.io/internal-registry-auth-token.binding: bound
+      openshift.io/internal-registry-auth-token.service-account: deployer
+    creationTimestamp: "2025-06-10T09:49:53Z"
+    name: deployer-dockercfg-j5xbn
+    namespace: buspark-test-dev
+    ownerReferences:
+    - apiVersion: v1
+      kind: ServiceAccount
+      name: deployer
+      uid: 52c99138-7db1-49fe-9be3-68a739ced471
+    resourceVersion: "3035758201"
+    uid: d3cf6ff2-b41b-42b0-9c18-014bd01b0ee4
+  type: kubernetes.io/dockercfg
+- apiVersion: v1
+  data:
+    tls.crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUVhVENDQTFHZ0F3SUJBZ0lJSHRET2Q5OExnRkV3RFFZSktvWklodmNOQVFFTEJRQXdOakUwTURJR0ExVUUKQXd3cmIzQmxibk5vYVdaMExYTmxjblpwWTJVdGMyVnlkbWx1WnkxemFXZHVaWEpBTVRjek16STFNemd6TXpBZQpGdzB5TlRBMk1UQXdPVFE1TlRKYUZ3MHlOekEyTVRBd09UUTVOVE5hTURNeE1UQXZCZ05WQkFNTUtDb3ViVzlrClpXeHRaWE5vTFhObGNuWnBibWN1WW5WemNHRnlheTEwWlhOMExXUmxkaTV6ZG1Nd2dnRWlNQTBHQ1NxR1NJYjMKRFFFQkFRVUFBNElCRHdBd2dnRUtBb0lCQVFDbXNydGVMR3pRajdmUlEzWGV4SHdlOEd4YjVLNVg2WDh5OGw2cgpMb2tJVmY5Y1NXVjdRejF5RGhpS2dQZ3FrWStHNlBoZmV3NytkTXBhR1dSblR6U0hqL1FDR3dhSWxoRUo2VmY3CllrcHl2NVRySWN1andNZGVZZDIyR1NiUWRaR21PL0hORUo0dDRpaXV2RGlac1NJZ3FQc05tT1JCRkFXN0lyUUcKWWIvS0Rqdks1em45RWFuVjA1ZElCdzNSWjJWM0NPRUVEbXoxQk9qbS9UM3U3VFQzMmlGVmRLSVJwYW4yaTF6Ngo2UW9vN3k5a0x5YS9lNnBERG5lRjY0WXlKY1h6MTJwaWtPRkdSalBKTFRhaVJWR1Q2dS9sVlFJaUt5RDdpeWZaCmxLZ0hQRWVhNmNudExVbllkcnpib3VBamZaaGkzdkdaRk5ZdWJwUWJxZkRESXZQSEFnTUJBQUdqZ2dGOE1JSUIKZURBT0JnTlZIUThCQWY4RUJBTUNCYUF3RXdZRFZSMGxCQXd3Q2dZSUt3WUJCUVVIQXdFd0RBWURWUjBUQVFILwpCQUl3QURBZEJnTlZIUTRFRmdRVXFvcm1BYjFzdFdWaTNKb3U0TXVoTTFjbHRITXdId1lEVlIwakJCZ3dGb0FVCnpndDNJNWwwVStzSkJYZmZnZzAwVElWcms3RXdnY3NHQTFVZEVRU0J3ekNCd0lJb0tpNXRiMlJsYkcxbGMyZ3QKYzJWeWRtbHVaeTVpZFhOd1lYSnJMWFJsYzNRdFpHVjJMbk4yWTRJMktpNXRiMlJsYkcxbGMyZ3RjMlZ5ZG1sdQpaeTVpZFhOd1lYSnJMWFJsYzNRdFpHVjJMbk4yWXk1amJIVnpkR1Z5TG14dlkyRnNnaVp0YjJSbGJHMWxjMmd0CmMyVnlkbWx1Wnk1aWRYTndZWEpyTFhSbGMzUXRaR1YyTG5OMlk0STBiVzlrWld4dFpYTm9MWE5sY25acGJtY3UKWW5WemNHRnlheTEwWlhOMExXUmxkaTV6ZG1NdVkyeDFjM1JsY2k1c2IyTmhiREExQmdzckJnRUVBWklJRVdRQwpBUVFtRXlSak1HWTRNbUV6WlMweFpEazRMVFJpTVRNdE9HTTVaaTA1T0dJeU5UZzRNekUzWTJFd0RRWUpLb1pJCmh2Y05BUUVMQlFBRGdnRUJBSDdYRitWSm84ZHM2VEIzZzZleVYvWCtDK1VlUFJLcUF1MGtDbHpJZGFtMUhYNEMKUFpOY3FtNzJyUkttVHRVb1M3WHFYYnZSWjJSaHBDbjZVSFFXMW5aaG9WYXZHOGtCUjUwaThvK3ZXclNhdngyZQplZ1hiOTN4WUJ2S2tQcTg2cEN6YkRpay9OTjV2dWhOK093SmdzQ3NMcWRaMUZtQnkzKzlLTzVKckhRQzFhcUFnCnZMRnY1V1lVZGlXRHB4ZUd0bjB5bjcrUVJJckNyWU5NREFrenFmRzFpZU51Tzc5OXBuSGk5NXpHWU03V0pHZzQKSXgrTTVBVnROZTNkeHA0N1E4eFh0ZEdkenhLWkJ5UzdoRW5nc3lPUVBKT1BQZ3REaFF1NkFkVU8xaVFtZWx2YgpyWXp5dGV0bVIzTS9jaHAyQ2cwVVVvUGQ1RUZ1b21xZXJ3VldBRkU9Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0KLS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURVVENDQWptZ0F3SUJBZ0lJUmFZVjJtdWxHeDB3RFFZSktvWklodmNOQVFFTEJRQXdOakUwTURJR0ExVUUKQXd3cmIzQmxibk5vYVdaMExYTmxjblpwWTJVdGMyVnlkbWx1WnkxemFXZHVaWEpBTVRjek16STFNemd6TXpBZQpGdzB5TkRFeU1ETXhPVEl6TlRKYUZ3MHlOekF5TURFeE9USXpOVE5hTURZeE5EQXlCZ05WQkFNTUsyOXdaVzV6CmFHbG1kQzF6WlhKMmFXTmxMWE5sY25acGJtY3RjMmxuYm1WeVFERTNNek15TlRNNE16TXdnZ0VpTUEwR0NTcUcKU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRQy9Lc3kxY0R4c1gwYTBOeUdIK2pKeHhxZlRncExHWXVJbgpNeHpIWWtuSTFHb3VOakVTUi9MQkw0RHBYR0M5RUNtV3hDTTlFQjhYbnVLZzdTbnpUT1ZPY3hJVlpiakR4MHdhClpuL0w1ZlNIbUFHOWt6ZGpHZTFtcGk0bFZIMmdyR1ZqMXlOZnBqNWtReFhLWTRHSDNzbW5La3NSby9DMnJEcHQKM1NuNTJqanJsOFEwbHNiSDBsMzRhTU5haEozaFFVQmFvWlRCTmdoQ255YWZTalhNOUZRcE1GdEpySG92ODBDNApYRkFWZVZoUFZXeWNMNlZlaXExOFg5eGRiaEhRcFhZcjQyOGN2VWphNEhrVGpzRGFXTW5JVjNLNEdKWis4cUtrCmFoUFpmRjZ0Y3h2T0paNCtQNkFFdjl4UjBmZDQxMzk0RjNSK2xsYk9CSHRqT2tac0tKZVhBZ01CQUFHall6QmgKTUE0R0ExVWREd0VCL3dRRUF3SUNwREFQQmdOVkhSTUJBZjhFQlRBREFRSC9NQjBHQTFVZERnUVdCQlRPQzNjagptWFJUNndrRmQ5K0NEVFJNaFd1VHNUQWZCZ05WSFNNRUdEQVdnQlRPQzNjam1YUlQ2d2tGZDkrQ0RUUk1oV3VUCnNUQU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFyeHkvNWtGV2tmODV3c3REdFhCYTluOG5TUCtKNjV6eUE0RUcKcVhRd3pHZy82Qm5SdTFocVVXU2R4U09UUE1IeFZvbU5RV0RxR0ZjVzZCcm92TVVRZ2hFbzBRZWNBQ3g5R0tadApJWFp5NC9mSmoyTm5VOW5vZEIxT1UyNGR5bnk2a01INjA2a1JMSEJFbzg1SkVHMVVjMHRmRWNtTTduQXNwZzlRCnVIWkN0U2ludysrNVBmUE1zUDQ3ZURkUzNGUFdHY1pyV0FDQk1qUXRuRXhqU2hqM0RqdmhnR1FaSU5rdFRHbzUKRUNrMzRobGh5bjVBcmtLWnZFbmlNRVpWeWdLeWJ1ZmIzazVnT3IwZGRkZGF0Y3ZHby9uY0Z1eGdlNmJrTkdTZApLcnk5dGxJSFZJc0Yra0R1RHU1L3hRUko2dTJ1WXNicnY1SHlDWVQ2UVdWZVQwUks0Zz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+    tls.key: LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlFcFFJQkFBS0NBUUVBcHJLN1hpeHMwSSszMFVOMTNzUjhIdkJzVytTdVYrbC9NdkplcXk2SkNGWC9YRWxsCmUwTTljZzRZaW9ENEtwR1BodWo0WDNzTy9uVEtXaGxrWjA4MGg0LzBBaHNHaUpZUkNlbFgrMkpLY3IrVTZ5SEwKbzhESFhtSGR0aGttMEhXUnBqdnh6UkNlTGVJb3JydzRtYkVpSUtqN0RaamtRUlFGdXlLMEJtRy95ZzQ3eXVjNQovUkdwMWRPWFNBY04wV2RsZHdqaEJBNXM5UVRvNXYwOTd1MDA5OW9oVlhTaUVhV3A5b3RjK3VrS0tPOHZaQzhtCnYzdXFRdzUzaGV1R01pWEY4OWRxWXBEaFJrWXp5UzAyb2tWUmsrcnY1VlVDSWlzZys0c24yWlNvQnp4SG11bkoKN1MxSjJIYTgyNkxnSTMyWVl0N3htUlRXTG02VUc2bnd3eUx6eHdJREFRQUJBb0lCQVFDVVJIYlpEV1Ivb01UYgpVVWhlcXA3SG1ncVhOWEJJYXp1aTRlYUlGV3oyeUI3SVE5UUtiY1VTVkMxSnkrcHZXbWF4bFRlTkhWUTV5VUZPCklEV29tYzljSUJMbGFJcElKRW5sYWZIQ2V5dENvdHBleFFGdWxnSCtGY2Z3dHJCS1M3Z1BobFBNbEZKTTkxSSsKRU5XN0JjMFlCWlMvQkZWSStQa2IrSUx0QmpaakRSUDlRV28zYnNtMXNZK0dNS2NycVowWE54SUNoelpIbGJvWQpLY1Q2aGtod0k1cFpuTXdySjdsVnVpOENXSkhuZEhVVW1MWXJ1c1FxZFdCNmZYTXRVRFYrY3hySFVGMy9RbWR3CmxrKzdBQndJd1E5Y2U5SnczSG1PQzdyNXByTkRPREpxenNQUGl2Z3YvZm5QNjU2V1RxZGVvU2F6TUxoTXlmV2kKN3NXV1ErbEpBb0dCQU1TZk5TeWdYSTFpMTc1WW55bHBkRiszZTlYMEY4NklGclJxcmUya093elYzdFZ2NlBFKwpEbFdRdlZFWjBqb0I3R0grWllaMktpZlhyRXBPK0sxV2FGTlNVY0ZKblBydS9KSGJFNmpZd291OHlsdkVsclBmCktnNUpKRkZsTGRYTFBXd2d2dFVueE94YXJOdjFPL254T3hJT0g5eDlYS2JkNzhDNDQ1Q1d3TFlOQW9HQkFOa0sKSUtYVTNJL0pyUWd0clFEMG11aEVZaVMrSTdmNlIzcExCcTZlL3B6eFlMc1QxWXNpL0Y1a0xwbXlFcUtyMVczQQo3MkR5VHlTTGJZTVVHSStEUEZGWHlVZUpmK3U4VmZtR0UrVllJa2JsckI4eDU5TmkyRVdTdCtNMDZWS2RWanVqCm51MDFDTEpCd2NXdUt3Q09WUDkxZWRUdUZUYWFQcjFEMktwQi9sQWpBb0dCQUk5cE5FYWxmSHdmZ1E2ejR2czQKa0lvVDhYMy9lTEhLYncwTzFtZURweEpZbUJ5RGNKc3MwUlcxNlcvUzdwUWl2UUJJcGxKcHM1dTE0bE9jd0NMbAo2RmdGcmQzV1RHcDJqNy91MDZzTzF1OUhOeTJ4K04yZlF6U0NRcndmbVV2YjNxUVVTang4c2xSV1dzaGdXV3VYCmVLZFZxQVdSWmxmTGZzakowaW11MjBhdEFvR0JBSUZsS0ZHMXRrbURVMFdzOVplOFBSNThwb2FCVllvNkRLTTgKVjUrRDZ3aG1YK1VvemdkRnRIQVNDalpYbEFTbnJYYmhyOVY4b1BLSXJhR1lPWXhXRVgvdGRuTFA1eFFFRkwzTwowYzNKM2FXbkNCY1JDY1ZkQ05OeHhYQVArNHJsZ3FQTHlOUmk2ZXhjaDhuekxIQUlhMlJpQldDTkVOaWMzUXE1CmlGTDVSVVZCQW9HQUZjLzlicHFqcmV3VDRqMms0UTVkYitRM3BHQmorNXM3b2pBK2lGSEJrdTFTVmhGeW96TEIKTXZuUTd5aGxsNFBQMUQvZXhCT0VkT3NQKzN3ditBWnlxeUc4eEJUK3diRTRzc0V5YlFLOEtXSVdicFBhVzg2VgpmcTdqQnNScFJMM2ZNU3Y3enBPVE5PL0RGMDU2NHpuSHNRUjVORU1LSjdhZit6bnNuS1VXNU5nPQotLS0tLUVORCBSU0EgUFJJVkFURSBLRVktLS0tLQo=
+  kind: Secret
+  metadata:
+    annotations:
+      openshift.io/description: 'Secret contains a pair signed serving certificate/key
+        that is generated by Service CA operator for service/modelmesh-serving with
+        hostname modelmesh-serving.buspark-test-dev.svc and is annotated to the service
+        with annotating a service resource with ''service.beta.openshift.io/serving-cert-secret-name:
+        model-serving-proxy-tls''. The certificate is valid for 2 years.'
+      openshift.io/owning-component: service-ca
+      service.alpha.openshift.io/expiry: "2027-06-10T09:49:53Z"
+      service.alpha.openshift.io/originating-service-name: modelmesh-serving
+      service.alpha.openshift.io/originating-service-uid: c0f82a3e-1d98-4b13-8c9f-98b2588317ca
+      service.beta.openshift.io/expiry: "2027-06-10T09:49:53Z"
+    creationTimestamp: "2025-06-10T09:49:53Z"
+    name: model-serving-proxy-tls
+    namespace: buspark-test-dev
+    ownerReferences:
+    - apiVersion: v1
+      kind: Service
+      name: modelmesh-serving
+      uid: c0f82a3e-1d98-4b13-8c9f-98b2588317ca
+    resourceVersion: "2428866411"
+    uid: 59722faa-f2c8-44e7-aab9-4e78a21122f5
+  type: kubernetes.io/tls
+- apiVersion: v1
+  data:
+    .dockercfg: eyIxNzIuMzAuMTk0LjIyMTo1MDAwIjp7ImF1dGgiOiJQSFJ2YTJWdVBqcGxlVXBvWWtkamFVOXBTbE5WZWtreFRtbEpjMGx0ZEhCYVEwazJTVzVqZUdWRmFFMVViRUpZVDBaa2NGSjZSVEJVUld4d1RsUk9VVk5GU2xoak1GRjNWMnhvUzFGWGJEVlphbWQ1VFVWV2VrMXNXa2RVUkdkcFpsRXVaWGxLYUdSWFVXbFBiSE5wWVVoU01HTklUVFpNZVRsMllWZFNha3h0T1hkTlV6VjJZMGRXZFdNeWFIQmFibEpvWTBoQ2VreHRUblppVXpoNVdtMVdibG96Um5SWmJVcDZZMnBhY1UweWFHcGliVFZxV2pOTk5HSnVVVE5aYW1NMFpGUmtkazFUU21STVEwcHNaVWhCYVU5cVJUTk9WRWwzVGtSTmVFMTZSWE5KYld4b1pFTkpOazFVWXpGTmFrRjZUMVJWZWsxVGQybGhXRTU2U1dwdmFXRklVakJqU0UwMlRIazVkbUZYVW1wTWJUbDNUVk0xZG1OSFZuVmpNbWh3V201U2FHTklRbnBNYlU1MllsTTRlVnB0Vm01YU0wWjBXVzFLZW1OcVduRk5NbWhxWW0wMWFsb3pUVFJpYmxFeldXcGpOR1JVWkhaTlUwbHpTVzF3TUdGVFNUWkpha2w2VDFkYWEwOUhSWGRNVkU1cFQxUkpkRTVFVFhsUFF6QTFUMWRGTWt4VVdURk9hazVyVGxSRk5GbHFZM2xOUTBselNXMTBNVmx0Vm5saWJWWXdXbGhOZFdGWE9HbFBibk5wWW0xR2RGcFlUbmRaVjA1c1NXcHZhVmx1Vm5walIwWjVZWGt4TUZwWVRqQk1WMUpzWkdsSmMwbHVUbXhaTTBwc1pFTkpObVY1U25WWlZ6RnNTV3B2YVdOSGJIZGFWM2h3WW0xVmRGcEhPV3BoTWxaNVdUSmFia3hZV20xamJtUTBTV2wzYVdSWGJHdEphbTlwVGxkUk5GcHFhR3hhVjFsMFRucEthazlETURCT1IwMHhURmRLYlUxcVdYUk9WRXByV21wWmVsbHFWWHBOUkVKcVNXNHdjMGx1VG14amJscHdXVEpXYUZreVRuWmtWelV3U1dwd04wbHROV2hpVjFWcFQybEtkMkZZUW14aVIyeDFXbE5KYzBsdVZuQmFRMGsyU1dwT2FGcEVXVFZPVkVrelRGUmplVnBIU1hST1JFbDZXVk13TkZscVdYbE1WR2Q1V2xSR2EwMTZRbXBPTWs1b1drTktPV1pUZDJsaWJVcHRTV3B2ZUU1NlZYbE5SRTAxVGxSTmVFeERTbnBrVjBscFQybEtlbVZZVGpCYVZ6QTJZekpXZVdSdGJHcGFWMFpxV1RJNU1XSnVVVFpaYmxaNlkwZEdlV0Y1TVRCYVdFNHdURmRTYkdScWNIZGhXRUpzWWtkc2RWcFRTamt1WkVOblV6VmFXazloT1VKV2VWVnFhekJSWVVKbVUyeERRamhJT1UwdFpscEhNMWxZUlMxMWVXNUxWVmxsYzFoWGJteG5UbEZsUVMxdWQwNUlWRk5EYm5KdVkzZEZWMDFrVmxSTU1pMDNORmxFYlZJMmJrSnFXRUZxYlRoWE5uWXdWM0I2WTBSME5tRTBjRXhyVTBwaU5rTldZMnBZTTI1R1FYbGZjM1U0TlhSYVVuWTNiRnBMYTNkaGRYZEVWMjkzYVRORk1HdFNWakJ2YlVOR1pESmFSRTVIWld0SWRXWlVWbXBLVjBvek5tMTBTWEo1ZUZwd1RsWlZNVUZNVkZsV1p6STBNR1p3U1RONlJsUXRXVGhVUlVGdFExYzNaemxwZUZocFlreDVNVGxuYmxoZldDMWtTRE5FYVRKRFpXTnRSMlptUlZkWFoxVnVOQzFxWlZjM1gydFBiVlk1ZWpCSFltVlpVVlZ2Ylc5d05GQnBhWFJwTWxoeFUwODFSR0kwUlMxYU16ZHdiM0I0V21jd2J6aDFkRkZRTUc1NVNVbEJaMFl6VVZKTlkwcHFaRkJwTjA1SVUzZFZibXB0ZFRWV2NrOHRUSGhpVnkwd1ltWlNjMjgyZERRNFRqaEZWRFo1VmpOcFpYTjBWbTFOWm10T1kzbE9XazlJYzFObmIxaG5WMUpxVFRGNFMxOXVTelJaWWpseE0yaDJaMDVLUkRWVFN6UnBVVlI2TW1OU1N6ZFZVMUpzUWtGT01tOUhhVlZQY0dwWE0xSjJYM051TWxGUVVqaGlaVVI1Y0dSVGJHSk9TRWhYUlROeFFXOVBWbmhyYkU5VWRHRnpUalZmYVdZdGNIWlZjbWRqVUdRMWRtNTFiSHBSY0dsaFUyRkpURVpzTkVkb05sRnBOelpuTFhKbVpuRnpWR05ZWWpoUlRISndPRmg2VVZFelgxUnhPVzFXVWpGamFYQmZTMlZ0WVVsNVQzTlpabEpFYTJvd1JFaFJWRUpGWlRGRldXVnpZVjlVVkZaM056ZFdaRVZRU0ZsNmQyNXZOa2xEUVVGTlVIQjJWa1pzTUdsWlNFTjZkRVpoVkhWalRXUldkVUpJY1VkdmQxSlhNbmx3VG1oNE5IQkdTMDVMT0ZwV04wVmhUWGhLVTNablFYbE9UbVpRTWxsMWVuWkxNM1ZsUzJrdGEySjRhREZ2V2tOT2REY3pVVGc9In0sImRlZmF1bHQtcm91dGUtb3BlbnNoaWZ0LWltYWdlLXJlZ2lzdHJ5LmFwcHMucm0zLjd3c2UucDEub3BlbnNoaWZ0YXBwcy5jb20iOnsiYXV0aCI6IlBIUnZhMlZ1UGpwbGVVcG9Za2RqYVU5cFNsTlZla2t4VG1sSmMwbHRkSEJhUTBrMlNXNWplR1ZGYUUxVWJFSllUMFprY0ZKNlJUQlVSV3h3VGxST1VWTkZTbGhqTUZGM1YyeG9TMUZYYkRWWmFtZDVUVVZXZWsxc1drZFVSR2RwWmxFdVpYbEthR1JYVVdsUGJITnBZVWhTTUdOSVRUWk1lVGwyWVZkU2FreHRPWGROVXpWMlkwZFdkV015YUhCYWJsSm9ZMGhDZWt4dFRuWmlVemg1V20xV2Jsb3pSblJaYlVwNlkycGFjVTB5YUdwaWJUVnFXak5OTkdKdVVUTlphbU0wWkZSa2RrMVRTbVJNUTBwc1pVaEJhVTlxUlROT1ZFbDNUa1JOZUUxNlJYTkpiV3hvWkVOSk5rMVVZekZOYWtGNlQxUlZlazFUZDJsaFdFNTZTV3B2YVdGSVVqQmpTRTAyVEhrNWRtRlhVbXBNYlRsM1RWTTFkbU5IVm5Wak1taHdXbTVTYUdOSVFucE1iVTUyWWxNNGVWcHRWbTVhTTBaMFdXMUtlbU5xV25GTk1taHFZbTAxYWxvelRUUmlibEV6V1dwak5HUlVaSFpOVTBselNXMXdNR0ZUU1RaSmFrbDZUMWRhYTA5SFJYZE1WRTVwVDFSSmRFNUVUWGxQUXpBMVQxZEZNa3hVV1RGT2FrNXJUbFJGTkZscVkzbE5RMGx6U1cxME1WbHRWbmxpYlZZd1dsaE5kV0ZYT0dsUGJuTnBZbTFHZEZwWVRuZFpWMDVzU1dwdmFWbHVWbnBqUjBaNVlYa3hNRnBZVGpCTVYxSnNaR2xKYzBsdVRteFpNMHBzWkVOSk5tVjVTblZaVnpGc1NXcHZhV05IYkhkYVYzaHdZbTFWZEZwSE9XcGhNbFo1V1RKYWJreFlXbTFqYm1RMFNXbDNhV1JYYkd0SmFtOXBUbGRSTkZwcWFHeGFWMWwwVG5wS2FrOURNREJPUjAweFRGZEtiVTFxV1hST1ZFcHJXbXBaZWxscVZYcE5SRUpxU1c0d2MwbHVUbXhqYmxwd1dUSldhRmt5VG5aa1Z6VXdTV3B3TjBsdE5XaGlWMVZwVDJsS2QyRllRbXhpUjJ4MVdsTkpjMGx1Vm5CYVEwazJTV3BPYUZwRVdUVk9WRWt6VEZSamVWcEhTWFJPUkVsNldWTXdORmxxV1hsTVZHZDVXbFJHYTAxNlFtcE9NazVvV2tOS09XWlRkMmxpYlVwdFNXcHZlRTU2VlhsTlJFMDFUbFJOZUV4RFNucGtWMGxwVDJsS2VtVllUakJhVnpBMll6SldlV1J0YkdwYVYwWnFXVEk1TVdKdVVUWlpibFo2WTBkR2VXRjVNVEJhV0U0d1RGZFNiR1JxY0hkaFdFSnNZa2RzZFZwVFNqa3VaRU5uVXpWYVdrOWhPVUpXZVZWcWF6QlJZVUptVTJ4RFFqaElPVTB0WmxwSE0xbFlSUzExZVc1TFZWbGxjMWhYYm14blRsRmxRUzF1ZDA1SVZGTkRibkp1WTNkRlYwMWtWbFJNTWkwM05GbEViVkkyYmtKcVdFRnFiVGhYTm5Zd1YzQjZZMFIwTm1FMGNFeHJVMHBpTmtOV1kycFlNMjVHUVhsZmMzVTROWFJhVW5ZM2JGcExhM2RoZFhkRVYyOTNhVE5GTUd0U1ZqQnZiVU5HWkRKYVJFNUhaV3RJZFdaVVZtcEtWMG96Tm0xMFNYSjVlRnB3VGxaVk1VRk1WRmxXWnpJME1HWndTVE42UmxRdFdUaFVSVUZ0UTFjM1p6bHBlRmhwWWt4NU1UbG5ibGhmV0Mxa1NETkVhVEpEWldOdFIyWm1SVmRYWjFWdU5DMXFaVmMzWDJ0UGJWWTVlakJIWW1WWlVWVnZiVzl3TkZCcGFYUnBNbGh4VTA4MVJHSTBSUzFhTXpkd2IzQjRXbWN3YnpoMWRGRlFNRzU1U1VsQlowWXpVVkpOWTBwcVpGQnBOMDVJVTNkVmJtcHRkVFZXY2s4dFRIaGlWeTB3WW1aU2MyODJkRFE0VGpoRlZEWjVWak5wWlhOMFZtMU5abXRPWTNsT1drOUljMU5uYjFoblYxSnFUVEY0UzE5dVN6UlpZamx4TTJoMlowNUtSRFZUU3pScFVWUjZNbU5TU3pkVlUxSnNRa0ZPTW05SGFWVlBjR3BYTTFKMlgzTnVNbEZRVWpoaVpVUjVjR1JUYkdKT1NFaFhSVE54UVc5UFZuaHJiRTlVZEdGelRqVmZhV1l0Y0haVmNtZGpVR1ExZG01MWJIcFJjR2xoVTJGSlRFWnNORWRvTmxGcE56Wm5MWEptWm5GelZHTllZamhSVEhKd09GaDZVVkV6WDFSeE9XMVdVakZqYVhCZlMyVnRZVWw1VDNOWlpsSkVhMm93UkVoUlZFSkZaVEZGV1dWellWOVVWRlozTnpkV1pFVlFTRmw2ZDI1dk5rbERRVUZOVUhCMlZrWnNNR2xaU0VONmRFWmhWSFZqVFdSV2RVSkljVWR2ZDFKWE1ubHdUbWg0TkhCR1MwNUxPRnBXTjBWaFRYaEtVM1puUVhsT1RtWlFNbGwxZW5aTE0zVmxTMmt0YTJKNGFERnZXa05PZERjelVUZz0ifSwiaW1hZ2UtcmVnaXN0cnkub3BlbnNoaWZ0LWltYWdlLXJlZ2lzdHJ5LnN2Yy5jbHVzdGVyLmxvY2FsOjUwMDAiOnsiYXV0aCI6IlBIUnZhMlZ1UGpwbGVVcG9Za2RqYVU5cFNsTlZla2t4VG1sSmMwbHRkSEJhUTBrMlNXNWplR1ZGYUUxVWJFSllUMFprY0ZKNlJUQlVSV3h3VGxST1VWTkZTbGhqTUZGM1YyeG9TMUZYYkRWWmFtZDVUVVZXZWsxc1drZFVSR2RwWmxFdVpYbEthR1JYVVdsUGJITnBZVWhTTUdOSVRUWk1lVGwyWVZkU2FreHRPWGROVXpWMlkwZFdkV015YUhCYWJsSm9ZMGhDZWt4dFRuWmlVemg1V20xV2Jsb3pSblJaYlVwNlkycGFjVTB5YUdwaWJUVnFXak5OTkdKdVVUTlphbU0wWkZSa2RrMVRTbVJNUTBwc1pVaEJhVTlxUlROT1ZFbDNUa1JOZUUxNlJYTkpiV3hvWkVOSk5rMVVZekZOYWtGNlQxUlZlazFUZDJsaFdFNTZTV3B2YVdGSVVqQmpTRTAyVEhrNWRtRlhVbXBNYlRsM1RWTTFkbU5IVm5Wak1taHdXbTVTYUdOSVFucE1iVTUyWWxNNGVWcHRWbTVhTTBaMFdXMUtlbU5xV25GTk1taHFZbTAxYWxvelRUUmlibEV6V1dwak5HUlVaSFpOVTBselNXMXdNR0ZUU1RaSmFrbDZUMWRhYTA5SFJYZE1WRTVwVDFSSmRFNUVUWGxQUXpBMVQxZEZNa3hVV1RGT2FrNXJUbFJGTkZscVkzbE5RMGx6U1cxME1WbHRWbmxpYlZZd1dsaE5kV0ZYT0dsUGJuTnBZbTFHZEZwWVRuZFpWMDVzU1dwdmFWbHVWbnBqUjBaNVlYa3hNRnBZVGpCTVYxSnNaR2xKYzBsdVRteFpNMHBzWkVOSk5tVjVTblZaVnpGc1NXcHZhV05IYkhkYVYzaHdZbTFWZEZwSE9XcGhNbFo1V1RKYWJreFlXbTFqYm1RMFNXbDNhV1JYYkd0SmFtOXBUbGRSTkZwcWFHeGFWMWwwVG5wS2FrOURNREJPUjAweFRGZEtiVTFxV1hST1ZFcHJXbXBaZWxscVZYcE5SRUpxU1c0d2MwbHVUbXhqYmxwd1dUSldhRmt5VG5aa1Z6VXdTV3B3TjBsdE5XaGlWMVZwVDJsS2QyRllRbXhpUjJ4MVdsTkpjMGx1Vm5CYVEwazJTV3BPYUZwRVdUVk9WRWt6VEZSamVWcEhTWFJPUkVsNldWTXdORmxxV1hsTVZHZDVXbFJHYTAxNlFtcE9NazVvV2tOS09XWlRkMmxpYlVwdFNXcHZlRTU2VlhsTlJFMDFUbFJOZUV4RFNucGtWMGxwVDJsS2VtVllUakJhVnpBMll6SldlV1J0YkdwYVYwWnFXVEk1TVdKdVVUWlpibFo2WTBkR2VXRjVNVEJhV0U0d1RGZFNiR1JxY0hkaFdFSnNZa2RzZFZwVFNqa3VaRU5uVXpWYVdrOWhPVUpXZVZWcWF6QlJZVUptVTJ4RFFqaElPVTB0WmxwSE0xbFlSUzExZVc1TFZWbGxjMWhYYm14blRsRmxRUzF1ZDA1SVZGTkRibkp1WTNkRlYwMWtWbFJNTWkwM05GbEViVkkyYmtKcVdFRnFiVGhYTm5Zd1YzQjZZMFIwTm1FMGNFeHJVMHBpTmtOV1kycFlNMjVHUVhsZmMzVTROWFJhVW5ZM2JGcExhM2RoZFhkRVYyOTNhVE5GTUd0U1ZqQnZiVU5HWkRKYVJFNUhaV3RJZFdaVVZtcEtWMG96Tm0xMFNYSjVlRnB3VGxaVk1VRk1WRmxXWnpJME1HWndTVE42UmxRdFdUaFVSVUZ0UTFjM1p6bHBlRmhwWWt4NU1UbG5ibGhmV0Mxa1NETkVhVEpEWldOdFIyWm1SVmRYWjFWdU5DMXFaVmMzWDJ0UGJWWTVlakJIWW1WWlVWVnZiVzl3TkZCcGFYUnBNbGh4VTA4MVJHSTBSUzFhTXpkd2IzQjRXbWN3YnpoMWRGRlFNRzU1U1VsQlowWXpVVkpOWTBwcVpGQnBOMDVJVTNkVmJtcHRkVFZXY2s4dFRIaGlWeTB3WW1aU2MyODJkRFE0VGpoRlZEWjVWak5wWlhOMFZtMU5abXRPWTNsT1drOUljMU5uYjFoblYxSnFUVEY0UzE5dVN6UlpZamx4TTJoMlowNUtSRFZUU3pScFVWUjZNbU5TU3pkVlUxSnNRa0ZPTW05SGFWVlBjR3BYTTFKMlgzTnVNbEZRVWpoaVpVUjVjR1JUYkdKT1NFaFhSVE54UVc5UFZuaHJiRTlVZEdGelRqVmZhV1l0Y0haVmNtZGpVR1ExZG01MWJIcFJjR2xoVTJGSlRFWnNORWRvTmxGcE56Wm5MWEptWm5GelZHTllZamhSVEhKd09GaDZVVkV6WDFSeE9XMVdVakZqYVhCZlMyVnRZVWw1VDNOWlpsSkVhMm93UkVoUlZFSkZaVEZGV1dWellWOVVWRlozTnpkV1pFVlFTRmw2ZDI1dk5rbERRVUZOVUhCMlZrWnNNR2xaU0VONmRFWmhWSFZqVFdSV2RVSkljVWR2ZDFKWE1ubHdUbWg0TkhCR1MwNUxPRnBXTjBWaFRYaEtVM1puUVhsT1RtWlFNbGwxZW5aTE0zVmxTMmt0YTJKNGFERnZXa05PZERjelVUZz0ifSwiaW1hZ2UtcmVnaXN0cnkub3BlbnNoaWZ0LWltYWdlLXJlZ2lzdHJ5LnN2Yzo1MDAwIjp7ImF1dGgiOiJQSFJ2YTJWdVBqcGxlVXBvWWtkamFVOXBTbE5WZWtreFRtbEpjMGx0ZEhCYVEwazJTVzVqZUdWRmFFMVViRUpZVDBaa2NGSjZSVEJVUld4d1RsUk9VVk5GU2xoak1GRjNWMnhvUzFGWGJEVlphbWQ1VFVWV2VrMXNXa2RVUkdkcFpsRXVaWGxLYUdSWFVXbFBiSE5wWVVoU01HTklUVFpNZVRsMllWZFNha3h0T1hkTlV6VjJZMGRXZFdNeWFIQmFibEpvWTBoQ2VreHRUblppVXpoNVdtMVdibG96Um5SWmJVcDZZMnBhY1UweWFHcGliVFZxV2pOTk5HSnVVVE5aYW1NMFpGUmtkazFUU21STVEwcHNaVWhCYVU5cVJUTk9WRWwzVGtSTmVFMTZSWE5KYld4b1pFTkpOazFVWXpGTmFrRjZUMVJWZWsxVGQybGhXRTU2U1dwdmFXRklVakJqU0UwMlRIazVkbUZYVW1wTWJUbDNUVk0xZG1OSFZuVmpNbWh3V201U2FHTklRbnBNYlU1MllsTTRlVnB0Vm01YU0wWjBXVzFLZW1OcVduRk5NbWhxWW0wMWFsb3pUVFJpYmxFeldXcGpOR1JVWkhaTlUwbHpTVzF3TUdGVFNUWkpha2w2VDFkYWEwOUhSWGRNVkU1cFQxUkpkRTVFVFhsUFF6QTFUMWRGTWt4VVdURk9hazVyVGxSRk5GbHFZM2xOUTBselNXMTBNVmx0Vm5saWJWWXdXbGhOZFdGWE9HbFBibk5wWW0xR2RGcFlUbmRaVjA1c1NXcHZhVmx1Vm5walIwWjVZWGt4TUZwWVRqQk1WMUpzWkdsSmMwbHVUbXhaTTBwc1pFTkpObVY1U25WWlZ6RnNTV3B2YVdOSGJIZGFWM2h3WW0xVmRGcEhPV3BoTWxaNVdUSmFia3hZV20xamJtUTBTV2wzYVdSWGJHdEphbTlwVGxkUk5GcHFhR3hhVjFsMFRucEthazlETURCT1IwMHhURmRLYlUxcVdYUk9WRXByV21wWmVsbHFWWHBOUkVKcVNXNHdjMGx1VG14amJscHdXVEpXYUZreVRuWmtWelV3U1dwd04wbHROV2hpVjFWcFQybEtkMkZZUW14aVIyeDFXbE5KYzBsdVZuQmFRMGsyU1dwT2FGcEVXVFZPVkVrelRGUmplVnBIU1hST1JFbDZXVk13TkZscVdYbE1WR2Q1V2xSR2EwMTZRbXBPTWs1b1drTktPV1pUZDJsaWJVcHRTV3B2ZUU1NlZYbE5SRTAxVGxSTmVFeERTbnBrVjBscFQybEtlbVZZVGpCYVZ6QTJZekpXZVdSdGJHcGFWMFpxV1RJNU1XSnVVVFpaYmxaNlkwZEdlV0Y1TVRCYVdFNHdURmRTYkdScWNIZGhXRUpzWWtkc2RWcFRTamt1WkVOblV6VmFXazloT1VKV2VWVnFhekJSWVVKbVUyeERRamhJT1UwdFpscEhNMWxZUlMxMWVXNUxWVmxsYzFoWGJteG5UbEZsUVMxdWQwNUlWRk5EYm5KdVkzZEZWMDFrVmxSTU1pMDNORmxFYlZJMmJrSnFXRUZxYlRoWE5uWXdWM0I2WTBSME5tRTBjRXhyVTBwaU5rTldZMnBZTTI1R1FYbGZjM1U0TlhSYVVuWTNiRnBMYTNkaGRYZEVWMjkzYVRORk1HdFNWakJ2YlVOR1pESmFSRTVIWld0SWRXWlVWbXBLVjBvek5tMTBTWEo1ZUZwd1RsWlZNVUZNVkZsV1p6STBNR1p3U1RONlJsUXRXVGhVUlVGdFExYzNaemxwZUZocFlreDVNVGxuYmxoZldDMWtTRE5FYVRKRFpXTnRSMlptUlZkWFoxVnVOQzFxWlZjM1gydFBiVlk1ZWpCSFltVlpVVlZ2Ylc5d05GQnBhWFJwTWxoeFUwODFSR0kwUlMxYU16ZHdiM0I0V21jd2J6aDFkRkZRTUc1NVNVbEJaMFl6VVZKTlkwcHFaRkJwTjA1SVUzZFZibXB0ZFRWV2NrOHRUSGhpVnkwd1ltWlNjMjgyZERRNFRqaEZWRFo1VmpOcFpYTjBWbTFOWm10T1kzbE9XazlJYzFObmIxaG5WMUpxVFRGNFMxOXVTelJaWWpseE0yaDJaMDVLUkRWVFN6UnBVVlI2TW1OU1N6ZFZVMUpzUWtGT01tOUhhVlZQY0dwWE0xSjJYM051TWxGUVVqaGlaVVI1Y0dSVGJHSk9TRWhYUlROeFFXOVBWbmhyYkU5VWRHRnpUalZmYVdZdGNIWlZjbWRqVUdRMWRtNTFiSHBSY0dsaFUyRkpURVpzTkVkb05sRnBOelpuTFhKbVpuRnpWR05ZWWpoUlRISndPRmg2VVZFelgxUnhPVzFXVWpGamFYQmZTMlZ0WVVsNVQzTlpabEpFYTJvd1JFaFJWRUpGWlRGRldXVnpZVjlVVkZaM056ZFdaRVZRU0ZsNmQyNXZOa2xEUVVGTlVIQjJWa1pzTUdsWlNFTjZkRVpoVkhWalRXUldkVUpJY1VkdmQxSlhNbmx3VG1oNE5IQkdTMDVMT0ZwV04wVmhUWGhLVTNablFYbE9UbVpRTWxsMWVuWkxNM1ZsUzJrdGEySjRhREZ2V2tOT2REY3pVVGc9In19
+  kind: Secret
+  metadata:
+    annotations:
+      openshift.io/internal-registry-auth-token.binding: bound
+      openshift.io/internal-registry-auth-token.service-account: pipeline
+    creationTimestamp: "2025-06-10T09:50:51Z"
+    name: pipeline-dockercfg-vfrwx
+    namespace: buspark-test-dev
+    ownerReferences:
+    - apiVersion: v1
+      kind: ServiceAccount
+      name: pipeline
+      uid: 3ad69527-72db-423a-8b62-82e1d30c7cad
+    resourceVersion: "3035777788"
+    uid: 5d8f8eef-72c8-44c5-bf26-52df63b5300c
+  type: kubernetes.io/dockercfg
+- apiVersion: v1
+  data:
+    .dockercfg: eyIxNzIuMzAuMTk0LjIyMTo1MDAwIjp7ImF1dGgiOiJQSFJ2YTJWdVBqcGxlVXBvWWtkamFVOXBTbE5WZWtreFRtbEpjMGx0ZEhCYVEwazJTVzVqZUdWRmFFMVViRUpZVDBaa2NGSjZSVEJVUld4d1RsUk9VVk5GU2xoak1GRjNWMnhvUzFGWGJEVlphbWQ1VFVWV2VrMXNXa2RVUkdkcFpsRXVaWGxLYUdSWFVXbFBiSE5wWVVoU01HTklUVFpNZVRsMllWZFNha3h0T1hkTlV6VjJZMGRXZFdNeWFIQmFibEpvWTBoQ2VreHRUblppVXpoNVdtMVdibG96Um5SWmJVcDZZMnBhY1UweWFHcGliVFZxV2pOTk5HSnVVVE5aYW1NMFpGUmtkazFUU21STVEwcHNaVWhCYVU5cVJUTk9WRWwzVGtSSk5FNVVXWE5KYld4b1pFTkpOazFVWXpGTmFrRjZUMVJKTVU1cGQybGhXRTU2U1dwdmFXRklVakJqU0UwMlRIazVkbUZYVW1wTWJUbDNUVk0xZG1OSFZuVmpNbWh3V201U2FHTklRbnBNYlU1MllsTTRlVnB0Vm01YU0wWjBXVzFLZW1OcVduRk5NbWhxWW0wMWFsb3pUVFJpYmxFeldXcGpOR1JVWkhaTlUwbHpTVzF3TUdGVFNUWkpiVnBzV20xVk1GbFhVVFJNVkZwcFRsUmpkRTVIVVhsTlV6QTBUVEpKTVV4VWJHeFBWRTV0V2tkU2JFMUVUVFZQVTBselNXMTBNVmx0Vm5saWJWWXdXbGhOZFdGWE9HbFBibk5wWW0xR2RGcFlUbmRaVjA1c1NXcHZhVmx1Vm5walIwWjVZWGt4TUZwWVRqQk1WMUpzWkdsSmMwbHVUbXhaTTBwc1pFTkpObVY1U25WWlZ6RnNTV3B2YVdReU9YbGhNMDUzV1ZkT2JGcHFUVE5PUjFKcVQwZFZNbHBYVW0xT1JGazBUVU14ZWxsVE1XdGlNazV5V2xoS2FscHRZM1JrU0ZreldXNUphVXhEU2pGaFYxRnBUMmxKTWsxSFdtbE9hazB5VGxNd05VOUhSVEpNVkZKcldUSlpkRTlFUlRGYVV6RnBXbFJuZDFwcVdUQlBWRUY1VGxkSmFXWlRkMmxqTWxaNVpHMXNhbHBYUm1wWk1qa3hZbTVSYVU5dWMybGliVVowV2xOSk5rbHVaSFpqYlhSNlkwZEdhbHBYV1hwT2VsSnJXWHBvYkU1dFZtdGFhbEV5VDBSQmRHTXlSV2xNUTBveFlWZFJhVTlwU20xYVZHTjNUMVJXYTFscE1ETk5SMUpyVEZSUmVsbHFSWFJaYlVVMFRrTXhhRTlIU1hsWk1sa3pXbFJqTTA1cVZXbG1XREJ6U1cwMWFWcHBTVFpOVkdNeFRXcEJlazlVU1RGT2FYZHBZek5XYVVscWIybGpNMng2WkVkV2RFOXVUbXhqYmxwd1dUSldhRmt5VG5aa1Z6VXdUMjFLTVdNelFtaGpiWE4wWkVkV2VtUkRNV3RhV0ZrMlpESTVlV0V6VG5kWlYwNXNXbXBOTTA1SFVtcFBSMVV5V2xkU2JVNUVXVFJOUXpGNldWTktPUzVIVWw5Nk5VZDFMWGxTYW5SUWFHTmtkWGxFTVc4eGExZFdiR3hMZGxaUmNVNHRSbXhHVlVwbWJVaDNVRVpFVjBSM2RuVnZORTFsUzFSb2RrSlRhV0UzZDI5SGJVMVRWSGRMYmpCb2NVOXZUM2RtZUdObGFXSTBkbXR6V2s5RmN6WlhVazlLVTFsdGMwVTVhMUEwTTNGb1dYQTNRM1ExZDBSdk5uY3dkRmx3TVhOMlFVMU9aV00yYTBaYVJubDNiMDFsZDBkbGRTMXVRbGcxVEVFd2JrbDBaVlEwT1ZJemREaHpiMTkxVUZoRlkyazRZVVYzYTJoSGVtRlNWV0UxUzJKSWJ6RnRVRFJZVEUxU1RITkVNMVIyYVdkYVJEVjNkRTVRVG0xeWRtSXdlbDlHUkhSTFJtSTRkV3RGVDBkRk1HY3RNR2h5YWxwSFJYRkVjM2s0UlZsbVZXUmtlamxaVTJGbU9HNVpXRTR5ZG1SWE5USjZVMEpGWDB0dWQwaEdaVXRaWkRsVE4wcHBPWG81UzBoMGNWQnZjakZuU2tSWVVXbFpYMDl2T0VnM1lWSlhZMlo1YjJSb1YxUTNXRU5GYnpaRVVsOXNNbXRQYm14UWFEZDZWVXBpTjFnM1FsRnBjbXRpTjBWek1tVlpjbTV2TjBKdFRIaENNMVZtUkhsSFluRmxOelIwYVdaMFJUUlVWa1V3ZGs1VVZIbzJiR00wYzAxR2RXSkRSbWhOY21oeE5ESnlhQzB5UmtOdWVtczFXRWxmZFVWaWFXNTFRUzAwVURWV1FUUkpiRlEyWW1nd1R6SjViSFJuT0Y5M2JIQnFReTE1TkVRdFYzUlRWR1JTVkdWemNsUmpZVzlFZERKTWRUTnFWVEJTZGs4NVVXY3dUWGhNUTJ0eFUwMVRhbEZPYkRGdVZFVTFlbE51UXpObFVYUnRXSFJOVDFsdU9IaGlOVjlMU21GRE9HWlNibkpGVTJZM1oyUmZVWFpzYVVwZlMwaHVkbWh6WkZsTVJVVjZiR1ZTVG01U1JtSlBTek5KUW1JdE9DMWlkR2w1YjBkSU1WSnFlRWhpUjIxTVEyVjBaM1kzVWxWcmRGaDBiazF1UVhVNVVXbHNXRlY2VFRGbmRVeElablpFZW10eE5GSXhRVFZHYjJjelEzVnJMWFF5WVZoWmEyNUljVVZ2ZWpGWFFrdGpUakF0Y1hwUVpVTkxUUT09In0sImRlZmF1bHQtcm91dGUtb3BlbnNoaWZ0LWltYWdlLXJlZ2lzdHJ5LmFwcHMucm0zLjd3c2UucDEub3BlbnNoaWZ0YXBwcy5jb20iOnsiYXV0aCI6IlBIUnZhMlZ1UGpwbGVVcG9Za2RqYVU5cFNsTlZla2t4VG1sSmMwbHRkSEJhUTBrMlNXNWplR1ZGYUUxVWJFSllUMFprY0ZKNlJUQlVSV3h3VGxST1VWTkZTbGhqTUZGM1YyeG9TMUZYYkRWWmFtZDVUVVZXZWsxc1drZFVSR2RwWmxFdVpYbEthR1JYVVdsUGJITnBZVWhTTUdOSVRUWk1lVGwyWVZkU2FreHRPWGROVXpWMlkwZFdkV015YUhCYWJsSm9ZMGhDZWt4dFRuWmlVemg1V20xV2Jsb3pSblJaYlVwNlkycGFjVTB5YUdwaWJUVnFXak5OTkdKdVVUTlphbU0wWkZSa2RrMVRTbVJNUTBwc1pVaEJhVTlxUlROT1ZFbDNUa1JKTkU1VVdYTkpiV3hvWkVOSk5rMVVZekZOYWtGNlQxUkpNVTVwZDJsaFdFNTZTV3B2YVdGSVVqQmpTRTAyVEhrNWRtRlhVbXBNYlRsM1RWTTFkbU5IVm5Wak1taHdXbTVTYUdOSVFucE1iVTUyWWxNNGVWcHRWbTVhTTBaMFdXMUtlbU5xV25GTk1taHFZbTAxYWxvelRUUmlibEV6V1dwak5HUlVaSFpOVTBselNXMXdNR0ZUU1RaSmJWcHNXbTFWTUZsWFVUUk1WRnBwVGxSamRFNUhVWGxOVXpBMFRUSkpNVXhVYkd4UFZFNXRXa2RTYkUxRVRUVlBVMGx6U1cxME1WbHRWbmxpYlZZd1dsaE5kV0ZYT0dsUGJuTnBZbTFHZEZwWVRuZFpWMDVzU1dwdmFWbHVWbnBqUjBaNVlYa3hNRnBZVGpCTVYxSnNaR2xKYzBsdVRteFpNMHBzWkVOSk5tVjVTblZaVnpGc1NXcHZhV1F5T1hsaE0wNTNXVmRPYkZwcVRUTk9SMUpxVDBkVk1scFhVbTFPUkZrMFRVTXhlbGxUTVd0aU1rNXlXbGhLYWxwdFkzUmtTRmt6V1c1SmFVeERTakZoVjFGcFQybEpNazFIV21sT2FrMHlUbE13TlU5SFJUSk1WRkpyV1RKWmRFOUVSVEZhVXpGcFdsUm5kMXBxV1RCUFZFRjVUbGRKYVdaVGQybGpNbFo1Wkcxc2FscFhSbXBaTWpreFltNVJhVTl1YzJsaWJVWjBXbE5KTmtsdVpIWmpiWFI2WTBkR2FscFhXWHBPZWxKcldYcG9iRTV0Vm10YWFsRXlUMFJCZEdNeVJXbE1RMG94WVZkUmFVOXBTbTFhVkdOM1QxUldhMWxwTUROTlIxSnJURlJSZWxscVJYUlpiVVUwVGtNeGFFOUhTWGxaTWxreldsUmpNMDVxVldsbVdEQnpTVzAxYVZwcFNUWk5WR014VFdwQmVrOVVTVEZPYVhkcFl6TldhVWxxYjJsak0yeDZaRWRXZEU5dVRteGpibHB3V1RKV2FGa3lUblprVnpVd1QyMUtNV016UW1oamJYTjBaRWRXZW1SRE1XdGFXRmsyWkRJNWVXRXpUbmRaVjA1c1dtcE5NMDVIVW1wUFIxVXlXbGRTYlU1RVdUUk5RekY2V1ZOS09TNUhVbDk2TlVkMUxYbFNhblJRYUdOa2RYbEVNVzh4YTFkV2JHeExkbFpSY1U0dFJteEdWVXBtYlVoM1VFWkVWMFIzZG5Wdk5FMWxTMVJvZGtKVGFXRTNkMjlIYlUxVFZIZExiakJvY1U5dlQzZG1lR05sYVdJMGRtdHpXazlGY3paWFVrOUtVMWx0YzBVNWExQTBNM0ZvV1hBM1EzUTFkMFJ2Tm5jd2RGbHdNWE4yUVUxT1pXTTJhMFphUm5sM2IwMWxkMGRsZFMxdVFsZzFURUV3YmtsMFpWUTBPVkl6ZERoemIxOTFVRmhGWTJrNFlVVjNhMmhIZW1GU1ZXRTFTMkpJYnpGdFVEUllURTFTVEhORU0xUjJhV2RhUkRWM2RFNVFUbTF5ZG1Jd2VsOUdSSFJMUm1JNGRXdEZUMGRGTUdjdE1HaHlhbHBIUlhGRWMzazRSVmxtVldSa2VqbFpVMkZtT0c1WldFNHlkbVJYTlRKNlUwSkZYMHR1ZDBoR1pVdFpaRGxUTjBwcE9YbzVTMGgwY1ZCdmNqRm5Ta1JZVVdsWlgwOXZPRWczWVZKWFkyWjViMlJvVjFRM1dFTkZielpFVWw5c01tdFBibXhRYURkNlZVcGlOMWczUWxGcGNtdGlOMFZ6TW1WWmNtNXZOMEp0VEhoQ00xVm1SSGxIWW5GbE56UjBhV1owUlRSVVZrVXdkazVVVkhvMmJHTTBjMDFHZFdKRFJtaE5jbWh4TkRKeWFDMHlSa051ZW1zMVdFbGZkVVZpYVc1MVFTMDBVRFZXUVRSSmJGUTJZbWd3VHpKNWJIUm5PRjkzYkhCcVF5MTVORVF0VjNSVFZHUlNWR1Z6Y2xSallXOUVkREpNZFROcVZUQlNkazg1VVdjd1RYaE1RMnR4VTAxVGFsRk9iREZ1VkVVMWVsTnVRek5sVVhSdFdIUk5UMWx1T0hoaU5WOUxTbUZET0daU2JuSkZVMlkzWjJSZlVYWnNhVXBmUzBodWRtaHpaRmxNUlVWNmJHVlNUbTVTUm1KUFN6TkpRbUl0T0MxaWRHbDViMGRJTVZKcWVFaGlSMjFNUTJWMFozWTNVbFZyZEZoMGJrMXVRWFU1VVdsc1dGVjZUVEZuZFV4SVpuWkVlbXR4TkZJeFFUVkdiMmN6UTNWckxYUXlZVmhaYTI1SWNVVnZlakZYUWt0alRqQXRjWHBRWlVOTFRRPT0ifSwiaW1hZ2UtcmVnaXN0cnkub3BlbnNoaWZ0LWltYWdlLXJlZ2lzdHJ5LnN2Yy5jbHVzdGVyLmxvY2FsOjUwMDAiOnsiYXV0aCI6IlBIUnZhMlZ1UGpwbGVVcG9Za2RqYVU5cFNsTlZla2t4VG1sSmMwbHRkSEJhUTBrMlNXNWplR1ZGYUUxVWJFSllUMFprY0ZKNlJUQlVSV3h3VGxST1VWTkZTbGhqTUZGM1YyeG9TMUZYYkRWWmFtZDVUVVZXZWsxc1drZFVSR2RwWmxFdVpYbEthR1JYVVdsUGJITnBZVWhTTUdOSVRUWk1lVGwyWVZkU2FreHRPWGROVXpWMlkwZFdkV015YUhCYWJsSm9ZMGhDZWt4dFRuWmlVemg1V20xV2Jsb3pSblJaYlVwNlkycGFjVTB5YUdwaWJUVnFXak5OTkdKdVVUTlphbU0wWkZSa2RrMVRTbVJNUTBwc1pVaEJhVTlxUlROT1ZFbDNUa1JKTkU1VVdYTkpiV3hvWkVOSk5rMVVZekZOYWtGNlQxUkpNVTVwZDJsaFdFNTZTV3B2YVdGSVVqQmpTRTAyVEhrNWRtRlhVbXBNYlRsM1RWTTFkbU5IVm5Wak1taHdXbTVTYUdOSVFucE1iVTUyWWxNNGVWcHRWbTVhTTBaMFdXMUtlbU5xV25GTk1taHFZbTAxYWxvelRUUmlibEV6V1dwak5HUlVaSFpOVTBselNXMXdNR0ZUU1RaSmJWcHNXbTFWTUZsWFVUUk1WRnBwVGxSamRFNUhVWGxOVXpBMFRUSkpNVXhVYkd4UFZFNXRXa2RTYkUxRVRUVlBVMGx6U1cxME1WbHRWbmxpYlZZd1dsaE5kV0ZYT0dsUGJuTnBZbTFHZEZwWVRuZFpWMDVzU1dwdmFWbHVWbnBqUjBaNVlYa3hNRnBZVGpCTVYxSnNaR2xKYzBsdVRteFpNMHBzWkVOSk5tVjVTblZaVnpGc1NXcHZhV1F5T1hsaE0wNTNXVmRPYkZwcVRUTk9SMUpxVDBkVk1scFhVbTFPUkZrMFRVTXhlbGxUTVd0aU1rNXlXbGhLYWxwdFkzUmtTRmt6V1c1SmFVeERTakZoVjFGcFQybEpNazFIV21sT2FrMHlUbE13TlU5SFJUSk1WRkpyV1RKWmRFOUVSVEZhVXpGcFdsUm5kMXBxV1RCUFZFRjVUbGRKYVdaVGQybGpNbFo1Wkcxc2FscFhSbXBaTWpreFltNVJhVTl1YzJsaWJVWjBXbE5KTmtsdVpIWmpiWFI2WTBkR2FscFhXWHBPZWxKcldYcG9iRTV0Vm10YWFsRXlUMFJCZEdNeVJXbE1RMG94WVZkUmFVOXBTbTFhVkdOM1QxUldhMWxwTUROTlIxSnJURlJSZWxscVJYUlpiVVUwVGtNeGFFOUhTWGxaTWxreldsUmpNMDVxVldsbVdEQnpTVzAxYVZwcFNUWk5WR014VFdwQmVrOVVTVEZPYVhkcFl6TldhVWxxYjJsak0yeDZaRWRXZEU5dVRteGpibHB3V1RKV2FGa3lUblprVnpVd1QyMUtNV016UW1oamJYTjBaRWRXZW1SRE1XdGFXRmsyWkRJNWVXRXpUbmRaVjA1c1dtcE5NMDVIVW1wUFIxVXlXbGRTYlU1RVdUUk5RekY2V1ZOS09TNUhVbDk2TlVkMUxYbFNhblJRYUdOa2RYbEVNVzh4YTFkV2JHeExkbFpSY1U0dFJteEdWVXBtYlVoM1VFWkVWMFIzZG5Wdk5FMWxTMVJvZGtKVGFXRTNkMjlIYlUxVFZIZExiakJvY1U5dlQzZG1lR05sYVdJMGRtdHpXazlGY3paWFVrOUtVMWx0YzBVNWExQTBNM0ZvV1hBM1EzUTFkMFJ2Tm5jd2RGbHdNWE4yUVUxT1pXTTJhMFphUm5sM2IwMWxkMGRsZFMxdVFsZzFURUV3YmtsMFpWUTBPVkl6ZERoemIxOTFVRmhGWTJrNFlVVjNhMmhIZW1GU1ZXRTFTMkpJYnpGdFVEUllURTFTVEhORU0xUjJhV2RhUkRWM2RFNVFUbTF5ZG1Jd2VsOUdSSFJMUm1JNGRXdEZUMGRGTUdjdE1HaHlhbHBIUlhGRWMzazRSVmxtVldSa2VqbFpVMkZtT0c1WldFNHlkbVJYTlRKNlUwSkZYMHR1ZDBoR1pVdFpaRGxUTjBwcE9YbzVTMGgwY1ZCdmNqRm5Ta1JZVVdsWlgwOXZPRWczWVZKWFkyWjViMlJvVjFRM1dFTkZielpFVWw5c01tdFBibXhRYURkNlZVcGlOMWczUWxGcGNtdGlOMFZ6TW1WWmNtNXZOMEp0VEhoQ00xVm1SSGxIWW5GbE56UjBhV1owUlRSVVZrVXdkazVVVkhvMmJHTTBjMDFHZFdKRFJtaE5jbWh4TkRKeWFDMHlSa051ZW1zMVdFbGZkVVZpYVc1MVFTMDBVRFZXUVRSSmJGUTJZbWd3VHpKNWJIUm5PRjkzYkhCcVF5MTVORVF0VjNSVFZHUlNWR1Z6Y2xSallXOUVkREpNZFROcVZUQlNkazg1VVdjd1RYaE1RMnR4VTAxVGFsRk9iREZ1VkVVMWVsTnVRek5sVVhSdFdIUk5UMWx1T0hoaU5WOUxTbUZET0daU2JuSkZVMlkzWjJSZlVYWnNhVXBmUzBodWRtaHpaRmxNUlVWNmJHVlNUbTVTUm1KUFN6TkpRbUl0T0MxaWRHbDViMGRJTVZKcWVFaGlSMjFNUTJWMFozWTNVbFZyZEZoMGJrMXVRWFU1VVdsc1dGVjZUVEZuZFV4SVpuWkVlbXR4TkZJeFFUVkdiMmN6UTNWckxYUXlZVmhaYTI1SWNVVnZlakZYUWt0alRqQXRjWHBRWlVOTFRRPT0ifSwiaW1hZ2UtcmVnaXN0cnkub3BlbnNoaWZ0LWltYWdlLXJlZ2lzdHJ5LnN2Yzo1MDAwIjp7ImF1dGgiOiJQSFJ2YTJWdVBqcGxlVXBvWWtkamFVOXBTbE5WZWtreFRtbEpjMGx0ZEhCYVEwazJTVzVqZUdWRmFFMVViRUpZVDBaa2NGSjZSVEJVUld4d1RsUk9VVk5GU2xoak1GRjNWMnhvUzFGWGJEVlphbWQ1VFVWV2VrMXNXa2RVUkdkcFpsRXVaWGxLYUdSWFVXbFBiSE5wWVVoU01HTklUVFpNZVRsMllWZFNha3h0T1hkTlV6VjJZMGRXZFdNeWFIQmFibEpvWTBoQ2VreHRUblppVXpoNVdtMVdibG96Um5SWmJVcDZZMnBhY1UweWFHcGliVFZxV2pOTk5HSnVVVE5aYW1NMFpGUmtkazFUU21STVEwcHNaVWhCYVU5cVJUTk9WRWwzVGtSSk5FNVVXWE5KYld4b1pFTkpOazFVWXpGTmFrRjZUMVJKTVU1cGQybGhXRTU2U1dwdmFXRklVakJqU0UwMlRIazVkbUZYVW1wTWJUbDNUVk0xZG1OSFZuVmpNbWh3V201U2FHTklRbnBNYlU1MllsTTRlVnB0Vm01YU0wWjBXVzFLZW1OcVduRk5NbWhxWW0wMWFsb3pUVFJpYmxFeldXcGpOR1JVWkhaTlUwbHpTVzF3TUdGVFNUWkpiVnBzV20xVk1GbFhVVFJNVkZwcFRsUmpkRTVIVVhsTlV6QTBUVEpKTVV4VWJHeFBWRTV0V2tkU2JFMUVUVFZQVTBselNXMTBNVmx0Vm5saWJWWXdXbGhOZFdGWE9HbFBibk5wWW0xR2RGcFlUbmRaVjA1c1NXcHZhVmx1Vm5walIwWjVZWGt4TUZwWVRqQk1WMUpzWkdsSmMwbHVUbXhaTTBwc1pFTkpObVY1U25WWlZ6RnNTV3B2YVdReU9YbGhNMDUzV1ZkT2JGcHFUVE5PUjFKcVQwZFZNbHBYVW0xT1JGazBUVU14ZWxsVE1XdGlNazV5V2xoS2FscHRZM1JrU0ZreldXNUphVXhEU2pGaFYxRnBUMmxKTWsxSFdtbE9hazB5VGxNd05VOUhSVEpNVkZKcldUSlpkRTlFUlRGYVV6RnBXbFJuZDFwcVdUQlBWRUY1VGxkSmFXWlRkMmxqTWxaNVpHMXNhbHBYUm1wWk1qa3hZbTVSYVU5dWMybGliVVowV2xOSk5rbHVaSFpqYlhSNlkwZEdhbHBYV1hwT2VsSnJXWHBvYkU1dFZtdGFhbEV5VDBSQmRHTXlSV2xNUTBveFlWZFJhVTlwU20xYVZHTjNUMVJXYTFscE1ETk5SMUpyVEZSUmVsbHFSWFJaYlVVMFRrTXhhRTlIU1hsWk1sa3pXbFJqTTA1cVZXbG1XREJ6U1cwMWFWcHBTVFpOVkdNeFRXcEJlazlVU1RGT2FYZHBZek5XYVVscWIybGpNMng2WkVkV2RFOXVUbXhqYmxwd1dUSldhRmt5VG5aa1Z6VXdUMjFLTVdNelFtaGpiWE4wWkVkV2VtUkRNV3RhV0ZrMlpESTVlV0V6VG5kWlYwNXNXbXBOTTA1SFVtcFBSMVV5V2xkU2JVNUVXVFJOUXpGNldWTktPUzVIVWw5Nk5VZDFMWGxTYW5SUWFHTmtkWGxFTVc4eGExZFdiR3hMZGxaUmNVNHRSbXhHVlVwbWJVaDNVRVpFVjBSM2RuVnZORTFsUzFSb2RrSlRhV0UzZDI5SGJVMVRWSGRMYmpCb2NVOXZUM2RtZUdObGFXSTBkbXR6V2s5RmN6WlhVazlLVTFsdGMwVTVhMUEwTTNGb1dYQTNRM1ExZDBSdk5uY3dkRmx3TVhOMlFVMU9aV00yYTBaYVJubDNiMDFsZDBkbGRTMXVRbGcxVEVFd2JrbDBaVlEwT1ZJemREaHpiMTkxVUZoRlkyazRZVVYzYTJoSGVtRlNWV0UxUzJKSWJ6RnRVRFJZVEUxU1RITkVNMVIyYVdkYVJEVjNkRTVRVG0xeWRtSXdlbDlHUkhSTFJtSTRkV3RGVDBkRk1HY3RNR2h5YWxwSFJYRkVjM2s0UlZsbVZXUmtlamxaVTJGbU9HNVpXRTR5ZG1SWE5USjZVMEpGWDB0dWQwaEdaVXRaWkRsVE4wcHBPWG81UzBoMGNWQnZjakZuU2tSWVVXbFpYMDl2T0VnM1lWSlhZMlo1YjJSb1YxUTNXRU5GYnpaRVVsOXNNbXRQYm14UWFEZDZWVXBpTjFnM1FsRnBjbXRpTjBWek1tVlpjbTV2TjBKdFRIaENNMVZtUkhsSFluRmxOelIwYVdaMFJUUlVWa1V3ZGs1VVZIbzJiR00wYzAxR2RXSkRSbWhOY21oeE5ESnlhQzB5UmtOdWVtczFXRWxmZFVWaWFXNTFRUzAwVURWV1FUUkpiRlEyWW1nd1R6SjViSFJuT0Y5M2JIQnFReTE1TkVRdFYzUlRWR1JTVkdWemNsUmpZVzlFZERKTWRUTnFWVEJTZGs4NVVXY3dUWGhNUTJ0eFUwMVRhbEZPYkRGdVZFVTFlbE51UXpObFVYUnRXSFJOVDFsdU9IaGlOVjlMU21GRE9HWlNibkpGVTJZM1oyUmZVWFpzYVVwZlMwaHVkbWh6WkZsTVJVVjZiR1ZTVG01U1JtSlBTek5KUW1JdE9DMWlkR2w1YjBkSU1WSnFlRWhpUjIxTVEyVjBaM1kzVWxWcmRGaDBiazF1UVhVNVVXbHNXRlY2VFRGbmRVeElablpFZW10eE5GSXhRVFZHYjJjelEzVnJMWFF5WVZoWmEyNUljVVZ2ZWpGWFFrdGpUakF0Y1hwUVpVTkxUUT09In19
+  kind: Secret
+  metadata:
+    annotations:
+      openshift.io/internal-registry-auth-token.binding: bound
+      openshift.io/internal-registry-auth-token.service-account: workspacef374dc8e6edf4680-sa
+    creationTimestamp: "2025-06-29T10:58:16Z"
+    name: workspacef374dc8e6edf4680-sa-dockercfg-tv7br
+    namespace: buspark-test-dev
+    ownerReferences:
+    - apiVersion: v1
+      kind: ServiceAccount
+      name: workspacef374dc8e6edf4680-sa
+      uid: fe7095db-70dd-43b1-ba84-a8b2cf7e7765
+    resourceVersion: "3035683687"
+    uid: 60fb6365-98a6-4dcf-815e-be80f649025b
+  type: kubernetes.io/dockercfg
 kind: List
 metadata:
   resourceVersion: ""

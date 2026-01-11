@@ -6,13 +6,28 @@ This directory contains everything you need to deploy CKAN (and its companion se
 
 ## 1. Prerequisites
 
-- **OpenShift CLI** (`oc`) installed and logged in  
+- **OpenShift CLI** (`oc`) installed  
 - An existing OpenShift project/namespace (e.g. `buspark-test-v2-dev`)  
 - `yq` (v4.x) installed (if you ever need to tweak or re-clean the manifests)  
 - CKAN image (/ckan/Dockerfile.dev) is already built and pushed to Quay:  
   ```bash
   quay.io/buspark_test/spark-ckan:latest
   ```
+
+### Logging into OpenShift
+
+You’ll need to authenticate your `oc` CLI with your OpenShift project before running any commands locally:
+
+1. Log into your [OpenShift Web Console](https://console-openshift-console.example.com/) (replace with your cluster URL).  
+2. Switch to your target project/namespace (e.g. `buspark-test-v2-dev`).  
+3. In the top-right corner, click your user menu → **Copy Login Command**.  
+4. This will open a page showing a login command with a token, for example:  
+   ```bash
+   oc login --token=sha256~XXXXXX --server=https://api.cluster-name:6443
+   ```  
+5. Run that command in your terminal. This authenticates your local `oc` session with the correct project and permissions.  
+
+Once logged in, all subsequent `oc` commands will run against your selected project.
 
 ## 2. Deployment steps
 

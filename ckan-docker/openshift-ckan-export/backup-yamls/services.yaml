@@ -12,6 +12,7 @@ items:
     labels:
       io.kompose.service: ckan-dev
     name: ckan-dev
+    namespace: buspark-test-dev
     resourceVersion: "2627667218"
     uid: 0dffa4a7-cd2e-4a05-b6c1-b054d120b9fb
   spec:
@@ -40,6 +41,7 @@ items:
     labels:
       io.kompose.service: ckan-dev
     name: ckan-service
+    namespace: buspark-test-dev
     resourceVersion: "2957811210"
     uid: 3e2d70a0-95f7-4b6e-91e4-6272dee5033a
   spec:
@@ -72,6 +74,7 @@ items:
     labels:
       io.kompose.service: datapusher
     name: datapusher
+    namespace: buspark-test-dev
     resourceVersion: "2627654542"
     uid: b81db122-a3e4-44f1-a8ef-644d862d9e89
   spec:
@@ -105,6 +108,7 @@ items:
     labels:
       io.kompose.service: db
     name: db
+    namespace: buspark-test-dev
     resourceVersion: "2627651076"
     uid: 2c6b70c3-ef31-4886-a22b-7f6dbf78c1cd
   spec:
@@ -140,6 +144,7 @@ items:
       app.kubernetes.io/name: modelmesh-controller
       modelmesh-service: modelmesh-serving
     name: modelmesh-serving
+    namespace: buspark-test-dev
     ownerReferences:
     - apiVersion: v1
       blockOwnerDeletion: true
@@ -192,6 +197,7 @@ items:
     labels:
       io.kompose.service: nginx
     name: nginx
+    namespace: buspark-test-dev
     resourceVersion: "2958615710"
     uid: 0e48bef1-e3e3-40c0-99ba-9adb2be52665
   spec:
@@ -229,6 +235,7 @@ items:
     labels:
       io.kompose.service: redis
     name: redis
+    namespace: buspark-test-dev
     resourceVersion: "2627653401"
     uid: 9b999a48-a494-4d8e-85cb-539a9ba15e63
   spec:
@@ -262,6 +269,7 @@ items:
     labels:
       io.kompose.service: solr
     name: solr
+    namespace: buspark-test-dev
     resourceVersion: "2627652231"
     uid: 732d63fe-cce5-4df4-8b3d-fa5173c8fd74
   spec:

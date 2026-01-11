@@ -11,6 +11,7 @@ items:
       labels:
         io.kompose.service: ckan-dev
       name: ckan-dev
+      namespace: buspark-test-v2-dev
     spec:
       progressDeadlineSeconds: 600
       replicas: 0
@@ -99,6 +100,7 @@ items:
       labels:
         io.kompose.service: datapusher
       name: datapusher
+      namespace: buspark-test-v2-dev
     spec:
       progressDeadlineSeconds: 600
       replicas: 0
@@ -153,6 +155,7 @@ items:
       labels:
         io.kompose.service: db
       name: db
+      namespace: buspark-test-v2-dev
     spec:
       progressDeadlineSeconds: 600
       replicas: 0
@@ -218,6 +221,7 @@ items:
       labels:
         io.kompose.service: nginx
       name: nginx
+      namespace: buspark-test-v2-dev
     spec:
       progressDeadlineSeconds: 600
       replicas: 0
@@ -292,6 +296,7 @@ items:
       labels:
         io.kompose.service: redis
       name: redis
+      namespace: buspark-test-v2-dev
     spec:
       progressDeadlineSeconds: 600
       replicas: 0
@@ -346,6 +351,7 @@ items:
       labels:
         io.kompose.service: solr
       name: solr
+      namespace: buspark-test-v2-dev
     spec:
       progressDeadlineSeconds: 600
       replicas: 0
@@ -404,6 +410,7 @@ items:
       labels:
         io.kompose.service: ckan-dev
       name: ckan-dev
+      namespace: buspark-test-v2-dev
     spec:
       clusterIP: 172.30.57.17
       clusterIPs:
@@ -427,6 +434,7 @@ items:
       labels:
         io.kompose.service: ckan-dev
       name: ckan-service
+      namespace: buspark-test-v2-dev
     spec:
       clusterIP: 172.30.61.146
       clusterIPs:
@@ -452,6 +460,7 @@ items:
       labels:
         io.kompose.service: datapusher
       name: datapusher
+      namespace: buspark-test-v2-dev
     spec:
       clusterIP: 172.30.56.157
       clusterIPs:
@@ -478,6 +487,7 @@ items:
       labels:
         io.kompose.service: db
       name: db
+      namespace: buspark-test-v2-dev
     spec:
       clusterIP: 172.30.138.142
       clusterIPs:
@@ -508,6 +518,7 @@ items:
         app.kubernetes.io/name: modelmesh-controller
         modelmesh-service: modelmesh-serving
       name: modelmesh-serving
+      namespace: buspark-test-v2-dev
     spec:
       clusterIP: None
       clusterIPs:
@@ -546,6 +557,7 @@ items:
       labels:
         io.kompose.service: nginx
       name: nginx
+      namespace: buspark-test-v2-dev
     spec:
       clusterIP: 172.30.33.65
       clusterIPs:
@@ -576,6 +588,7 @@ items:
       labels:
         io.kompose.service: redis
       name: redis
+      namespace: buspark-test-v2-dev
     spec:
       clusterIP: 172.30.213.123
       clusterIPs:
@@ -602,6 +615,7 @@ items:
       labels:
         io.kompose.service: solr
       name: solr
+      namespace: buspark-test-v2-dev
     spec:
       clusterIP: 172.30.255.78
       clusterIPs:
@@ -628,6 +642,7 @@ items:
         io.kompose.service: ckan-dev
         pod-template-hash: 5d54478c9c
       name: ckan-service
+      namespace: buspark-test-v2-dev
     spec:
       host: ckan-service-buspark-test-dev.apps.rm3.7wse.p1.openshiftapps.com
       port:
@@ -645,6 +660,7 @@ items:
       labels:
         io.kompose.service: nginx
       name: nginx
+      namespace: buspark-test-v2-dev
     spec:
       host: nginx-buspark-test-dev.apps.rm3.7wse.p1.openshiftapps.com
       port:
@@ -668,6 +684,7 @@ items:
       labels:
         io.kompose.service: ckan-storage
       name: ckan-storage
+      namespace: buspark-test-v2-dev
     spec:
       accessModes:
         - ReadWriteOnce
@@ -691,6 +708,7 @@ items:
       labels:
         io.kompose.service: nginx-certs
       name: nginx-certs
+      namespace: buspark-test-v2-dev
     spec:
       accessModes:
         - ReadWriteOnce
@@ -714,6 +732,7 @@ items:
       labels:
         io.kompose.service: pg-data
       name: pg-data
+      namespace: buspark-test-v2-dev
     spec:
       accessModes:
         - ReadWriteOnce
@@ -737,6 +756,7 @@ items:
       labels:
         io.kompose.service: solr-data
       name: solr-data
+      namespace: buspark-test-v2-dev
     spec:
       accessModes:
         - ReadWriteOnce
@@ -778,6 +798,7 @@ items:
       labels:
         app.kubernetes.io/part-of: tekton-pipelines
       name: config-service-cabundle
+      namespace: buspark-test-v2-dev
   - apiVersion: v1
     data:
       ca-bundle.crt: |
@@ -4738,6 +4759,7 @@ items:
         app.kubernetes.io/part-of: tekton-pipelines
         config.openshift.io/inject-trusted-cabundle: "true"
       name: config-trusted-cabundle
+      namespace: buspark-test-v2-dev
   - apiVersion: v1
     data:
       ssh-askpass.sh: |
@@ -4755,6 +4777,7 @@ items:
         app.kubernetes.io/part-of: devworkspace-operator
         controller.devfile.io/watch-configmap: "true"
       name: devworkspace-ssh-askpass
+      namespace: buspark-test-v2-dev
   - apiVersion: v1
     data:
       CKAN___API_TOKEN__JWT__DECODE__SECRET: string:CHANGE_ME
@@ -4822,6 +4845,7 @@ items:
       labels:
         io.kompose.service: ckan-dev-env
       name: env
+      namespace: buspark-test-v2-dev
   - apiVersion: v1
     data:
       ca.crt: |
@@ -4972,6 +4996,7 @@ items:
       annotations:
         kubernetes.io/description: Contains a CA bundle that can be used to verify the kube-apiserver when using internal endpoints such as the internal service IP or kubernetes.default.svc. No other usage is guaranteed across distributions of Kubernetes clusters.
       name: kube-root-ca.crt
+      namespace: buspark-test-v2-dev
   - apiVersion: v1
     data:
       nginx.conf: |
@@ -5010,6 +5035,7 @@ items:
     metadata:
       annotations: {}
       name: nginx-config
+      namespace: buspark-test-v2-dev
   - apiVersion: v1
     data:
       ca-bundle.crt: |
@@ -8971,6 +8997,7 @@ items:
         app.kubernetes.io/part-of: opendatahub-operator
         config.openshift.io/inject-trusted-cabundle: "true"
       name: odh-trusted-ca-bundle
+      namespace: buspark-test-v2-dev
   - apiVersion: v1
     data:
       service-ca.crt: |
@@ -8999,6 +9026,7 @@ items:
       annotations:
         service.beta.openshift.io/inject-cabundle: "true"
       name: openshift-service-ca.crt
+      namespace: buspark-test-v2-dev
   - apiVersion: v1
     data:
       .dockercfg: eyIxNzIuMzAuMTk0LjIyMTo1MDAwIjp7ImF1dGgiOiJQSFJ2YTJWdVBqcGxlVXBvWWtkamFVOXBTbE5WZWtreFRtbEpjMGx0ZEhCYVEwazJTVzVqZUdWRmFFMVViRUpZVDBaa2NGSjZSVEJVUld4d1RsUk9VVk5GU2xoak1GRjNWMnhvUzFGWGJEVlphbWQ1VFVWV2VrMXNXa2RVUkdkcFpsRXVaWGxLYUdSWFVXbFBiSE5wWVVoU01HTklUVFpNZVRsMllWZFNha3h0T1hkTlV6VjJZMGRXZFdNeWFIQmFibEpvWTBoQ2VreHRUblppVXpoNVdtMVdibG96Um5SWmJVcDZZMnBhY1UweWFHcGliVFZxV2pOTk5HSnVVVE5aYW1NMFpGUmtkazFUU21STVEwcHNaVWhCYVU5cVJUTk9WRWwzVGtSTmQwNTZUWE5KYld4b1pFTkpOazFVWXpGTmFrRjZUMVJSTTAxNWQybGhXRTU2U1dwdmFXRklVakJqU0UwMlRIazVkbUZYVW1wTWJUbDNUVk0xZG1OSFZuVmpNbWh3V201U2FHTklRbnBNYlU1MllsTTRlVnB0Vm01YU0wWjBXVzFLZW1OcVduRk5NbWhxWW0wMWFsb3pUVFJpYmxFeldXcGpOR1JVWkhaTlUwbHpTVzF3TUdGVFNUWkpiVXBvV2xkTmVFMVVTbXRNVkdzelRucFpkRTVFWTNsTlV6QTBUbTFLYlV4VWF6Vk9la0pwV21wcmQxbHFUWGhPUTBselNXMTBNVmx0Vm5saWJWWXdXbGhOZFdGWE9HbFBibk5wWW0xR2RGcFlUbmRaVjA1c1NXcHZhVmx1Vm5walIwWjVZWGt4TUZwWVRqQk1WMUpzWkdsSmMwbHVUbXhaTTBwc1pFTkpObVY1U25WWlZ6RnNTV3B2YVZsdVZuQmlSMUpzWTJreGEySXlUbkphV0VwcVdtMWpkR1I2U1hsYVJFbHBURU5LTVdGWFVXbFBhVWwzVFdwRmVVOUVWbWhaVXpGcVRYcFZkMHhVVVRKYVJGRjBXV3BzYVU1RE1XMU5WMUYzV1ZkSk0wOUVWbXROZW1OcFpsTjNhV015Vm5sa2JXeHFXbGRHYWxreU9URmlibEZwVDI1emFXSnRSblJhVTBrMlNXMUtNV0ZYZUd0YVdFbHBURU5LTVdGWFVXbFBhVXBzVGxSSmVsbDZRVFZhUXpCNVdrZGFhMHhVVW14TmVsRjBXVlJWZUZscE1XbFpWR1JyVG0xT2FVNVVWbWxOUjBscFpsZ3djMGx0TldsYWFVazJUVlJqTVUxcVFYcFBWRkV6VFhsM2FXTXpWbWxKYW05cFl6TnNlbVJIVm5SUGJrNXNZMjVhY0ZreVZtaFpNazUyWkZjMU1FOXRTakZqTTBKb1kyMXpkR1JIVm5wa1F6RnJXbGhaTmxsdVZuQmlSMUpzWTJsS09TNUhlRU5zUTJWMVJsRkZVMFZIWkV0M01uSm1hRGhQUVUxS2EweFVhVTgxVnpKUVNXVjNRVmRvT0Y5WFR6Z3lXV2d5UTFoWE5EazJYemxHYzB0TFVYRmpZMWxrTmxadWJteGlSVlJIU2w5c1RIaG9abW8wU1c5V05HZE9UbTFaZDB3eFgxbFdabmRLZGxCQk4wWlZWRVJIY1cxdFpuVTRka3h2VGtSeGExWk1SSFZTVUdkTlptUTBTelpHUTNac1IxTnpiMUpNUWpSU2QzVlVWQzEyWlRaeE9HVnllWE5HUjJkSVVrdFJZVlZuWkdoeGJ6UkZiM0JqTW5wcWFtOHdNMjl3WW0xd01HSjFZekJWUkV4Rk56Z3ROM05uUjFkVlYyaG1WMlJDT1VFelpESk5UMGxwZUc5ME1XTXpiVU5sVDIwd05VazBWbXB0Ukc1NlozaG9Nbkl3U25Ga2REbHRaM0pOWWxCbllsRk1WMVJrY0ZReWRETm9jVEUzWldKaWRXZDJSbmRxTlVKdWFHVnhjbVpzWWtOUGVEa3dlV2RyYjFaaFlUUk5Za054Y2xwM1EzTnFiR1kxUlRGVVQwVktYelp0VVRsaGVqSm5Za3hSZFROQ01rSldPVEpoVEV0S1VYWkNSVE50Y3pGcFlWVklVRzR6VkVGZlEwSnlVbU5UVTB3eFZrWTJPV3BoZHpaMVF6VkxWMWh1V25KWk0zZHZlbGsxYVhCS1JIUTRSMkp1WWw5UlMyVlBiMHRuY0ZCcFVUVkROV0prY0ZoTGN6ZFhaVzl5WTA5bE1XeHNOWE5YUVZwa1NIcE9hbHAwU0UxamRDMDBhMUZDUWpndE5XSmpWVVZWU2kweFRFdGxWVFZqT0RoUGJUQTFPVm8wWjFaelZUTjZURzlwUlVaRVMyVlJOekJsYVZSR1prY3lRMmRtYVhsdlFWRTNaR3h0WVZKelJEWlpNVnBsTFZCbVgwNVliVEF6WWxGSVdHMDVZelZ4YjNSWVkwSTFkWHBvVlRGeVpGa3hiWHB6TWxweUxVcFpVVzV2YzAxelkybFpNRGwxUlY5U05IWkxWek5FYWxWTmVVeFlXakZEVlZSSFExaEtlV3BSVVhWT01uTXljSGRrVHpGbVpXSlpYemR4VUdoMFpYWjRSa3BXWms5TGNEbG1PWFZxY0VGVVdVSmtkVUpmU2xKM1YwbDVUREJ3ZWw5ak9BPT0ifSwiZGVmYXVsdC1yb3V0ZS1vcGVuc2hpZnQtaW1hZ2UtcmVnaXN0cnkuYXBwcy5ybTMuN3dzZS5wMS5vcGVuc2hpZnRhcHBzLmNvbSI6eyJhdXRoIjoiUEhSdmEyVnVQanBsZVVwb1lrZGphVTlwU2xOVmVra3hUbWxKYzBsdGRIQmFRMGsyU1c1amVHVkZhRTFVYkVKWVQwWmtjRko2UlRCVVJXeHdUbFJPVVZORlNsaGpNRkYzVjJ4b1MxRlhiRFZaYW1kNVRVVldlazFzV2tkVVJHZHBabEV1WlhsS2FHUlhVV2xQYkhOcFlVaFNNR05JVFRaTWVUbDJZVmRTYWt4dE9YZE5VelYyWTBkV2RXTXlhSEJhYmxKb1kwaENla3h0VG5aaVV6aDVXbTFXYmxvelJuUlpiVXA2WTJwYWNVMHlhR3BpYlRWcVdqTk5OR0p1VVROWmFtTTBaRlJrZGsxVFNtUk1RMHBzWlVoQmFVOXFSVE5PVkVsM1RrUk5kMDU2VFhOSmJXeG9aRU5KTmsxVVl6Rk5ha0Y2VDFSUk0wMTVkMmxoV0U1NlNXcHZhV0ZJVWpCalNFMDJUSGs1ZG1GWFVtcE1iVGwzVFZNMWRtTkhWblZqTW1od1dtNVNhR05JUW5wTWJVNTJZbE00ZVZwdFZtNWFNMFowV1cxS2VtTnFXbkZOTW1ocVltMDFhbG96VFRSaWJsRXpXV3BqTkdSVVpIWk5VMGx6U1cxd01HRlRTVFpKYlVwb1dsZE5lRTFVU210TVZHc3pUbnBaZEU1RVkzbE5VekEwVG0xS2JVeFVhelZPZWtKcFdtcHJkMWxxVFhoT1EwbHpTVzEwTVZsdFZubGliVll3V2xoTmRXRlhPR2xQYm5OcFltMUdkRnBZVG5kWlYwNXNTV3B2YVZsdVZucGpSMFo1WVhreE1GcFlUakJNVjFKc1pHbEpjMGx1VG14Wk0wcHNaRU5KTm1WNVNuVlpWekZzU1dwdmFWbHVWbkJpUjFKc1kya3hhMkl5VG5KYVdFcHFXbTFqZEdSNlNYbGFSRWxwVEVOS01XRlhVV2xQYVVsM1RXcEZlVTlFVm1oWlV6RnFUWHBWZDB4VVVUSmFSRkYwV1dwc2FVNURNVzFOVjFGM1dWZEpNMDlFVm10TmVtTnBabE4zYVdNeVZubGtiV3hxV2xkR2Fsa3lPVEZpYmxGcFQyNXphV0p0Um5SYVUwazJTVzFLTVdGWGVHdGFXRWxwVEVOS01XRlhVV2xQYVVwc1RsUkplbGw2UVRWYVF6QjVXa2RhYTB4VVVteE5lbEYwV1ZSVmVGbHBNV2xaVkdSclRtMU9hVTVVVm1sTlIwbHBabGd3YzBsdE5XbGFhVWsyVFZSak1VMXFRWHBQVkZFelRYbDNhV016Vm1sSmFtOXBZek5zZW1SSFZuUlBiazVzWTI1YWNGa3lWbWhaTWs1MlpGYzFNRTl0U2pGak0wSm9ZMjF6ZEdSSFZucGtRekZyV2xoWk5sbHVWbkJpUjFKc1kybEtPUzVIZUVOc1EyVjFSbEZGVTBWSFpFdDNNbkptYURoUFFVMUthMHhVYVU4MVZ6SlFTV1YzUVZkb09GOVhUemd5V1dneVExaFhORGsyWHpsR2MwdExVWEZqWTFsa05sWnVibXhpUlZSSFNsOXNUSGhvWm1vMFNXOVdOR2RPVG0xWmQwd3hYMWxXWm5kS2RsQkJOMFpWVkVSSGNXMXRablU0ZGt4dlRrUnhhMVpNUkhWU1VHZE5abVEwU3paR1EzWnNSMU56YjFKTVFqUlNkM1ZVVkMxMlpUWnhPR1Z5ZVhOR1IyZElVa3RSWVZWblpHaHhielJGYjNCak1ucHFhbTh3TTI5d1ltMXdNR0oxWXpCVlJFeEZOemd0TjNOblIxZFZWMmhtVjJSQ09VRXpaREpOVDBscGVHOTBNV016YlVObFQyMHdOVWswVm1wdFJHNTZaM2hvTW5Jd1NuRmtkRGx0WjNKTllsQm5ZbEZNVjFSa2NGUXlkRE5vY1RFM1pXSmlkV2QyUm5kcU5VSnVhR1Z4Y21ac1lrTlBlRGt3ZVdkcmIxWmhZVFJOWWtOeGNscDNRM05xYkdZMVJURlVUMFZLWHpadFVUbGhlakpuWWt4UmRUTkNNa0pXT1RKaFRFdEtVWFpDUlROdGN6RnBZVlZJVUc0elZFRmZRMEp5VW1OVFUwd3hWa1kyT1dwaGR6WjFRelZMVjFodVduSlpNM2R2ZWxrMWFYQktSSFE0UjJKdVlsOVJTMlZQYjB0bmNGQnBVVFZETldKa2NGaExjemRYWlc5eVkwOWxNV3hzTlhOWFFWcGtTSHBPYWxwMFNFMWpkQzAwYTFGQ1FqZ3ROV0pqVlVWVlNpMHhURXRsVlRWak9EaFBiVEExT1ZvMFoxWnpWVE42VEc5cFJVWkVTMlZSTnpCbGFWUkdaa2N5UTJkbWFYbHZRVkUzWkd4dFlWSnpSRFpaTVZwbExWQm1YMDVZYlRBellsRklXRzA1WXpWeGIzUllZMEkxZFhwb1ZURnlaRmt4Ylhwek1scHlMVXBaVVc1dmMwMXpZMmxaTURsMVJWOVNOSFpMVnpORWFsVk5lVXhZV2pGRFZWUkhRMWhLZVdwUlVYVk9Nbk15Y0hka1R6Rm1aV0paWHpkeFVHaDBaWFo0UmtwV1prOUxjRGxtT1hWcWNFRlVXVUprZFVKZlNsSjNWMGw1VERCd2VsOWpPQT09In0sImltYWdlLXJlZ2lzdHJ5Lm9wZW5zaGlmdC1pbWFnZS1yZWdpc3RyeS5zdmMuY2x1c3Rlci5sb2NhbDo1MDAwIjp7ImF1dGgiOiJQSFJ2YTJWdVBqcGxlVXBvWWtkamFVOXBTbE5WZWtreFRtbEpjMGx0ZEhCYVEwazJTVzVqZUdWRmFFMVViRUpZVDBaa2NGSjZSVEJVUld4d1RsUk9VVk5GU2xoak1GRjNWMnhvUzFGWGJEVlphbWQ1VFVWV2VrMXNXa2RVUkdkcFpsRXVaWGxLYUdSWFVXbFBiSE5wWVVoU01HTklUVFpNZVRsMllWZFNha3h0T1hkTlV6VjJZMGRXZFdNeWFIQmFibEpvWTBoQ2VreHRUblppVXpoNVdtMVdibG96Um5SWmJVcDZZMnBhY1UweWFHcGliVFZxV2pOTk5HSnVVVE5aYW1NMFpGUmtkazFUU21STVEwcHNaVWhCYVU5cVJUTk9WRWwzVGtSTmQwNTZUWE5KYld4b1pFTkpOazFVWXpGTmFrRjZUMVJSTTAxNWQybGhXRTU2U1dwdmFXRklVakJqU0UwMlRIazVkbUZYVW1wTWJUbDNUVk0xZG1OSFZuVmpNbWh3V201U2FHTklRbnBNYlU1MllsTTRlVnB0Vm01YU0wWjBXVzFLZW1OcVduRk5NbWhxWW0wMWFsb3pUVFJpYmxFeldXcGpOR1JVWkhaTlUwbHpTVzF3TUdGVFNUWkpiVXBvV2xkTmVFMVVTbXRNVkdzelRucFpkRTVFWTNsTlV6QTBUbTFLYlV4VWF6Vk9la0pwV21wcmQxbHFUWGhPUTBselNXMTBNVmx0Vm5saWJWWXdXbGhOZFdGWE9HbFBibk5wWW0xR2RGcFlUbmRaVjA1c1NXcHZhVmx1Vm5walIwWjVZWGt4TUZwWVRqQk1WMUpzWkdsSmMwbHVUbXhaTTBwc1pFTkpObVY1U25WWlZ6RnNTV3B2YVZsdVZuQmlSMUpzWTJreGEySXlUbkphV0VwcVdtMWpkR1I2U1hsYVJFbHBURU5LTVdGWFVXbFBhVWwzVFdwRmVVOUVWbWhaVXpGcVRYcFZkMHhVVVRKYVJGRjBXV3BzYVU1RE1XMU5WMUYzV1ZkSk0wOUVWbXROZW1OcFpsTjNhV015Vm5sa2JXeHFXbGRHYWxreU9URmlibEZwVDI1emFXSnRSblJhVTBrMlNXMUtNV0ZYZUd0YVdFbHBURU5LTVdGWFVXbFBhVXBzVGxSSmVsbDZRVFZhUXpCNVdrZGFhMHhVVW14TmVsRjBXVlJWZUZscE1XbFpWR1JyVG0xT2FVNVVWbWxOUjBscFpsZ3djMGx0TldsYWFVazJUVlJqTVUxcVFYcFBWRkV6VFhsM2FXTXpWbWxKYW05cFl6TnNlbVJIVm5SUGJrNXNZMjVhY0ZreVZtaFpNazUyWkZjMU1FOXRTakZqTTBKb1kyMXpkR1JIVm5wa1F6RnJXbGhaTmxsdVZuQmlSMUpzWTJsS09TNUhlRU5zUTJWMVJsRkZVMFZIWkV0M01uSm1hRGhQUVUxS2EweFVhVTgxVnpKUVNXVjNRVmRvT0Y5WFR6Z3lXV2d5UTFoWE5EazJYemxHYzB0TFVYRmpZMWxrTmxadWJteGlSVlJIU2w5c1RIaG9abW8wU1c5V05HZE9UbTFaZDB3eFgxbFdabmRLZGxCQk4wWlZWRVJIY1cxdFpuVTRka3h2VGtSeGExWk1SSFZTVUdkTlptUTBTelpHUTNac1IxTnpiMUpNUWpSU2QzVlVWQzEyWlRaeE9HVnllWE5HUjJkSVVrdFJZVlZuWkdoeGJ6UkZiM0JqTW5wcWFtOHdNMjl3WW0xd01HSjFZekJWUkV4Rk56Z3ROM05uUjFkVlYyaG1WMlJDT1VFelpESk5UMGxwZUc5ME1XTXpiVU5sVDIwd05VazBWbXB0Ukc1NlozaG9Nbkl3U25Ga2REbHRaM0pOWWxCbllsRk1WMVJrY0ZReWRETm9jVEUzWldKaWRXZDJSbmRxTlVKdWFHVnhjbVpzWWtOUGVEa3dlV2RyYjFaaFlUUk5Za054Y2xwM1EzTnFiR1kxUlRGVVQwVktYelp0VVRsaGVqSm5Za3hSZFROQ01rSldPVEpoVEV0S1VYWkNSVE50Y3pGcFlWVklVRzR6VkVGZlEwSnlVbU5UVTB3eFZrWTJPV3BoZHpaMVF6VkxWMWh1V25KWk0zZHZlbGsxYVhCS1JIUTRSMkp1WWw5UlMyVlBiMHRuY0ZCcFVUVkROV0prY0ZoTGN6ZFhaVzl5WTA5bE1XeHNOWE5YUVZwa1NIcE9hbHAwU0UxamRDMDBhMUZDUWpndE5XSmpWVVZWU2kweFRFdGxWVFZqT0RoUGJUQTFPVm8wWjFaelZUTjZURzlwUlVaRVMyVlJOekJsYVZSR1prY3lRMmRtYVhsdlFWRTNaR3h0WVZKelJEWlpNVnBsTFZCbVgwNVliVEF6WWxGSVdHMDVZelZ4YjNSWVkwSTFkWHBvVlRGeVpGa3hiWHB6TWxweUxVcFpVVzV2YzAxelkybFpNRGwxUlY5U05IWkxWek5FYWxWTmVVeFlXakZEVlZSSFExaEtlV3BSVVhWT01uTXljSGRrVHpGbVpXSlpYemR4VUdoMFpYWjRSa3BXWms5TGNEbG1PWFZxY0VGVVdVSmtkVUpmU2xKM1YwbDVUREJ3ZWw5ak9BPT0ifSwiaW1hZ2UtcmVnaXN0cnkub3BlbnNoaWZ0LWltYWdlLXJlZ2lzdHJ5LnN2Yzo1MDAwIjp7ImF1dGgiOiJQSFJ2YTJWdVBqcGxlVXBvWWtkamFVOXBTbE5WZWtreFRtbEpjMGx0ZEhCYVEwazJTVzVqZUdWRmFFMVViRUpZVDBaa2NGSjZSVEJVUld4d1RsUk9VVk5GU2xoak1GRjNWMnhvUzFGWGJEVlphbWQ1VFVWV2VrMXNXa2RVUkdkcFpsRXVaWGxLYUdSWFVXbFBiSE5wWVVoU01HTklUVFpNZVRsMllWZFNha3h0T1hkTlV6VjJZMGRXZFdNeWFIQmFibEpvWTBoQ2VreHRUblppVXpoNVdtMVdibG96Um5SWmJVcDZZMnBhY1UweWFHcGliVFZxV2pOTk5HSnVVVE5aYW1NMFpGUmtkazFUU21STVEwcHNaVWhCYVU5cVJUTk9WRWwzVGtSTmQwNTZUWE5KYld4b1pFTkpOazFVWXpGTmFrRjZUMVJSTTAxNWQybGhXRTU2U1dwdmFXRklVakJqU0UwMlRIazVkbUZYVW1wTWJUbDNUVk0xZG1OSFZuVmpNbWh3V201U2FHTklRbnBNYlU1MllsTTRlVnB0Vm01YU0wWjBXVzFLZW1OcVduRk5NbWhxWW0wMWFsb3pUVFJpYmxFeldXcGpOR1JVWkhaTlUwbHpTVzF3TUdGVFNUWkpiVXBvV2xkTmVFMVVTbXRNVkdzelRucFpkRTVFWTNsTlV6QTBUbTFLYlV4VWF6Vk9la0pwV21wcmQxbHFUWGhPUTBselNXMTBNVmx0Vm5saWJWWXdXbGhOZFdGWE9HbFBibk5wWW0xR2RGcFlUbmRaVjA1c1NXcHZhVmx1Vm5walIwWjVZWGt4TUZwWVRqQk1WMUpzWkdsSmMwbHVUbXhaTTBwc1pFTkpObVY1U25WWlZ6RnNTV3B2YVZsdVZuQmlSMUpzWTJreGEySXlUbkphV0VwcVdtMWpkR1I2U1hsYVJFbHBURU5LTVdGWFVXbFBhVWwzVFdwRmVVOUVWbWhaVXpGcVRYcFZkMHhVVVRKYVJGRjBXV3BzYVU1RE1XMU5WMUYzV1ZkSk0wOUVWbXROZW1OcFpsTjNhV015Vm5sa2JXeHFXbGRHYWxreU9URmlibEZwVDI1emFXSnRSblJhVTBrMlNXMUtNV0ZYZUd0YVdFbHBURU5LTVdGWFVXbFBhVXBzVGxSSmVsbDZRVFZhUXpCNVdrZGFhMHhVVW14TmVsRjBXVlJWZUZscE1XbFpWR1JyVG0xT2FVNVVWbWxOUjBscFpsZ3djMGx0TldsYWFVazJUVlJqTVUxcVFYcFBWRkV6VFhsM2FXTXpWbWxKYW05cFl6TnNlbVJIVm5SUGJrNXNZMjVhY0ZreVZtaFpNazUyWkZjMU1FOXRTakZqTTBKb1kyMXpkR1JIVm5wa1F6RnJXbGhaTmxsdVZuQmlSMUpzWTJsS09TNUhlRU5zUTJWMVJsRkZVMFZIWkV0M01uSm1hRGhQUVUxS2EweFVhVTgxVnpKUVNXVjNRVmRvT0Y5WFR6Z3lXV2d5UTFoWE5EazJYemxHYzB0TFVYRmpZMWxrTmxadWJteGlSVlJIU2w5c1RIaG9abW8wU1c5V05HZE9UbTFaZDB3eFgxbFdabmRLZGxCQk4wWlZWRVJIY1cxdFpuVTRka3h2VGtSeGExWk1SSFZTVUdkTlptUTBTelpHUTNac1IxTnpiMUpNUWpSU2QzVlVWQzEyWlRaeE9HVnllWE5HUjJkSVVrdFJZVlZuWkdoeGJ6UkZiM0JqTW5wcWFtOHdNMjl3WW0xd01HSjFZekJWUkV4Rk56Z3ROM05uUjFkVlYyaG1WMlJDT1VFelpESk5UMGxwZUc5ME1XTXpiVU5sVDIwd05VazBWbXB0Ukc1NlozaG9Nbkl3U25Ga2REbHRaM0pOWWxCbllsRk1WMVJrY0ZReWRETm9jVEUzWldKaWRXZDJSbmRxTlVKdWFHVnhjbVpzWWtOUGVEa3dlV2RyYjFaaFlUUk5Za054Y2xwM1EzTnFiR1kxUlRGVVQwVktYelp0VVRsaGVqSm5Za3hSZFROQ01rSldPVEpoVEV0S1VYWkNSVE50Y3pGcFlWVklVRzR6VkVGZlEwSnlVbU5UVTB3eFZrWTJPV3BoZHpaMVF6VkxWMWh1V25KWk0zZHZlbGsxYVhCS1JIUTRSMkp1WWw5UlMyVlBiMHRuY0ZCcFVUVkROV0prY0ZoTGN6ZFhaVzl5WTA5bE1XeHNOWE5YUVZwa1NIcE9hbHAwU0UxamRDMDBhMUZDUWpndE5XSmpWVVZWU2kweFRFdGxWVFZqT0RoUGJUQTFPVm8wWjFaelZUTjZURzlwUlVaRVMyVlJOekJsYVZSR1prY3lRMmRtYVhsdlFWRTNaR3h0WVZKelJEWlpNVnBsTFZCbVgwNVliVEF6WWxGSVdHMDVZelZ4YjNSWVkwSTFkWHBvVlRGeVpGa3hiWHB6TWxweUxVcFpVVzV2YzAxelkybFpNRGwxUlY5U05IWkxWek5FYWxWTmVVeFlXakZEVlZSSFExaEtlV3BSVVhWT01uTXljSGRrVHpGbVpXSlpYemR4VUdoMFpYWjRSa3BXWms5TGNEbG1PWFZxY0VGVVdVSmtkVUpmU2xKM1YwbDVUREJ3ZWw5ak9BPT0ifX0=
@@ -9008,6 +9036,7 @@ items:
         openshift.io/internal-registry-auth-token.binding: bound
         openshift.io/internal-registry-auth-token.service-account: builder
       name: builder-dockercfg-w22d2
+      namespace: buspark-test-v2-dev
     type: kubernetes.io/dockercfg
   - apiVersion: v1
     data:
@@ -9018,6 +9047,7 @@ items:
         openshift.io/internal-registry-auth-token.binding: bound
         openshift.io/internal-registry-auth-token.service-account: default
       name: default-dockercfg-xf55x
+      namespace: buspark-test-v2-dev
     type: kubernetes.io/dockercfg
   - apiVersion: v1
     data:
@@ -9028,6 +9058,7 @@ items:
         openshift.io/internal-registry-auth-token.binding: bound
         openshift.io/internal-registry-auth-token.service-account: deployer
       name: deployer-dockercfg-j5xbn
+      namespace: buspark-test-v2-dev
     type: kubernetes.io/dockercfg
   - apiVersion: v1
     data:
@@ -9043,6 +9074,7 @@ items:
         service.alpha.openshift.io/originating-service-uid: c0f82a3e-1d98-4b13-8c9f-98b2588317ca
         service.beta.openshift.io/expiry: "2027-06-10T09:49:53Z"
       name: model-serving-proxy-tls
+      namespace: buspark-test-v2-dev
     type: kubernetes.io/tls
   - apiVersion: v1
     data:
@@ -9053,6 +9085,7 @@ items:
         openshift.io/internal-registry-auth-token.binding: bound
         openshift.io/internal-registry-auth-token.service-account: pipeline
       name: pipeline-dockercfg-vfrwx
+      namespace: buspark-test-v2-dev
     type: kubernetes.io/dockercfg
   - apiVersion: v1
     data:
@@ -9063,6 +9096,8 @@ items:
         openshift.io/internal-registry-auth-token.binding: bound
         openshift.io/internal-registry-auth-token.service-account: workspacef374dc8e6edf4680-sa
       name: workspacef374dc8e6edf4680-sa-dockercfg-tv7br
+      namespace: buspark-test-v2-dev
     type: kubernetes.io/dockercfg
 kind: List
 metadata:
+  namespace: buspark-test-v2-dev

@@ -10,6 +10,7 @@ items:
       io.kompose.service: ckan-dev
       pod-template-hash: 5d54478c9c
     name: ckan-service
+    namespace: buspark-test-dev
     resourceVersion: "2622720122"
     uid: d23744eb-cefc-4304-8961-5463c220f55a
   spec:
@@ -40,6 +41,7 @@ items:
     labels:
       io.kompose.service: nginx
     name: nginx
+    namespace: buspark-test-dev
     resourceVersion: "2951128424"
     uid: ace633c3-9f1c-455b-bb30-b8aa04031870
   spec:

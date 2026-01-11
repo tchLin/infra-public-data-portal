@@ -34,6 +34,7 @@ items:
     labels:
       app.kubernetes.io/part-of: tekton-pipelines
     name: config-service-cabundle
+    namespace: buspark-test-dev
     ownerReferences:
     - apiVersion: operator.tekton.dev/v1alpha1
       blockOwnerDeletion: true
@@ -4004,6 +4005,7 @@ items:
       app.kubernetes.io/part-of: tekton-pipelines
       config.openshift.io/inject-trusted-cabundle: "true"
     name: config-trusted-cabundle
+    namespace: buspark-test-dev
     ownerReferences:
     - apiVersion: operator.tekton.dev/v1alpha1
       blockOwnerDeletion: true
@@ -4031,6 +4033,7 @@ items:
       app.kubernetes.io/part-of: devworkspace-operator
       controller.devfile.io/watch-configmap: "true"
     name: devworkspace-ssh-askpass
+    namespace: buspark-test-dev
     resourceVersion: "2744911426"
     uid: c6030220-df99-412a-88ad-92115c13c1c3
 - apiVersion: v1
@@ -4103,6 +4106,7 @@ items:
     labels:
       io.kompose.service: ckan-dev-env
     name: env
+    namespace: buspark-test-dev
     resourceVersion: "2959134694"
     uid: 7dc3005a-263a-4004-a569-4a1d6d5ef1ee
 - apiVersion: v1
@@ -4259,6 +4263,7 @@ items:
         of Kubernetes clusters.
     creationTimestamp: "2025-06-10T09:49:53Z"
     name: kube-root-ca.crt
+    namespace: buspark-test-dev
     resourceVersion: "2428866353"
     uid: 6530183d-de19-47f7-8a3b-65f118aad076
 - apiVersion: v1
@@ -4302,6 +4307,7 @@ items:
         {"apiVersion":"v1","data":{"nginx.conf":"pid /tmp/nginx.pid;\n\nevents {}\n\nhttp {\n    upstream ckan_upstream {\n        server ckan-service:5000;\n    }\n\n    server {\n        # OpenShift non-root containers listen on high ports\n        listen 8080;\n\n        # Proxy all root-path requests through to CKAN\n        location / {\n            proxy_pass         http://ckan_upstream;\n            proxy_set_header   Host $host;\n            proxy_set_header   X-Real-IP $remote_addr;\n            proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;\n            proxy_buffering    off;\n        }\n\n        # Static file caching proxy\n        location ~* \\.(css|js|png|jpg|jpeg|gif|svg|ico)$ {\n            proxy_pass         http://ckan_upstream;\n            proxy_set_header   Host $host;\n            proxy_cache_bypass $http_pragma;\n            expires            max;\n        }\n    }\n}\n"},"kind":"ConfigMap","metadata":{"annotations":{},"creationTimestamp":null,"name":"nginx-config","namespace":"buspark-test-dev"}}
     creationTimestamp: "2025-06-29T11:03:19Z"
     name: nginx-config
+    namespace: buspark-test-dev
     resourceVersion: "2958407694"
     uid: 0a9eaec4-dc49-419f-9a7a-833c6d2993eb
 - apiVersion: v1
@@ -8267,6 +8273,7 @@ items:
       app.kubernetes.io/part-of: opendatahub-operator
       config.openshift.io/inject-trusted-cabundle: "true"
     name: odh-trusted-ca-bundle
+    namespace: buspark-test-dev
     resourceVersion: "2465735434"
     uid: 9a11b80e-08bc-4e60-a010-c32cb8c6016f
 - apiVersion: v1
@@ -8298,6 +8305,7 @@ items:
       service.beta.openshift.io/inject-cabundle: "true"
     creationTimestamp: "2025-06-10T09:49:53Z"
     name: openshift-service-ca.crt
+    namespace: buspark-test-dev
     resourceVersion: "2428866356"
     uid: 63b9044d-59f3-479a-acb3-c0669ad6da22
 kind: List

@@ -16,7 +16,6 @@ items:
     labels:
       io.kompose.service: ckan-dev
     name: ckan-dev
-    namespace: buspark-test-dev
     resourceVersion: "2992907861"
     uid: d09e2065-60e1-4e8b-9923-c3db726d5d43
   spec:
@@ -126,7 +125,6 @@ items:
     labels:
       io.kompose.service: datapusher
     name: datapusher
-    namespace: buspark-test-dev
     resourceVersion: "3002254826"
     uid: dc528fff-2f14-4679-9983-9b6527ad0ae1
   spec:
@@ -202,7 +200,6 @@ items:
     labels:
       io.kompose.service: db
     name: db
-    namespace: buspark-test-dev
     resourceVersion: "3002254842"
     uid: 3af94f16-84ae-47de-8faa-9fd1feaa5f29
   spec:
@@ -289,7 +286,6 @@ items:
     labels:
       io.kompose.service: nginx
     name: nginx
-    namespace: buspark-test-dev
     resourceVersion: "3002254871"
     uid: f1b509f8-760e-489b-9e63-f743316d3485
   spec:
@@ -385,7 +381,6 @@ items:
     labels:
       io.kompose.service: redis
     name: redis
-    namespace: buspark-test-dev
     resourceVersion: "3002254881"
     uid: 291dbb0c-0cd2-4f22-a867-754b2f54d5b2
   spec:
@@ -461,7 +456,6 @@ items:
     labels:
       io.kompose.service: solr
     name: solr
-    namespace: buspark-test-dev
     resourceVersion: "3002254895"
     uid: 907d9f18-4e92-4cfe-a836-9763305923ad
   spec:
@@ -540,7 +534,6 @@ items:
     labels:
       io.kompose.service: ckan-dev
     name: ckan-dev
-    namespace: buspark-test-dev
     resourceVersion: "2627667218"
     uid: 0dffa4a7-cd2e-4a05-b6c1-b054d120b9fb
   spec:
@@ -569,7 +562,6 @@ items:
     labels:
       io.kompose.service: ckan-dev
     name: ckan-service
-    namespace: buspark-test-dev
     resourceVersion: "2957811210"
     uid: 3e2d70a0-95f7-4b6e-91e4-6272dee5033a
   spec:
@@ -602,7 +594,6 @@ items:
     labels:
       io.kompose.service: datapusher
     name: datapusher
-    namespace: buspark-test-dev
     resourceVersion: "2627654542"
     uid: b81db122-a3e4-44f1-a8ef-644d862d9e89
   spec:
@@ -636,7 +627,6 @@ items:
     labels:
       io.kompose.service: db
     name: db
-    namespace: buspark-test-dev
     resourceVersion: "2627651076"
     uid: 2c6b70c3-ef31-4886-a22b-7f6dbf78c1cd
   spec:
@@ -672,7 +662,6 @@ items:
       app.kubernetes.io/name: modelmesh-controller
       modelmesh-service: modelmesh-serving
     name: modelmesh-serving
-    namespace: buspark-test-dev
     ownerReferences:
     - apiVersion: v1
       blockOwnerDeletion: true
@@ -725,7 +714,6 @@ items:
     labels:
       io.kompose.service: nginx
     name: nginx
-    namespace: buspark-test-dev
     resourceVersion: "2958615710"
     uid: 0e48bef1-e3e3-40c0-99ba-9adb2be52665
   spec:
@@ -763,7 +751,6 @@ items:
     labels:
       io.kompose.service: redis
     name: redis
-    namespace: buspark-test-dev
     resourceVersion: "2627653401"
     uid: 9b999a48-a494-4d8e-85cb-539a9ba15e63
   spec:
@@ -797,7 +784,6 @@ items:
     labels:
       io.kompose.service: solr
     name: solr
-    namespace: buspark-test-dev
     resourceVersion: "2627652231"
     uid: 732d63fe-cce5-4df4-8b3d-fa5173c8fd74
   spec:
@@ -829,7 +815,6 @@ items:
       io.kompose.service: ckan-dev
       pod-template-hash: 5d54478c9c
     name: ckan-service
-    namespace: buspark-test-dev
     resourceVersion: "2622720122"
     uid: d23744eb-cefc-4304-8961-5463c220f55a
   spec:
@@ -860,7 +845,6 @@ items:
     labels:
       io.kompose.service: nginx
     name: nginx
-    namespace: buspark-test-dev
     resourceVersion: "2951128424"
     uid: ace633c3-9f1c-455b-bb30-b8aa04031870
   spec:
@@ -899,7 +883,6 @@ items:
     labels:
       io.kompose.service: ckan-storage
     name: ckan-storage
-    namespace: buspark-test-dev
     resourceVersion: "2622602808"
     uid: 7739c28a-fed9-4b00-910f-1ab8f8c35deb
   spec:
@@ -934,7 +917,6 @@ items:
     labels:
       io.kompose.service: nginx-certs
     name: nginx-certs
-    namespace: buspark-test-dev
     resourceVersion: "2627655863"
     uid: 9d4034b3-f698-43f0-8b4b-b1cc95b311b1
   spec:
@@ -969,7 +951,6 @@ items:
     labels:
       io.kompose.service: pg-data
     name: pg-data
-    namespace: buspark-test-dev
     resourceVersion: "2627651305"
     uid: 7b32e735-7082-4dca-8c73-7dc76d1897cf
   spec:
@@ -1004,7 +985,6 @@ items:
     labels:
       io.kompose.service: solr-data
     name: solr-data
-    namespace: buspark-test-dev
     resourceVersion: "2627652476"
     uid: 238a3f8b-3aa4-45b0-bc44-546cd41aa12c
   spec:
@@ -1056,7 +1036,6 @@ items:
     labels:
       app.kubernetes.io/part-of: tekton-pipelines
     name: config-service-cabundle
-    namespace: buspark-test-dev
     ownerReferences:
     - apiVersion: operator.tekton.dev/v1alpha1
       blockOwnerDeletion: true
@@ -5027,7 +5006,6 @@ items:
       app.kubernetes.io/part-of: tekton-pipelines
       config.openshift.io/inject-trusted-cabundle: "true"
     name: config-trusted-cabundle
-    namespace: buspark-test-dev
     ownerReferences:
     - apiVersion: operator.tekton.dev/v1alpha1
       blockOwnerDeletion: true
@@ -5055,7 +5033,6 @@ items:
       app.kubernetes.io/part-of: devworkspace-operator
       controller.devfile.io/watch-configmap: "true"
     name: devworkspace-ssh-askpass
-    namespace: buspark-test-dev
     resourceVersion: "2744911426"
     uid: c6030220-df99-412a-88ad-92115c13c1c3
 - apiVersion: v1
@@ -5128,7 +5105,6 @@ items:
     labels:
       io.kompose.service: ckan-dev-env
     name: env
-    namespace: buspark-test-dev
     resourceVersion: "2959134694"
     uid: 7dc3005a-263a-4004-a569-4a1d6d5ef1ee
 - apiVersion: v1
@@ -5285,7 +5261,6 @@ items:
         of Kubernetes clusters.
     creationTimestamp: "2025-06-10T09:49:53Z"
     name: kube-root-ca.crt
-    namespace: buspark-test-dev
     resourceVersion: "2428866353"
     uid: 6530183d-de19-47f7-8a3b-65f118aad076
 - apiVersion: v1
@@ -5329,7 +5304,6 @@ items:
         {"apiVersion":"v1","data":{"nginx.conf":"pid /tmp/nginx.pid;\n\nevents {}\n\nhttp {\n    upstream ckan_upstream {\n        server ckan-service:5000;\n    }\n\n    server {\n        # OpenShift non-root containers listen on high ports\n        listen 8080;\n\n        # Proxy all root-path requests through to CKAN\n        location / {\n            proxy_pass         http://ckan_upstream;\n            proxy_set_header   Host $host;\n            proxy_set_header   X-Real-IP $remote_addr;\n            proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;\n            proxy_buffering    off;\n        }\n\n        # Static file caching proxy\n        location ~* \\.(css|js|png|jpg|jpeg|gif|svg|ico)$ {\n            proxy_pass         http://ckan_upstream;\n            proxy_set_header   Host $host;\n            proxy_cache_bypass $http_pragma;\n            expires            max;\n        }\n    }\n}\n"},"kind":"ConfigMap","metadata":{"annotations":{},"creationTimestamp":null,"name":"nginx-config","namespace":"buspark-test-dev"}}
     creationTimestamp: "2025-06-29T11:03:19Z"
     name: nginx-config
-    namespace: buspark-test-dev
     resourceVersion: "2958407694"
     uid: 0a9eaec4-dc49-419f-9a7a-833c6d2993eb
 - apiVersion: v1
@@ -9295,7 +9269,6 @@ items:
       app.kubernetes.io/part-of: opendatahub-operator
       config.openshift.io/inject-trusted-cabundle: "true"
     name: odh-trusted-ca-bundle
-    namespace: buspark-test-dev
     resourceVersion: "2465735434"
     uid: 9a11b80e-08bc-4e60-a010-c32cb8c6016f
 - apiVersion: v1
@@ -9327,7 +9300,6 @@ items:
       service.beta.openshift.io/inject-cabundle: "true"
     creationTimestamp: "2025-06-10T09:49:53Z"
     name: openshift-service-ca.crt
-    namespace: buspark-test-dev
     resourceVersion: "2428866356"
     uid: 63b9044d-59f3-479a-acb3-c0669ad6da22
 - apiVersion: v1
@@ -9340,7 +9312,6 @@ items:
       openshift.io/internal-registry-auth-token.service-account: builder
     creationTimestamp: "2025-06-10T09:49:53Z"
     name: builder-dockercfg-w22d2
-    namespace: buspark-test-dev
     ownerReferences:
     - apiVersion: v1
       kind: ServiceAccount
@@ -9359,7 +9330,6 @@ items:
       openshift.io/internal-registry-auth-token.service-account: default
     creationTimestamp: "2025-06-10T09:49:53Z"
     name: default-dockercfg-xf55x
-    namespace: buspark-test-dev
     ownerReferences:
     - apiVersion: v1
       kind: ServiceAccount
@@ -9378,7 +9348,6 @@ items:
       openshift.io/internal-registry-auth-token.service-account: deployer
     creationTimestamp: "2025-06-10T09:49:53Z"
     name: deployer-dockercfg-j5xbn
-    namespace: buspark-test-dev
     ownerReferences:
     - apiVersion: v1
       kind: ServiceAccount
@@ -9406,7 +9375,6 @@ items:
       service.beta.openshift.io/expiry: "2027-06-10T09:49:53Z"
     creationTimestamp: "2025-06-10T09:49:53Z"
     name: model-serving-proxy-tls
-    namespace: buspark-test-dev
     ownerReferences:
     - apiVersion: v1
       kind: Service
@@ -9425,7 +9393,6 @@ items:
       openshift.io/internal-registry-auth-token.service-account: pipeline
     creationTimestamp: "2025-06-10T09:50:51Z"
     name: pipeline-dockercfg-vfrwx
-    namespace: buspark-test-dev
     ownerReferences:
     - apiVersion: v1
       kind: ServiceAccount
@@ -9444,7 +9411,6 @@ items:
       openshift.io/internal-registry-auth-token.service-account: workspacef374dc8e6edf4680-sa
     creationTimestamp: "2025-06-29T10:58:16Z"
     name: workspacef374dc8e6edf4680-sa-dockercfg-tv7br
-    namespace: buspark-test-dev
     ownerReferences:
     - apiVersion: v1
       kind: ServiceAccount
